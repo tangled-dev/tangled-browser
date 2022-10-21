@@ -1,19 +1,19 @@
 #!/bin/bash
 
-echo "\nworking on chromium\n"
+echo "working on chromium"
 #bash setup_chromium.sh $1
 
-echo "\nworking on millix\n"
+echo "working on millix"
 bash setup_nodejs.sh "$2-$3"
 
-echo "\nworking on tangled advertisement\n"
+echo "working on tangled advertisement"
 #bash setup_tangled_advertisement.sh
 
-echo "\nworking on millix node\n"
+echo "working on millix node"
 #bash setup_millix_node.sh $3
 
-echo "\nworking on millix wallet ui\n"
+echo "working on millix wallet ui"
 #bash setup_millix_wallet_ui.sh
 
-echo "\nworking on tangled\n"
+echo "working on tangled"
 #bash setup_tangled.sh $2 $3

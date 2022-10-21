@@ -25,14 +25,14 @@ git_apply() {
 cd src
 
 echo "replace chrome: with tangled: in the following folders"
-echo "android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer \n"
+echo "android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer "
 
 for folder in android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer; do
     echo "processing folder $folder"
     LC_ALL=C find $folder -not -path '*/.*' -type f -exec sed -i '' 's/"chrome:/"tangled:/gi' {} \; -exec sed -i '' 's/chrome:\/\//tangled:\/\//gi' {} \;
 done
 
-echo "\nactivate tangled: schema\n"
+echo "activate tangled: schema"
 
 for folder in chrome chromeos components content ios; do
     echo "processing folder $folder"
