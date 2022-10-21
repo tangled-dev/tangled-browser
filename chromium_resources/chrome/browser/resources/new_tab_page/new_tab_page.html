@@ -1,0 +1,351 @@
+<!doctype html>
+<html dir="$i18n{textdirection}" lang="$i18n{language}">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>$i18n{title}</title>
+  <link rel="stylesheet" href="tangled/css/bootstrap.min.css">
+  <link rel="stylesheet" href="tangled/css/all.css">
+  <link rel="stylesheet" href="tangled/css/animate.css">
+  <link rel="stylesheet" href="tangled/css/animsition.min.css">
+  <link rel="stylesheet" href="tangled/css/style.css" />
+  <style>
+    .fa,
+    .fas,
+    .far {
+      font-family: 'Font Awesome 5 Pro';
+      font-weight: 500;
+    }
+
+    .learnmore a {
+      color: unset;
+    }
+
+    body {
+      animation: colorchange 30s linear 1s infinite;
+      /* animation-name followed by duration in seconds*/
+      /* you could also use milliseconds (ms) or something like 2.5s */
+      -webkit-animation: colorchange 60s linear 0s infinite alternate;
+      /* Chrome and Safari */
+    }
+
+    canvas {
+      position: absolute !important;
+      top: 0 !important;
+      z-index: -1;
+    }
+
+    @keyframes colorchange {
+      0% {
+        background: #000429;
+        color: cyan;
+      }
+
+      25% {
+        background: #150029;
+        color: magenta;
+      }
+
+      50% {
+        background: #1c001a;
+        color: yellow;
+      }
+
+      75% {
+        background: #09081c;
+        color: cyan;
+      }
+
+      100% {
+        background: #00101c;
+        color: cyan;
+      }
+    }
+
+    @-webkit-keyframes colorchange
+
+    /* Safari and Chrome - necessary duplicate */
+      {
+      0% {
+        background: #000429;
+        color: cyan;
+      }
+
+      25% {
+        background: #150029;
+        color: magenta;
+      }
+
+      50% {
+        background: #1c001a;
+        color: yellow;
+      }
+
+      75% {
+        background: #09081c;
+        color: cyan;
+      }
+
+      100% {
+        background: #00101c;
+        color: cyan;
+      }
+    }
+
+    /*social svg*/
+    .social-svg {
+      width: 50px;
+      height: 68px;
+      transition: .5s;
+    }
+
+    h1,
+    svg .cls-1 {
+      transition: .5s !important
+    }
+
+    a svg:hover .cls-1 {
+      fill: #fff !important;
+      transition: .5s !important
+    }
+
+    #cls-2:hover {
+      color: unset !important;
+    }
+
+    .learnmore,
+    .icon-animate {
+      transition: .5s;
+    }
+
+    .icon-animate:hover {
+      color: #fff !important;
+    }
+
+    body::-webkit-scrollbar {
+      width: 11px;
+    }
+
+    body {
+      scrollbar-width: thin;
+      scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+    }
+
+    body::-webkit-scrollbar-track {
+      background: var(--scrollbarBG);
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background-color: var(--thumbBG);
+      border-radius: 0px;
+      border: 2px solid var(--scrollbarBG);
+    }
+
+    h1 svg {
+      width: 200px;
+    }
+
+    .gettangled,
+    .fa-play {
+      transition: .5s;
+    }
+
+    .gettangled:hover {
+      background-color: #fff !important;
+      color: #527d8d !important;
+      border: 1px solid transparent;
+    }
+
+    .popup-video:hover i {
+      background-color: #fff !important;
+      color: #527d8d !important;
+      border: 1px solid transparent !important;
+
+
+    }
+
+    /************animation svg ***********/
+    @keyframes colorchangeSvg {
+      0% {
+        fill: #b145ff;
+      }
+
+      25% {
+        fill: #00b6c6;
+      }
+
+      50% {
+        fill: #40fdca;
+      }
+
+      75% {
+        fill: #f9ff45;
+      }
+
+      100% {
+        fill: #ff45aa;
+      }
+    }
+
+    @keyframes colorchangeIcon {
+      0% {
+        color: #b145ff;
+      }
+
+      25% {
+        color: #00b6c6;
+      }
+
+      50% {
+        color: #40fdca;
+      }
+
+      75% {
+        color: #f9ff45;
+      }
+
+      100% {
+        color: #ff45aa;
+      }
+    }
+
+    @keyframes colorchangeHr {
+      0% {
+        background-color: #b145ff;
+      }
+
+      25% {
+        background-color: #00b6c6;
+      }
+
+      50% {
+        background-color: #40fdca;
+      }
+
+      75% {
+        background-color: #f9ff45;
+      }
+
+      100% {
+        background-color: #ff45aa;
+      }
+    }
+
+
+
+
+
+    .cls-1,
+    .cls-2 {
+      animation: colorchangeSvg 60s linear 0s infinite alternate;
+      -webkit-animation: colorchangeSvg 60s linear 0s infinite alternate;
+    }
+
+    /*icon animate */
+    .icon-animate,
+    .learnmore {
+      animation: colorchangeIcon 60s linear 0s infinite alternate;
+      -webkit-animation: colorchangeIcon 60s linear 0s infinite alternate;
+    }
+
+    /*hr*/
+    .learnmore~hr {
+      animation: colorchangeHr 60s linear 0s infinite alternate;
+      -webkit-animation: colorchangeHr 60s linear 0s infinite alternate;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper animsition" data-animsition-in-class="fade-in" data-animsition-in-duration="1000"
+    data-animsition-out-class="fade-out" data-animsition-out-duration="1000">
+    <div class="main" id="main">
+      <div class="hero-section app-hero" id="home">
+        <div class="home-section-overlay"></div>
+        <div class="container-fluid">
+
+          <div class="hero-content app-hero-content text-center">
+            <div class="col-md-12 nopadding">
+              <h1>
+                <!--<img src="images/logo.png">-->
+                <a href="https://tangled.com" target="_blank">
+                  <svg id="cls-2" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1"
+                    viewBox="0 0 1909.741 1936.336">
+                    <defs>
+                      <style>
+                        .cls-2 {
+                          fill: #527d8d;
+                        }
+                      </style>
+                    </defs>
+                    <path class="cls-2"
+                      d="M1902.82,523.75c-6.65-28.92-17.49-56.07-33.57-81.1a290.384,290.384,0,0,0-65.09-71.17,407.069,407.069,0,0,0-82.62-50.15c-39.36-18.11-80.46-31-122.61-40.71a44.86,44.86,0,0,0-5.69-.77c-9.23-.88-18.46-1.77-27.7-2.57-16.89-1.45-33.79-2.71-50.74-3.21-8-.24-16-.56-24-.71-10.24-.19-20.48-.53-30.7-.28-21.74.52-43.47.92-65.18,2.59-16.26,1.25-32.51,2.65-48.69,4.65q-33.3,4.14-66.2,10.88a775.931,775.931,0,0,0-108.9,30.28,905.325,905.325,0,0,0-120.53,54.37c-1.67.9-3.29,1.92-5.32,3.1-.82,3.19-1.53,5.65-2.08,8.14q-10.26,47.31-20.47,94.64c-.54,2.5-.86,5-1.24,7.56-.12.73,1.37,1.72,2.09,1.39,6.12-2.76,12.24-5.51,18.34-8.31,55.57-25.52,112.56-47.21,171.59-63.38a485.459,485.459,0,0,1,59-12.65c11.07-1.59,22.16-3.14,33.29-4.2,13.69-1.31,27.41-2.45,41.14-3,14.69-.56,29.42-.46,44.13-.4,10.55.05,21.13.14,31.65.85,17.22,1.17,34.46,2.15,51.551,4.8,10.42,1.61,20.92,2.79,31.28,4.71a590.982,590.982,0,0,1,66.06,16.23c14.08,4.32,27.93,9.08,40.92,16.22,22,12.11,42,26.86,58.88,45.59,15.69,17.4,27,37.16,32.65,60a181.028,181.028,0,0,1,5.66,42.67,141.876,141.876,0,0,1-1.73,23.9c-2.53,15.35-8.26,29.49-16.1,42.84-9,15.35-21,28.17-34.46,39.65-10.49,8.94-22,16.47-33.82,23.52a280.318,280.318,0,0,1-91,34.48,429.744,429.744,0,0,1-58.06,6.86,556.284,556.284,0,0,1-61.39,0c-18.18-1-36.35-2.42-54.43-4.92A576.756,576.756,0,0,1,1293,743.37c-46-11.92-89.83-29.47-132.17-50.89-22-11.12-43.26-23.5-64.26-36.36-38.46-23.55-76.19-48.23-114-72.71-2.42-1.56-4.74-3.26-7.06-5-33.3-24.37-61.4-44.92-94.67-69.32-5.2-3.8-33.66-21.2-38.1-23.75-21.89-12.6-23.69-13.69-45.57-26.32-49-28.31-98-56.61-147.46-84.16-38.09-21.22-77.67-39-119.45-51.69A571.055,571.055,0,0,0,447,304.47c-15.84-2.35-31.75-3.78-47.7-4.81a456.175,456.175,0,0,0-48.92-.25,549.624,549.624,0,0,0-69.61,7.11c-13.24,2.29-26.41,4.8-39.45,8a392.285,392.285,0,0,0-63.62,21.15C122.7,359.76,77.84,396,44.61,446.3,22.27,480.17,7.2,516.77,1.86,557.17a208.868,208.868,0,0,0-.49,51.68,262.75,262.75,0,0,0,24.16,83.44,325.307,325.307,0,0,0,35.29,58.1,227.407,227.407,0,0,0,28.57,31,286.642,286.642,0,0,0,60.52,42,353.212,353.212,0,0,0,70.68,26.82,116.032,116.032,0,0,0,13,3.15c11.38,1.66,22.81,3,34.24,4.4q11.891,1.41,23.85,2.39c14,1.12,28,2.42,42.11,3,24.29,1,48.6.94,72.91.18,5.75-.18,11.51-.4,17.25-.82q17.7-1.32,35.37-2.91c8-.73,15.92-1.53,23.84-2.62,10.76-1.48,21.48-3.24,32.22-5,14.53-2.3,28.91-5.31,43.18-8.87A479.168,479.168,0,0,0,673.4,798c1.65-.91,3.19-2,4.55-2.9.69-2.24,1.36-4.05,1.8-5.91Q694,729,708.24,668.83a17.165,17.165,0,0,0,.06-3.73c-1.7-1.09-2.9.36-4.19.94-1.75.78-3.35,1.88-5,2.8-25.23,13.85-50.71,27.16-77.29,38.31-30.44,12.75-61.56,23.33-93.73,30.7a443.925,443.925,0,0,1-52.93,8.89c-10.19,1.07-20.41,1.47-30.61,2.24-23.37,1.76-46.69.38-70-1.35-14-1-28-2.79-41.89-5A461.631,461.631,0,0,1,277.4,730.7a226.06,226.06,0,0,1-56.94-24.82,161.417,161.417,0,0,1-39.69-34.41c-16.46-19.93-27.09-42.41-29.39-68.54A173.508,173.508,0,0,1,153,559a129.835,129.835,0,0,1,30.83-65,161.035,161.035,0,0,1,30.79-27.31,245.653,245.653,0,0,1,54.44-28c5.39-2,10.91-3.64,16.46-5.13,18.33-4.93,37.11-6.74,56-7.38a468.071,468.071,0,0,1,69.9,3.16,353.074,353.074,0,0,1,41.5,7.41,444.023,444.023,0,0,1,63.74,20.81c29.93,12.18,59.12,25.95,88,40.5,49.12,24.8,96.82,52.15,143.91,80.58a80.5,80.5,0,0,1,7.13,4.85q53.26,40.92,106.5,81.87c4.56,3.5,9.28,6.82,14.06,10q27.16,18.06,54.43,36,52.5,34.53,105,69c18.47,12.07,37.29,23.59,56.8,33.93a695.492,695.492,0,0,0,144.06,57.22c8.32,2.25,16.61,4.68,25,6.65,12.44,2.92,24.92,5.71,37.47,8.15,13.17,2.55,26.41,4.7,39.7,6.6q20.91,3,41.91,4.9c14.33,1.29,28.7,2.13,43.08,2.77,19.18.84,38.37,1.4,57.55.66,18.52-.71,37.07-1.17,55.56-2.82,14-1.25,28-2.76,41.93-4.71,16.46-2.31,32.79-5.42,49-9.12a497.451,497.451,0,0,0,75-23.11c45.64-18.36,86.48-44.1,121.34-79,20.45-20.47,38.21-43,52.49-68.23,22.58-39.88,33.06-82.92,33.16-128.53A272.411,272.411,0,0,0,1902.82,523.75Z"
+                      transform="translate(-0.001 0.002)" />
+                    <path class="cls-2"
+                      d="M1053.33,1799a18.82,18.82,0,0,0-13.21-12.69,34.261,34.261,0,0,0-13.25-1.15c-18.14,1.73-36.27,3.63-54.46,4.77s-36.37,2.58-54.61,2.67c-5.12,0-10.23.34-15.35.43-15.34.27-30.7.83-46,.65a375.631,375.631,0,0,1-60.16-5,147.314,147.314,0,0,1-45.09-15.59,68.229,68.229,0,0,1-11.85-8.11c-16.12-13.71-24.52-31.59-28.19-52-.73-4.08-1.1-8.24-1.44-12.39a124.481,124.481,0,0,1,0-24c2.37-21.61,5.88-43,10.15-64.38,2.5-12.53,4.47-25.16,6.72-37.75,1-5.34,1.56-10.8,3.11-16,2.5-8.28,4.28-16.71,6.12-25.14,7.36-33.71,14.61-67.45,22-101.17q12.88-59,25.85-118c10.53-48.39,20.91-96.82,31.47-145.21q17.9-81.95,36-163.86,11.9-54.32,23.64-108.66Q888.57,833.2,902.4,769.99a13.545,13.545,0,0,0,.39-3.79,3.853,3.853,0,0,0-1.11-2.47,62.2,62.2,0,0,0-5.46-3.9c-12.51-8.32-25.07-16.57-37.54-25-10.34-7-20.68-13.93-30.82-21.19-8.58-6.13-16.89-12.65-25.28-19-9.15-7-18.24-14.06-27.4-21-1.74-1.33-3.29-3.09-5.68-3.36-1.7,1.24-2,3.18-2.42,5-1.13,4.66-2.13,9.35-3.23,14-9.63,40.74-19.44,81.42-28.36,122.33-12,54.94-24.36,109.8-36.54,164.71q-14,63.171-28,126.35-15.95,72.13-31.6,144.25-17.9,81.45-35.91,162.88-11.24,51-22.44,102c-2.12,9.68-4.22,19.36-6.17,29.07-3.09,15.35-6.06,30.72-9.07,46.09-3.81,19.44-8.55,38.7-11.1,58.38-1.64,12.69-3,25.39-3,38.22,0,11.2.62,22.36,1.6,33.52.73,8.29,1.87,16.51,3.21,24.71,1.71,10.42,4.22,20.66,6.76,30.9a214.012,214.012,0,0,0,46.52,89.32,159.481,159.481,0,0,0,22.93,21.76,209,209,0,0,0,68.58,35.49A410.384,410.384,0,0,0,809.9,1936.1c31.68.75,63.32-.39,94.94-2.21,9.58-.55,19.13-1.46,28.69-2.22,12.43-1,24.85-2.17,37.3-2.92,12.76-.77,25.55-1.15,38.34-1.64a38,38,0,0,0,10.38-1.61,19.15,19.15,0,0,0,12.91-13.07,36.94,36.94,0,0,0,1-4.67q10.211-47.8,20.47-95.61A23.75,23.75,0,0,0,1053.33,1799Z"
+                      transform="translate(-0.001 0.002)" />
+                    <path class="cls-2"
+                      d="M1059.93,15.23c-2.19-6.9-6.61-11.55-13.65-13.5A48.273,48.273,0,0,0,1033,0c-16.63.13-33.25.05-49.88.05H928.41a32.168,32.168,0,0,0-11.22,2.28c-6.37,2.39-10.41,7.27-12,14-1.48,6.21-2.8,12.46-4.16,18.71q-11.209,51.5-22.4,103-11,50.569-21.94,101.14t-22,101.13q-6,27.62-12.09,55.23c-.27,1.25-.37,2.53-.66,3.78-.66,2.8-.06,5,2.65,6.43,1.7.89,3.32,1.92,5,2.88,16.88,9.75,33.67,19.66,50.68,29.19a328.649,328.649,0,0,1,35.26,23.08c12.32,9.15,24.74,18.15,37.13,27.21,1.55,1.13,3.14,2.19,4.74,3.24a1.79,1.79,0,0,0,2.88-1.15,66.535,66.535,0,0,1,.72-6.65c2-9.38,4.11-18.72,6.15-28.08q11-50.561,22-101.13,10.06-46.35,20.14-92.71,11-50.57,22-101.12,10.19-46.81,20.36-93.64,4.07-18.72,8.21-37.44C1061,24.67,1061.42,20,1059.93,15.23Z"
+                      transform="translate(-0.001 0.002)" />
+                  </svg>
+                </a>
+              </h1>
+              <h1>pay me, internet.</h1>
+              <p style="font-size: 16px;color: white;">buy and sell millix at <a href="https://millix.com"
+                  class="learnmore" target="_blank">millix.com</a> with zero fees &nbsp;</p>
+              <iframe id="backgroundImage" src="$i18nRaw{backgroundImageUrl}" style="display: none;"></iframe>
+              <ntp-app></ntp-app>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-alt print-hide">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <center>
+
+                <p class="footer" id="footer"><a href="https://millix.org" target="_blank"><img
+                      src="tangled/images/footer.svg" alt="" height="80"></a>
+                </p>
+              </center>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="">
+          <div class="col-12">
+            <div class="text-center">
+
+              <p class="learnmore" style="font-size: 14px;color: white;padding-bottom: 10px;">tangled beta users: please
+                join us on discord by clicking the icon below &nbsp;</p>
+
+              <a class="discord-link" href="https://discord.com/invite/nb5uaKq4yX" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path class="cls-1"
+                    d="M297.216 243.2c0 15.616-11.52 28.416-26.112 28.416-14.336 0-26.112-12.8-26.112-28.416s11.52-28.416 26.112-28.416c14.592 0 26.112 12.8 26.112 28.416zm-119.552-28.416c-14.592 0-26.112 12.8-26.112 28.416s11.776 28.416 26.112 28.416c14.592 0 26.112-12.8 26.112-28.416.256-15.616-11.52-28.416-26.112-28.416zM448 52.736V512c-64.494-56.994-43.868-38.128-118.784-107.776l13.568 47.36H52.48C23.552 451.584 0 428.032 0 398.848V52.736C0 23.552 23.552 0 52.48 0h343.04C424.448 0 448 23.552 448 52.736zm-72.96 242.688c0-82.432-36.864-149.248-36.864-149.248-36.864-27.648-71.936-26.88-71.936-26.88l-3.584 4.096c43.52 13.312 63.744 32.512 63.744 32.512-60.811-33.329-132.244-33.335-191.232-7.424-9.472 4.352-15.104 7.424-15.104 7.424s21.248-20.224 67.328-33.536l-2.56-3.072s-35.072-.768-71.936 26.88c0 0-36.864 66.816-36.864 149.248 0 0 21.504 37.12 78.08 38.912 0 0 9.472-11.52 17.152-21.248-32.512-9.728-44.8-30.208-44.8-30.208 3.766 2.636 9.976 6.053 10.496 6.4 43.21 24.198 104.588 32.126 159.744 8.96 8.96-3.328 18.944-8.192 29.44-15.104 0 0-12.8 20.992-46.336 30.464 7.68 9.728 16.896 20.736 16.896 20.736 56.576-1.792 78.336-38.912 78.336-38.912z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="tangled/js/jquery-2.1.1.js"></script>
+  <script type="text/javascript" src="tangled/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="tangled/js/plugins.js"></script>
+  <script type="text/javascript" src="tangled/js/custom.js"></script>
+  <script type="text/javascript" src="tangled/js/fontawesome.min.js"></script>
+  <script type="text/javascript" src="tangled/js/common.js"></script>
+  <script type="module" src="new_tab_page.js"></script>
+  <link rel="stylesheet" href="tangled://resources/css/text_defaults_md.css">
+  <link rel="stylesheet" href="tangled://theme/colors.css?sets=ui,chrome">
+  <link rel="stylesheet" href="shared_vars.css">
+</body>
+
+</html>

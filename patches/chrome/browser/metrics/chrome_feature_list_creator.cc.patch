@@ -1,0 +1,23 @@
+diff --git a/chrome/browser/metrics/chrome_feature_list_creator.cc b/chrome/browser/metrics/chrome_feature_list_creator.cc
+index be5b586e08ace..4812f6123e2f9 100644
+--- a/chrome/browser/metrics/chrome_feature_list_creator.cc
++++ b/chrome/browser/metrics/chrome_feature_list_creator.cc
+@@ -8,6 +8,7 @@
+ #include <vector>
+ 
+ #include "base/command_line.h"
++#include "content/public/common/content_switches.h"
+ #include "base/feature_list.h"
+ #include "base/files/file_path.h"
+ #include "base/files/file_util.h"
+@@ -160,6 +161,10 @@ void ChromeFeatureListCreator::ConvertFlagsToSwitches() {
+   flags_ui::PrefServiceFlagsStorage flags_storage(local_state_.get());
+ #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
+ 
++  auto active_flags = flags_storage.GetFlags();
++  active_flags.insert(switches::kAllowInsecureLocalhost);
++  flags_storage.SetFlags(active_flags);
++
+   about_flags::ConvertFlagsToSwitches(&flags_storage,
+                                       base::CommandLine::ForCurrentProcess(),
+                                       flags_ui::kAddSentinels);

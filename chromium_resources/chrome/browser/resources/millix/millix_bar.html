@@ -1,0 +1,233 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>millix wallet</title>
+  <link rel="stylesheet" href="millix_bar.css">
+  <script src="tangled://resources/js/cr.js"></script>
+  <script src="tangled://resources/js/load_time_data.js"></script>
+  <script src="tangled://resources/js/util.js"></script>
+  <script src="vendor/jquery.js"></script>
+  <script src="vendor/jquery.nicescroll.js"></script>
+  <script src="vendor/moment.min.js"></script>
+  <script src="strings.js"></script>
+  <script src="millix_bar.js"></script>
+</head>
+
+<body style="font-family:Arial, Helvetica, sans-serif;min-width:700px;" class="noselect">
+  <div class="container ml-0 h-50">
+    <div class="row h-50">
+      <div class="col-4 m-0 h-50" style="width: 255px;" id="wallet_holder">
+        <a class="arrow-icon hidden" id="btn_expand">
+          <span class="left-bar"></span>
+          <span class="right-bar"></span>
+        </a>
+        <div class="col-9 m-0 w182 mt-1 pl-6 h-50 hidden" id="wallet_unlock">
+          <div class="row btn btn-default btn-unlock">
+            <div class="col-1 m-0 mr-0 w21 left">
+              <a><i style="line-height: 31px;">
+                  <svg version="1.1" id="millix_icon" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 287.75 242.5"
+                    xml:space="preserve" style="width:1.3em">
+                    <g id="millix">
+                      <path fill="currentColor"
+                        d="M54.94,0c2.51,3.26,4.86,6.28,7.19,9.32c23.64,30.84,47.23,61.71,70.97,92.47c3.48,4.51,7.52,8.61,11.54,12.65
+                  c20.28,20.38,40.64,40.67,60.97,61c8.76,8.76,19.11,14.62,31.24,17.25c0.53,0.12,1.08,0.15,1.9,0.26
+                  c-6.45-38.63-12.86-77.06-19.35-115.9c-3.11,2.34-6.26,4.23-8.82,6.73c-13.02,12.71-25.88,25.57-38.79,38.38
+                  c-0.11,0.11-0.24,0.21-0.15,0.14c-5.81-5.61-11.57-11.18-17.4-16.81c28-35.21,55.86-70.24,83.89-105.49
+                  c16.57,80.95,33.08,161.65,49.63,242.5c-0.53,0-0.92,0-1.3,0c-12.23-0.01-24.46-0.03-36.69-0.03c-1.67,0-3.12-0.48-4.41-1.57
+                  c-16.3-13.78-32.75-27.39-48.85-41.4c-8.04-7-15.55-14.62-23.11-22.15c-27.93-27.82-55.78-55.72-83.68-83.57
+                  c-4.55-4.54-8.87-9.35-14.11-13.15c-0.29-0.21-0.56-0.42-1-0.74c-7.85,37.74-15.66,75.34-23.53,113.17
+                  c1.69-0.37,3.25-0.64,4.77-1.05c10.94-2.94,20.35-8.53,28.34-16.54c11.16-11.18,22.31-22.36,33.46-33.54
+                  c0.31-0.31,0.52-0.71,0.71-0.97c5.96,5.92,11.73,11.66,17.38,17.26c-3.16,3.13-6.37,6.28-9.56,9.44
+                  c-9.28,9.2-18.37,18.62-27.92,27.54c-6.44,6.02-13.51,11.37-20.35,16.96c-11.79,9.63-23.64,19.21-35.44,28.83
+                  c-1.24,1.01-2.53,1.5-4.15,1.49c-12.19-0.04-24.38,0-36.57,0c-0.54,0-1.08-0.06-1.76-0.1C18.32,161.6,36.6,80.94,54.94,0z">
+                      </path>
+                    </g>
+                  </svg>
+                </i></a>
+            </div>
+            <div class="col-9 w90 m-0 btn-unlock-text">
+              connect wallet
+            </div>
+          </div>
+        </div>
+        <div class="col-9 m-0 w182 mt-1 pl-6 h-50" id="wallet_restart">
+          <div class="row btn btn-default btn-unlock">
+            <div class="col-1 m-0 mr-0 w21 left" id="btn-restart-icon">
+              <a class="hidden" id="btn-restart-icon-power"><i style="line-height: 31px;">
+                  <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="power-off"
+                    class="svg-inline--fa fa-power-off fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512" style="width: 1.1em;">
+                    <path fill="currentColor"
+                      d="M400 54.1c63 45 104 118.6 104 201.9 0 136.8-110.8 247.7-247.5 248C120 504.3 8.2 393 8 256.4 7.9 173.1 48.9 99.3 111.8 54.2c11.7-8.3 28-4.8 35 7.7L162.6 90c5.9 10.5 3.1 23.8-6.6 31-41.5 30.8-68 79.6-68 134.9-.1 92.3 74.5 168.1 168 168.1 91.6 0 168.6-74.2 168-169.1-.3-51.8-24.7-101.8-68.1-134-9.7-7.2-12.4-20.5-6.5-30.9l15.8-28.1c7-12.4 23.2-16.1 34.8-7.8zM296 264V24c0-13.3-10.7-24-24-24h-32c-13.3 0-24 10.7-24 24v240c0 13.3 10.7 24 24 24h32c13.3 0 24-10.7 24-24z">
+                    </path>
+                  </svg>
+                </i></a>
+              <a class="hidden" id="btn-restart-icon-spinner">
+                <i>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 1.1em;" class="rotating">
+                    <defs>
+                      <style>
+                        .fa-secondary {
+                          opacity: .4
+                        }
+                      </style>
+                    </defs>
+                    <path
+                      d="M478.71 364.58zm-22 6.11l-27.83-15.9a15.92 15.92 0 0 1-6.94-19.2A184 184 0 1 1 256 72c5.89 0 11.71.29 17.46.83-.74-.07-1.48-.15-2.23-.21-8.49-.69-15.23-7.31-15.23-15.83v-32a16 16 0 0 1 15.34-16C266.24 8.46 261.18 8 256 8 119 8 8 119 8 256s111 248 248 248c98 0 182.42-56.95 222.71-139.42-4.13 7.86-14.23 10.55-22 6.11z"
+                      class="fa-secondary" />
+                    <path
+                      d="M271.23 72.62c-8.49-.69-15.23-7.31-15.23-15.83V24.73c0-9.11 7.67-16.78 16.77-16.17C401.92 17.18 504 124.67 504 256a246 246 0 0 1-25 108.24c-4 8.17-14.37 11-22.26 6.45l-27.84-15.9c-7.41-4.23-9.83-13.35-6.2-21.07A182.53 182.53 0 0 0 440 256c0-96.49-74.27-175.63-168.77-183.38z"
+                      class="fa-primary" />
+                  </svg>
+                </i>
+              </a>
+            </div>
+            <div class="col-9 w90 m-0 btn-unlock-text" id="btn-restart-label">
+              restart node
+            </div>
+          </div>
+        </div>
+        <div class="col-9 m-0 w182 mt-2 mt-0 h-37 pt-7 btn btn-default hidden" id="wallet">
+          <div class="row">
+            <div class="col-1 m-0 ml-15 w16 left">
+              <a href="tangled://millix" id="millix_logo"><i>
+                  <svg version="1.1" id="millix_icon" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 287.75 242.5"
+                    xml:space="preserve" style="width:1.3em">
+                    <g id="millix">
+                      <path fill="currentColor"
+                        d="M54.94,0c2.51,3.26,4.86,6.28,7.19,9.32c23.64,30.84,47.23,61.71,70.97,92.47c3.48,4.51,7.52,8.61,11.54,12.65
+                c20.28,20.38,40.64,40.67,60.97,61c8.76,8.76,19.11,14.62,31.24,17.25c0.53,0.12,1.08,0.15,1.9,0.26
+                c-6.45-38.63-12.86-77.06-19.35-115.9c-3.11,2.34-6.26,4.23-8.82,6.73c-13.02,12.71-25.88,25.57-38.79,38.38
+                c-0.11,0.11-0.24,0.21-0.15,0.14c-5.81-5.61-11.57-11.18-17.4-16.81c28-35.21,55.86-70.24,83.89-105.49
+                c16.57,80.95,33.08,161.65,49.63,242.5c-0.53,0-0.92,0-1.3,0c-12.23-0.01-24.46-0.03-36.69-0.03c-1.67,0-3.12-0.48-4.41-1.57
+                c-16.3-13.78-32.75-27.39-48.85-41.4c-8.04-7-15.55-14.62-23.11-22.15c-27.93-27.82-55.78-55.72-83.68-83.57
+                c-4.55-4.54-8.87-9.35-14.11-13.15c-0.29-0.21-0.56-0.42-1-0.74c-7.85,37.74-15.66,75.34-23.53,113.17
+                c1.69-0.37,3.25-0.64,4.77-1.05c10.94-2.94,20.35-8.53,28.34-16.54c11.16-11.18,22.31-22.36,33.46-33.54
+                c0.31-0.31,0.52-0.71,0.71-0.97c5.96,5.92,11.73,11.66,17.38,17.26c-3.16,3.13-6.37,6.28-9.56,9.44
+                c-9.28,9.2-18.37,18.62-27.92,27.54c-6.44,6.02-13.51,11.37-20.35,16.96c-11.79,9.63-23.64,19.21-35.44,28.83
+                c-1.24,1.01-2.53,1.5-4.15,1.49c-12.19-0.04-24.38,0-36.57,0c-0.54,0-1.08-0.06-1.76-0.1C18.32,161.6,36.6,80.94,54.94,0z">
+                      </path>
+                    </g>
+                  </svg>
+                </i></a>
+            </div>
+            <div class="col-9 ml-5 left" id="balance_stable" style="font-size: 14px;">
+            </div>
+          </div>
+          <div class="row row-n-2">
+            <div class="col-1 m-0 ml-15 w16 left">
+            </div>
+            <div class="col-9 ml-5 left" id="balance_pending" style="color: #a0a0a0;">
+            </div>
+          </div>
+        </div>
+        <div class="col-9 m-0 w182 mb-4 mt-0 h-37 pt-7 hidden expandable-view btn btn-default" id="wallet_network">
+          <div class="row">
+            <div class="col-1 m-0 ml-15 w16 left" style="color: #a0a0a0;">
+              <i>
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="network-wired"
+                  class="svg-inline--fa fa-network-wired fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 640 512" style="width: 1.3em;">
+                  <path fill="currentColor"
+                    d="M640 264v-16c0-8.84-7.16-16-16-16H344v-40h72c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32H224c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h72v40H16c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h104v40H64c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32V352c0-17.67-14.33-32-32-32h-56v-40h304v40h-56c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32V352c0-17.67-14.33-32-32-32h-56v-40h104c8.84 0 16-7.16 16-16zM256 128V64h128v64H256zm-64 320H96v-64h96v64zm352 0h-96v-64h96v64z">
+                  </path>
+                </svg>
+              </i>
+            </div>
+            <div class="col-9 ml-5 left" id="peer_count" style="font-size: 14px;">
+            </div>
+          </div>
+          <div class="row row-n-2">
+            <div class="col-1 m-0 ml-15 w16 left">
+            </div>
+            <div class="col-9 ml-5 left" style="color: #a0a0a0;">
+              peers
+            </div>
+          </div>
+        </div>
+        <div class="col-9 m-0 w182 mb-4 mt-0 h-37 pt-7 hidden expandable-view btn btn-default" id="wallet_log">
+          <div class="row">
+            <div class="col-1 m-0 ml-15 w16 left" style="color: #a0a0a0;">
+              <i>
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="stream"
+                  class="svg-inline--fa fa-stream fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512" style="width: 1.1em;">
+                  <path fill="currentColor"
+                    d="M16 128h416c8.84 0 16-7.16 16-16V48c0-8.84-7.16-16-16-16H16C7.16 32 0 39.16 0 48v64c0 8.84 7.16 16 16 16zm480 80H80c-8.84 0-16 7.16-16 16v64c0 8.84 7.16 16 16 16h416c8.84 0 16-7.16 16-16v-64c0-8.84-7.16-16-16-16zm-64 176H16c-8.84 0-16 7.16-16 16v64c0 8.84 7.16 16 16 16h416c8.84 0 16-7.16 16-16v-64c0-8.84-7.16-16-16-16z">
+                  </path>
+                </svg>
+              </i>
+            </div>
+            <div class="col-9 ml-5 left" id="log_count" style="font-size: 14px;">
+            </div>
+          </div>
+          <div class="row row-n-2">
+            <div class="col-1 m-0 ml-15 w16 left" style="color: #a0a0a0;">
+            </div>
+            <div class="col-9 ml-5 left" style="color: #a0a0a0;">
+              events
+            </div>
+          </div>
+        </div>
+        <div class="col-9 m-0 w182 mb-4 mt-0 h-37 pt-7 hidden expandable-view btn btn-default" id="wallet_backlog">
+          <div class="row">
+            <div class="col-1 m-0 ml-15 w16 left" style="color: #a0a0a0;">
+              <i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" style="width: 1.4em;">
+                  <path fill="currentColor"
+                    d="M324 216a28 28 0 1 0-28-28 28 28 0 0 0 28 28zm-18.62 140.36l-83-53.67-29.8 109.11a16 16 0 0 0 11.22 19.64 15.8 15.8 0 0 0 4.2.56 16 16 0 0 0 15.43-11.8l18.25-66.89L288 383.23V416a16 16 0 0 0 32 0v-32.77a31.92 31.92 0 0 0-14.62-26.87zm135-9.26l-14 20.86L358.31 326l-10.53-52.75c-3.75-18.61-18.13-33.3-35.56-37.12l-24.59-7.3a48 48 0 0 0-48.78 18l-11.62 15.48a16 16 0 0 0 4.41 23.23l103.92 64 .09.07 70.67 43.48H385a19.13 19.13 0 0 0-18.21 12.51l-9.2 26.4h163.89l-54.32-84.64a16 16 0 0 0-26.75-.26zm190.67 80.78L367.37 25.3a57 57 0 0 0-94.71 0L8.89 427.89a52.87 52.87 0 0 0-2.31 54.88A56.23 56.23 0 0 0 56.29 512h527.45a56.23 56.23 0 0 0 49.71-29.27 52.82 52.82 0 0 0-2.37-54.85zm-39.84 32c-.66 1.24-2.72 4.08-7.5 4.08H56.29c-4.78 0-6.84-2.84-7.5-4.06a5.25 5.25 0 0 1 .25-5.75l263.77-402.6a9.06 9.06 0 0 1 14.41 0L591 454.19a5.27 5.27 0 0 1 .24 5.73z" />
+                </svg>
+              </i>
+            </div>
+            <div class="col-9 ml-5 left" id="backlog_count" style="font-size: 14px;">
+            </div>
+          </div>
+          <div class="row row-n-2">
+            <div class="col-1 m-0 ml-15 w16 left" style="color: #a0a0a0;">
+            </div>
+            <div class="col-9 ml-5 left" style="color: #a0a0a0;">
+              backlog
+            </div>
+          </div>
+        </div>
+        <div class="col-9 m-0 w182 mb-4 mt-0 h-37 pt-7 hidden expandable-view btn btn-default" id="wallet_transaction">
+          <div class="row">
+            <div class="col-1 m-0 ml-15 w16 left" style="color: #a0a0a0;">
+              <i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style="width: 0.8em;">
+                  <path fill="currentColor"
+                    d="M369.83 97.98L285.94 14.1c-9-9-21.2-14.1-33.89-14.1H47.99C21.5.1 0 21.6 0 48.09v415.92C0 490.5 21.5 512 47.99 512h287.94c26.5 0 48.07-21.5 48.07-47.99V131.97c0-12.69-5.17-24.99-14.17-33.99zM255.95 51.99l76.09 76.08h-76.09V51.99zM336 464.01H47.99V48.09h159.97v103.98c0 13.3 10.7 23.99 24 23.99H336v287.95zM208 216c0-4.42-3.58-8-8-8h-16c-4.42 0-8 3.58-8 8v24.12c-23.62.63-42.67 20.55-42.67 45.07 0 19.97 12.98 37.81 31.58 43.39l45 13.5c5.16 1.55 8.77 6.78 8.77 12.73 0 7.27-5.3 13.19-11.8 13.19h-28.11c-4.56 0-8.96-1.29-12.82-3.72-3.24-2.03-7.36-1.91-10.13.73l-11.75 11.21c-3.53 3.37-3.33 9.21.57 12.14 9.1 6.83 20.08 10.77 31.37 11.35V424c0 4.42 3.58 8 8 8h16c4.42 0 8-3.58 8-8v-24.12c23.62-.63 42.67-20.54 42.67-45.07 0-19.97-12.98-37.81-31.58-43.39l-45-13.5c-5.16-1.55-8.77-6.78-8.77-12.73 0-7.27 5.3-13.19 11.8-13.19h28.11c4.56 0 8.96 1.29 12.82 3.72 3.24 2.03 7.36 1.91 10.13-.73l11.75-11.21c3.53-3.37 3.33-9.21-.57-12.14-9.1-6.83-20.08-10.77-31.37-11.35V216zM88 112h80c4.42 0 8-3.58 8-8V88c0-4.42-3.58-8-8-8H88c-4.42 0-8 3.58-8 8v16c0 4.42 3.58 8 8 8zm88 56v-16c0-4.42-3.58-8-8-8H88c-4.42 0-8 3.58-8 8v16c0 4.42 3.58 8 8 8h80c4.42 0 8-3.58 8-8z" />
+                </svg>
+              </i>
+            </div>
+            <div class="col-9 ml-5 left" id="transaction_count" style="font-size: 14px;">
+            </div>
+          </div>
+          <div class="row row-n-2">
+            <div class="col-1 m-0 ml-15 w16 left" style="color: #a0a0a0;">
+            </div>
+            <div class="col-9 ml-5 left" id="backlog" style="color: #a0a0a0;">
+              transactions
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="ads_holder h-50 pt-7" class="col-8 m-0 ads-slider">
+          <span><a id="advertisement_headline"></a></span>
+          <span><a id="advertisement_deck"></a></span>
+      </div>
+    </div>
+  </div>
+  <!--UNCOMMENT ON DEV MODE ONLY
+  <iframe id="frame_millix_api" src="./millix_ws.html" class="hidden-element"
+    onload="millix_bar.onApiFrameReady()"></iframe>
+  -->
+  <iframe id="frame_millix_api" src="chrome-untrusted://millix-ws/" class="hidden-element"
+    onload="millix_bar.onApiFrameReady()"></iframe>
+</body>
+
+</html>

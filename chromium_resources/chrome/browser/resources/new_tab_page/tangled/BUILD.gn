@@ -1,0 +1,30 @@
+# Copyright 2020 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//ui/webui/resources/tools/generate_grd.gni")
+
+assert(!is_android)
+
+generate_grd("build_grdp") {
+  grd_prefix = "new_tab_page"
+  out_grd = "$target_gen_dir/resources.grdp"
+  
+  input_files = [
+    "css/all.css",
+    "css/bootstrap.min.css",
+    "css/animate.css",
+    "css/animsition.min.css",
+    "css/style.css",
+    "images/footer.svg",
+    "js/jquery-2.1.1.js",
+    "js/bootstrap.min.js",
+    "js/plugins.js",
+    "js/custom.js",
+    "js/common.js",
+    "js/fontawesome.min.js"
+  ]
+  input_files_base_dir = rebase_path(".", "//")
+
+  resource_path_prefix = "tangled"
+}

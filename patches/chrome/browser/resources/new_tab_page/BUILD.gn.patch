@@ -1,0 +1,18 @@
+--- a/chrome/browser/resources/new_tab_page/BUILD.gn
++++ b/chrome/browser/resources/new_tab_page/BUILD.gn
+@@ -206,6 +206,7 @@ generate_grd("build_grd") {
+ 
+   grdp_files = [
+     "$target_gen_dir/icons/resources.grdp",
++    "$target_gen_dir/tangled/resources.grdp",
+     "$target_gen_dir/modules/cart/icons/resources.grdp",
+     "$target_gen_dir/modules/feed/icons/resources.grdp",
+     "$target_gen_dir/modules/photos/icons/resources.grdp",
+@@ -216,6 +217,7 @@ generate_grd("build_grd") {
+ 
+   deps = [
+     "icons:build_grdp",
++    "tangled:build_grdp",
+     "modules/cart/icons:build_grdp",
+     "modules/feed/icons:build_grdp",
+     "modules/photos/icons:build_grdp",

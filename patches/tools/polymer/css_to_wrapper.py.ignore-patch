@@ -1,0 +1,24 @@
+diff --git a/tools/polymer/css_to_wrapper.py b/tools/polymer/css_to_wrapper.py
+index 86e892b46a0bc..9c42d80b1a60d 100644
+--- a/tools/polymer/css_to_wrapper.py
++++ b/tools/polymer/css_to_wrapper.py
+@@ -137,7 +137,7 @@ def _extract_metadata(css_file):
+           scheme_match = re.search(_SCHEME_REGEX, line)
+           if scheme_match:
+             scheme = line[scheme_match.end():]
+-            assert scheme in ['chrome', 'relative']
++            assert scheme in ['tangled', 'relative']
+             metadata['scheme'] = scheme
+ 
+         if _METADATA_END_REGEX in line:
+@@ -206,8 +206,8 @@ def main(argv):
+ 
+     # Extract the URL scheme that should be used for absolute URL imports.
+     scheme = None
+-    if metadata['scheme'] in ['default', 'chrome']:
+-      scheme = 'chrome:'
++    if metadata['scheme'] in ['default', 'tangled']:
++      scheme = 'tangled:'
+     elif metadata['scheme'] == 'relative':
+       scheme = ''
+ 

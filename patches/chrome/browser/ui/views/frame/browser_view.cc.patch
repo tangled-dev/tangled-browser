@@ -1,0 +1,52 @@
+diff --git a/chrome/browser/ui/views/frame/browser_view.cc b/chrome/browser/ui/views/frame/browser_view.cc
+index bb711aad149c9..7bee486fe426f 100644
+--- a/chrome/browser/ui/views/frame/browser_view.cc
++++ b/chrome/browser/ui/views/frame/browser_view.cc
+@@ -247,2 +247,6 @@
+ #include "ui/views/window/dialog_delegate.h"
++#include "chrome/browser/ui/views/millix/millix_bar_view.h"
++#include "content/public/browser/site_instance.h"
++#include "content/public/browser/navigation_controller.h"
++#include "content/public/common/bindings_policy.h"
+ 
+@@ -899,6 +899,18 @@ BrowserView::BrowserView(std::unique_ptr<Browser> browser)
+   web_contents_close_handler_ =
+       std::make_unique<WebContentsCloseHandler>(contents_web_view_);
+ 
++  millix_bar_view_ = AddChildView(std::make_unique<views::MillixBarView>(this));
++  millix_bar_view_->SetVisible(false);
++
++  GURL millix_url(chrome::kChromeUIMillixBarURL);
++  WebContents::CreateParams millix_create_params(browser_->profile(), content::SiteInstance::CreateForURL(browser_->profile(), millix_url));
++  millix_create_params.desired_renderer_state = WebContents::CreateParams::kInitializeAndWarmupRendererProcess;
++  std::unique_ptr<WebContents> millix_web_contents(WebContents::Create(millix_create_params));
++
++  content::NavigationController::LoadURLParams params(millix_url);
++  millix_web_contents->GetController().LoadURLWithParams(params);
++  millix_bar_view_->SetWebContents(std::move(millix_web_contents));
++
+   contents_container_ = AddChildView(std::move(contents_container));
+   set_contents_view(contents_container_);
+ 
+@@ -1122,6 +1122,10 @@ bool BrowserView::IsTabStripVisible() const {
+   return tabstrip_ != nullptr;
+ }
+ 
++views::MillixBarView* BrowserView::GetMillixBarView() {
++  return millix_bar_view_;
++}
++
+ bool BrowserView::GetIncognito() const {
+   return browser_->profile()->IsIncognitoProfile();
+ }
+@@ -3796,9 +3796,10 @@ void BrowserView::AddedToWidget() {
+   SetLayoutManager(std::make_unique<BrowserViewLayout>(
+       std::make_unique<BrowserViewLayoutDelegateImpl>(this),
+       GetWidget()->GetNativeView(), this, top_container_,
+       tab_strip_region_view_, tabstrip_, toolbar_, infobar_container_,
++      millix_bar_view_,
+       contents_container_, side_search_side_panel_,
+       left_aligned_side_panel_separator_, right_aligned_side_panel_,
+       right_aligned_side_panel_separator_, lens_side_panel_,
+       immersive_mode_controller_.get(), contents_separator_));
+ 

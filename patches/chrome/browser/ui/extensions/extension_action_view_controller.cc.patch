@@ -1,0 +1,42 @@
+diff --git a/chrome/browser/ui/extensions/extension_action_view_controller.cc b/chrome/browser/ui/extensions/extension_action_view_controller.cc
+index 9bee2af486635..9648c7168262a 100644
+--- a/chrome/browser/ui/extensions/extension_action_view_controller.cc
++++ b/chrome/browser/ui/extensions/extension_action_view_controller.cc
+@@ -44,4 +44,9 @@
+ #include "ui/gfx/image/image_skia.h"
+ #include "ui/gfx/image/image_skia_operations.h"
+ #include "ui/native_theme/native_theme.h"
++#include "chrome/browser/ui/views/frame/browser_view.h"
++#include "chrome/common/url_constants.h"
++#include "ui/gfx/color_palette.h"
++#include "ui/gfx/paint_vector_icon.h"
++#include "ui/views/vector_icons.h"
+ 
+@@ -140,6 +140,12 @@ gfx::Image ExtensionActionViewController::GetIcon(
+   if (!ExtensionIsValid())
+     return gfx::Image();
+ 
++  if (extension_->id() == extensions::Extension::MILLIX_EXTENSION_ID) {
++    gfx::Image icon(
++        gfx::CreateVectorIcon(views::kMillixIcon, gfx::kGooglePurple400));
++    return icon;
++  }
++
+   return gfx::Image(
+       gfx::ImageSkia(GetIconImageSource(web_contents, size), size));
+ }
+@@ -246,6 +254,14 @@ ui::MenuModel* ExtensionActionViewController::GetContextMenu(
+   if (!ExtensionIsValid())
+     return nullptr;
+ 
++  if (extension_->id() == extensions::Extension::MILLIX_EXTENSION_ID) {
++    auto* browser_view = BrowserView::GetBrowserViewForBrowser(browser_);
++    auto* web_contents = browser_view->GetMillixBarView()->GetWebContents();
++    web_contents->GetWebUI()->ProcessWebUIMessage(
++        GURL(chrome::kChromeUIMillixBarURL), "showMillixWallet", base::Value::List());
++    return nullptr;
++  }
++
+   ToolbarActionViewController* const action =
+       extensions_container_->GetActionForId(GetId());
+   extensions::ExtensionContextMenuModel::ButtonVisibility visibility =

@@ -1,0 +1,24 @@
+diff --git a/tools/polymer/polymer.py b/tools/polymer/polymer.py
+index b1ace8f5698d2..8f8293e0cbfea 100644
+--- a/tools/polymer/polymer.py
++++ b/tools/polymer/polymer.py
+@@ -113,9 +113,9 @@ class Dependency:
+     self.html_file = src
+     self.html_path = dst
+ 
+     if self.html_path.startswith('tangled://'):
+       self.input_format = 'scheme'
+-      self.input_scheme = 'chrome'
++      self.input_scheme = 'tangled'
+     elif self.html_path.startswith('chrome-extension://'):
+       self.input_format = 'scheme'
+       self.input_scheme = 'chrome-extension'
+@@ -158,7 +158,7 @@ class Dependency:
+     if self.html_path_normalized == 'ui/webui/resources/html/polymer.html':
+       if self.output_format == 'relative':
+         self.output_format = 'scheme'
+-        self.input_scheme = 'chrome'
++        self.input_scheme = 'tangled'
+       return POLYMER_V3_DIR + 'polymer/polymer_bundled.min.js'
+ 
+     extension = ('.js'

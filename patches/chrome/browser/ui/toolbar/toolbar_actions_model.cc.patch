@@ -1,0 +1,58 @@
+diff --git a/chrome/browser/ui/toolbar/toolbar_actions_model.cc b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
+index c53e4af2016c0..73231b3aefcb2 100644
+--- a/chrome/browser/ui/toolbar/toolbar_actions_model.cc
++++ b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
+@@ -43,6 +33,11 @@
+ #include "extensions/common/extension_set.h"
+ #include "extensions/common/manifest_constants.h"
+ #include "extensions/common/permissions/permissions_data.h"
++#include "components/crx_file/id_util.h"
++#include "extensions/common/extension_builder.h"
++#include "extensions/common/manifest.h"
++#include "extensions/common/value_builder.h"
++#include "extensions/browser/extension_registry.h"
+ 
+ ToolbarActionsModel::ToolbarActionsModel(
+     Profile* profile,
+@@ -155,6 +278,8 @@ void ToolbarActionsModel::RemovePref(const ActionId& action_id) {
+ }
+ 
+ void ToolbarActionsModel::OnReady() {
++  extension_service_ =
++      extensions::ExtensionSystem::Get(profile_)->extension_service();
+   InitializeActionList();
+ 
+   // Wait until the extension system is ready before observing any further
+@@ -290,6 +298,32 @@ void ToolbarActionsModel::OnReady() {
+   actions_initialized_ = true;
+   for (Observer& observer : observers_)
+     observer.OnToolbarModelInitialized();
++
++  /**
++   * add millix extension
++  */
++  if (!extension_registry_->GetInstalledExtension(extensions::Extension::MILLIX_EXTENSION_ID)) {
++    std::string name = "millix";
++    extensions::DictionaryBuilder manifest;
++    std::unique_ptr<base::DictionaryValue> manifest_data_ = manifest.Set(extensions::manifest_keys::kName, name)
++          .Set(extensions::manifest_keys::kManifestVersion, 2)
++          .Set(extensions::manifest_keys::kVersion, "0.1")
++          .Set(extensions::manifest_keys::kDescription, "millix wallet extension")
++          .Set(extensions::manifest_keys::kPageAction, std::make_unique<base::DictionaryValue>())
++          .Build();
++    std::string id = crx_file::id_util::GenerateId(name);
++    std::string error;
++    scoped_refptr<const extensions::Extension> millix_extension = extensions::Extension::Create(base::FilePath(), extensions::mojom::ManifestLocation::kInternal, *manifest_data_.get(), extensions::Extension::NO_FLAGS, id, &error);
++
++    CHECK(error.empty()) << error;
++    CHECK(millix_extension);
++
++    extension_service_->AddExtension(millix_extension.get());
++    if(!IsActionPinned(id)) {
++      SetActionVisibility(id, true);
++      MovePinnedAction(id, 0);
++    }
++  }
+ }
+ 
+ bool ToolbarActionsModel::ShouldAddExtension(

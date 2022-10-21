@@ -1,0 +1,51 @@
+diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resources.grd
+index 5a770836acc4e..630212ed7063f 100644
+--- a/chrome/browser/browser_resources.grd
++++ b/chrome/browser/browser_resources.grd
+@@ -38,6 +38,46 @@
+         <include name="IDR_ABOUT_SYS_CSS" file="resources\about_sys\about_sys.css" flattenhtml="true" type="BINDATA" />
+         <include name="IDR_ABOUT_SYS_JS" file="resources\about_sys\about_sys.js" preprocess="true" type="BINDATA" />
+       </if>
++      <if expr="not is_android">
++        <include name="IDR_MILLIX_BAR_HTML" file="resources\millix\millix_bar.html" type="BINDATA" />
++        <include name="IDR_MILLIX_BAR_CSS" file="resources\millix\millix_bar.css" type="BINDATA" />
++        <include name="IDR_MILLIX_BAR_JS" file="resources\millix\millix_bar.js" type="BINDATA" />
++        <include name="IDR_MILLIX_BAR_CONFIG_JS" file="resources\millix\config.js" type="BINDATA" />
++        <include name="IDR_MILLIX_WS_HTML" file="resources\millix\millix_ws.html" type="BINDATA" />
++        <include name="IDR_MILLIX_WS_JS" file="resources\millix\millix_ws.js" type="BINDATA" />
++        <include name="IDR_MILLIX_BAR_MOMENTJS" file="resources\millix\vendor\moment.min.js" type="BINDATA" />
++        <include name="IDR_MILLIX_BAR_JQUERY" file="resources\millix\vendor\jquery.js" type="BINDATA" />
++        <include name="IDR_MILLIX_BAR_JQUERY_NICE_SCROLL" file="resources\millix\vendor\jquery.nicescroll.js" type="BINDATA" />
++        <!-- app -->
++        <include name="IDR_MILLIX_APP_HTML" file="resources\millix\millix_app.html" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_JS" file="resources\millix\millix_app.js" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_UNTRUSTED_HTML" file="resources\millix\app\index.html" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_FAVICON_HTML" file="resources\millix\app\favicon.ico" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_WITHDRAWAL_MP3" file="resources\millix\app\withdrawal.mp3" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_DEPOSIT_MP3" file="resources\millix\app\deposit.mp3" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_CHUNK_0_CSS" file="resources\millix\app\static\css\2.chunk.css" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_CHUNK_0_CSS_MAP" file="resources\millix\app\static\css\2.chunk.css.map" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_MAIN_CSS" file="resources\millix\app\static\css\main.chunk.css" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_MAIN_CSS_MAP" file="resources\millix\app\static\css\main.chunk.css.map" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_CHUNK_0_JS" file="resources\millix\app\static\js\2.chunk.js" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_CHUNK_0_JS_MAP" file="resources\millix\app\static\js\2.chunk.js.map" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_CHUNK_1_JS" file="resources\millix\app\static\js\3.chunk.js" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_CHUNK_1_JS_MAP" file="resources\millix\app\static\js\3.chunk.js.map" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_MAIN_JS" file="resources\millix\app\static\js\main.chunk.js" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_MAIN_JS_MAP" file="resources\millix\app\static\js\main.chunk.js.map" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_RUNTIME_JS" file="resources\millix\app\static\js\runtime-main.js" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_RUNTIME_JS_MAP" file="resources\millix\app\static\js\runtime-main.js.map" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_PRIMEICONS_EOT" file="resources\millix\app\static\media\primeicons.eot" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_PRIMEICONS_SVG" file="resources\millix\app\static\media\primeicons.svg" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_PRIMEICONS_WOFF" file="resources\millix\app\static\media\primeicons.woff" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_PRIMEICONS_TTF" file="resources\millix\app\static\media\primeicons.ttf" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_ROBOTO_BOLD_WOFF" file="resources\millix\app\static\media\roboto_bold.woff" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_ROBOTO_BOLD_WOFF2" file="resources\millix\app\static\media\roboto_bold.woff2" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_ROBOTO_MEDIUM_WOFF" file="resources\millix\app\static\media\roboto_medium.woff" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_ROBOTO_MEDIUM_WOFF2" file="resources\millix\app\static\media\roboto_medium.woff2" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_ROBOTO_REGULAR_WOFF" file="resources\millix\app\static\media\roboto_regular.woff" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_ROBOTO_REGULAR_WOFF2" file="resources\millix\app\static\media\roboto_regular.woff2" type="BINDATA" />
++      </if>
+       <include name="IDR_AD_NETWORK_HASHES" file="resources\ad_networks.dat" type="BINDATA" />
+       <if expr="enable_webui_certificate_viewer">
+         <include name="IDR_CERTIFICATE_VIEWER_HTML" file="resources\certificate_viewer\certificate_viewer.html" type="BINDATA" />

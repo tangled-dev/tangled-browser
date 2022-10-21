@@ -1,0 +1,15 @@
+diff --git a/components/os_crypt/key_storage_linux.cc b/components/os_crypt/key_storage_linux.cc
+index 15234c8d9a9cb..0520dac429631 100644
+--- a/components/os_crypt/key_storage_linux.cc
++++ b/components/os_crypt/key_storage_linux.cc
+@@ -32,8 +32,8 @@
+ const char KeyStorageLinux::kFolderName[] = "Chrome Keys";
+ const char KeyStorageLinux::kKey[] = "Chrome Safe Storage";
+ #else
+-const char KeyStorageLinux::kFolderName[] = "Chromium Keys";
+-const char KeyStorageLinux::kKey[] = "Chromium Safe Storage";
++const char KeyStorageLinux::kFolderName[] = "Tangled Keys";
++const char KeyStorageLinux::kKey[] = "Tangled Safe Storage";
+ #endif
+ 
+ namespace {

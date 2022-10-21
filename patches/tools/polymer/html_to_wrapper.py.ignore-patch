@@ -1,0 +1,24 @@
+diff --git a/tools/polymer/html_to_wrapper.py b/tools/polymer/html_to_wrapper.py
+index c04a7faefbd50..5faff2dc5da0e 100644
+--- a/tools/polymer/html_to_wrapper.py
++++ b/tools/polymer/html_to_wrapper.py
+@@ -63,8 +63,8 @@ def main(argv):
+                       choices=['polymer', 'native'],
+                       default='polymer')
+   parser.add_argument('--scheme',
+-                      choices=['chrome', 'relative'],
+-                      default='chrome')
++                      choices=['tangled', 'relative'],
++                      default='tangled')
+ 
+   args = parser.parse_args(argv)
+ 
+@@ -118,7 +118,7 @@ def main(argv):
+ 
+       wrapper = template % {
+           'content': html_content,
+-          'scheme': 'chrome:' if args.scheme == 'chrome' else '',
++          'scheme': 'tangled:' if args.scheme == 'tangled' else '',
+       }
+ 
+       out_folder_for_file = path.join(out_folder, path.dirname(in_file))

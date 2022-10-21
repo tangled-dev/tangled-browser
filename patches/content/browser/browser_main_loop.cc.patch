@@ -1,0 +1,100 @@
+diff --git a/content/browser/browser_main_loop.cc b/content/browser/browser_main_loop.cc
+index 5c3c8e53064c1..6428c5b45e192 100644
+--- a/content/browser/browser_main_loop.cc
++++ b/content/browser/browser_main_loop.cc
+@@ -12,6 +12,7 @@
+ #include <tuple>
+ #include <utility>
+ #include <vector>
++#include <signal.h>
+ 
+ #include "base/base_switches.h"
+ #include "base/bind.h"
+@@ -147,6 +148,7 @@
+ #include "ui/display/display_features.h"
+ #include "ui/gfx/font_render_params.h"
+ #include "ui/gfx/switches.h"
++#include "base/process/kill.h"
+ 
+ #if defined(USE_AURA) || BUILDFLAG(IS_MAC)
+ #include "content/browser/compositor/image_transport_factory.h"
+@@ -838,6 +840,9 @@ void BrowserMainLoop::CreateStartupTasks() {
+       &BrowserMainLoop::PreMainMessageLoopRun, base::Unretained(this));
+   startup_task_runner_->AddTask(std::move(pre_main_message_loop_run));
+ 
++  StartupTask create_millix_node = base::BindOnce(&BrowserMainLoop::CreateMillixNode, base::Unretained(this));
++  startup_task_runner_->AddTask(std::move(create_millix_node));
++
+ // On Android, the native message loop is already running when the app is
+ // entered and startup tasks are run asynchrously from it.
+ // InterceptMainMessageLoopRun() thus needs to be forced instead of happening
+@@ -919,6 +925,46 @@ int BrowserMainLoop::CreateThreads() {
+   return result_code_;
+ }
+ 
++
++int BrowserMainLoop::CreateMillixNode() {
++  base::FilePath dir_exe = base::FilePath();
++  base::PathService::Get(base::DIR_EXE, &dir_exe);
++  LOG(INFO) << "running node from " << dir_exe.value().c_str();
++
++  base::LaunchOptions options;
++  #if defined(OS_MAC)
++      options.current_directory = dir_exe.AppendASCII("../Resources/millix_node");
++  #else
++    options.current_directory = dir_exe.AppendASCII("millix_node");
++  #endif
++
++  #if defined(OS_WIN)
++    options.start_hidden = true;
++    base::CommandLine millix_command_line(
++        dir_exe.AppendASCII("millix_node\\nodejs\\node.exe"));
++  #else
++    #if defined(OS_MAC)
++      base::CommandLine millix_command_line(dir_exe.AppendASCII("../Resources/millix_node/nodejs/bin/node"));
++    #else
++      base::CommandLine millix_command_line(dir_exe.AppendASCII("millix_node/nodejs/bin/node"));
++    #endif
++    options.new_process_group = true;
++  #endif
++  millix_command_line.AppendArg("index.dist.js");
++  millix_command_line.AppendArg("--pid-file");
++  millix_command_line.AppendArg("./millix-node.pid");
++  // --enable-logging --v=2
++  LOG(INFO) << "Starting millix node: " << millix_command_line.GetCommandLineString();
++
++  millix_process_ = std::make_unique<base::Process>(base::LaunchProcess(millix_command_line, options));
++  if (!millix_process_->IsValid()) {
++    LOG(ERROR) << "Unable to run millix node " << millix_command_line.GetCommandLineString().c_str();
++    return -1;
++  }
++  LOG(ERROR) << "millix node process handle" << millix_process_->Handle();
++  return 0;
++}
++
+ int BrowserMainLoop::PostCreateThreads() {
+   TRACE_EVENT0("startup", "BrowserMainLoop::PostCreateThreads");
+ 
+@@ -1053,6 +1099,22 @@ void BrowserMainLoop::RunMainMessageLoopParts() {
+ }
+ 
+ void BrowserMainLoop::ShutdownThreadsAndCleanUp() {
++
++  if (millix_process_->IsValid()) {
++    #if defined(OS_WIN)
++      int exit_code = 0;
++      if(!millix_process_->WaitForExitWithTimeout(base::TimeDelta(), &exit_code)) {
++        millix_process_->Terminate(0, false);
++      }
++      millix_process_->Close();
++    #else
++      auto pgid = -millix_process_->Pid();
++      LOG(ERROR) << "killing process group id " << pgid;
++      kill(pgid, SIGTERM);
++      kill(millix_process_->Pid(), SIGTERM);
++    #endif
++  }
++
+   if (!created_threads_) {
+     // Called early, nothing to do
+     return;

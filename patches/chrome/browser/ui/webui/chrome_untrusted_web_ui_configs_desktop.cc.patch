@@ -1,0 +1,21 @@
+diff --git a/chrome/browser/ui/webui/chrome_untrusted_web_ui_configs_desktop.cc b/chrome/browser/ui/webui/chrome_untrusted_web_ui_configs_desktop.cc
+index 6c1b339e5f983..396aeaa390eaa 100644
+--- a/chrome/browser/ui/webui/chrome_untrusted_web_ui_configs_desktop.cc
++++ b/chrome/browser/ui/webui/chrome_untrusted_web_ui_configs_desktop.cc
+@@ -7,12 +7,16 @@
+ #include "chrome/browser/ui/webui/feed/feed_ui_config.h"
+ #include "chrome/browser/ui/webui/image_editor/image_editor_untrusted_ui.h"
+ #include "content/public/browser/webui_config_map.h"
++#include "chrome/browser/ui/webui/millix/untrusted_millix_ws_config.h"
++#include "chrome/browser/ui/webui/millix/untrusted_millix_app_config.h"
+ 
+ void RegisterDesktopChromeUntrustedWebUIConfigs() {
+   auto& map = content::WebUIConfigMap::GetInstance();
+ 
+   // Add untrusted `WebUIConfig`s common across all platforms excluding Android
+   // here.
++  map.AddUntrustedWebUIConfig(std::make_unique<UntrustedMillixWSConfig>());
++  map.AddUntrustedWebUIConfig(std::make_unique<UntrustedMillixAppConfig>());
+   map.AddUntrustedWebUIConfig(std::make_unique<feed::FeedUIConfig>());
+   map.AddUntrustedWebUIConfig(
+       std::make_unique<image_editor::ImageEditorUntrustedUIConfig>());

@@ -1,0 +1,35 @@
+diff --git a/chrome/browser/ui/views/frame/browser_view_layout.h b/chrome/browser/ui/views/frame/browser_view_layout.h
+index ebc8051dcbae6..77c30f138a7af 100644
+--- a/chrome/browser/ui/views/frame/browser_view_layout.h
++++ b/chrome/browser/ui/views/frame/browser_view_layout.h
+@@ -29,6 +29,7 @@ class Point;
+ namespace views {
+ class View;
+ class Widget;
++class MillixBarView;
+ }  // namespace views
+ 
+ namespace web_modal {
+@@ -56,5 +57,6 @@ class BrowserViewLayout : public views::LayoutManager {
+                     TabStripRegionView* tab_strip_region_view,
+                     TabStrip* tab_strip,
+                     views::View* toolbar,
+                     InfoBarContainerView* infobar_container,
++                    views::MillixBarView* millix_bar_view,
+                     views::View* contents_container,
+@@ -131,6 +131,7 @@ class BrowserViewLayout : public views::LayoutManager {
+   int LayoutBookmarkAndInfoBars(int top, int browser_view_y);
+   int LayoutBookmarkBar(int top);
+   int LayoutInfoBar(int top);
++  int LayoutMillixBar(int top);
+ 
+   // Layout the |contents_container_| view between the coordinates |top| and
+   // |bottom|. See browser_view.h for details of the relationship between
+@@ -172,6 +172,7 @@ class BrowserViewLayout : public views::LayoutManager {
+   const raw_ptr<TabStripRegionView> tab_strip_region_view_;
+   const raw_ptr<views::View> toolbar_;
+   const raw_ptr<InfoBarContainerView> infobar_container_;
++  views::MillixBarView* millix_bar_view_ = nullptr;
+   const raw_ptr<views::View> contents_container_;
+   const raw_ptr<views::View> side_search_side_panel_;
+   const raw_ptr<views::View> left_aligned_side_panel_separator_;

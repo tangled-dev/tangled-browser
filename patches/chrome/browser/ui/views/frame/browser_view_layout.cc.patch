@@ -1,0 +1,71 @@
+diff --git a/chrome/browser/ui/views/frame/browser_view_layout.cc b/chrome/browser/ui/views/frame/browser_view_layout.cc
+index 1f790b4d87dae..c89744b901106 100644
+--- a/chrome/browser/ui/views/frame/browser_view_layout.cc
++++ b/chrome/browser/ui/views/frame/browser_view_layout.cc
+@@ -46,2 +46,3 @@
+ #include "ui/views/window/client_view.h"
++#include "chrome/browser/ui/views/millix/millix_bar_view.h"
+ 
+@@ -151,5 +151,6 @@ BrowserViewLayout::BrowserViewLayout(
+     TabStripRegionView* tab_strip_region_view,
+     TabStrip* tab_strip,
+     views::View* toolbar,
+     InfoBarContainerView* infobar_container,
++    views::MillixBarView* millix_bar_view,
+     views::View* contents_container,
+@@ -166,5 +166,6 @@ BrowserViewLayout::BrowserViewLayout(
+       top_container_(top_container),
+       tab_strip_region_view_(tab_strip_region_view),
+       toolbar_(toolbar),
+       infobar_container_(infobar_container),
++      millix_bar_view_(millix_bar_view),
+       contents_container_(contents_container),
+@@ -211,6 +211,7 @@ gfx::Size BrowserViewLayout::GetMinimumSize(const views::View* host) const {
+   gfx::Size toolbar_size((has_toolbar || has_location_bar)
+                              ? toolbar_->GetMinimumSize()
+                              : gfx::Size());
++  gfx::Size millix_bar_size(millix_bar_view_->GetMinimumSize());
+   gfx::Size bookmark_bar_size;
+   if (has_bookmarks_bar)
+     bookmark_bar_size = bookmark_bar_->GetMinimumSize();
+@@ -229,11 +229,11 @@ gfx::Size BrowserViewLayout::GetMinimumSize(const views::View* host) const {
+   const int min_height =
+       delegate_->GetTopInsetInBrowserView() + tabstrip_size.height() +
+       toolbar_size.height() + bookmark_bar_size.height() +
+-      infobar_container_size.height() + contents_size.height();
++      infobar_container_size.height() + contents_size.height() + millix_bar_size.height();
+ 
+   const int min_width = std::max(
+       {tabstrip_size.width(), toolbar_size.width(), bookmark_bar_size.width(),
+-       infobar_container_size.width(), contents_size.width()});
++       infobar_container_size.width(), contents_size.width(), millix_bar_size.width()});
+ 
+   return gfx::Size(min_width, min_height);
+ }
+@@ -372,7 +372,7 @@ void BrowserViewLayout::Layout(views::View* browser_view) {
+   }
+   top = LayoutWebUITabStrip(top);
+   top = LayoutToolbar(top);
+-
++  top = LayoutMillixBar(top);
+   top = LayoutBookmarkAndInfoBars(top, browser_view->y());
+ 
+   // Top container requires updated toolbar and bookmark bar to compute bounds.
+@@ -546,6 +546,17 @@ int BrowserViewLayout::LayoutInfoBar(int top) {
+   return top + infobar_container_->height();
+ }
+ 
++int BrowserViewLayout::LayoutMillixBar(int top) {
++  TRACE_EVENT0("ui", "BrowserViewLayout::LayoutMillixBar");
++  bool is_visible = millix_bar_view_->GetVisible();
++  int browser_view_width = vertical_layout_rect_.width();
++  int height = is_visible ? millix_bar_view_->GetPreferredSize().height() : 0;
++  SetViewVisibility(millix_bar_view_, is_visible);
++  millix_bar_view_->SetViewBounds(vertical_layout_rect_.x(), top, browser_view_width,
++                      height);
++  return millix_bar_view_->bounds().bottom();
++}
++
+ void BrowserViewLayout::LayoutContentsContainerView(int top, int bottom) {
+   TRACE_EVENT0("ui", "BrowserViewLayout::LayoutContentsContainerView");
+   // |contents_container_| contains web page contents and devtools.

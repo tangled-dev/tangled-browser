@@ -1,0 +1,5 @@
+src
+.cipd
+nodejs
+.gclient*
+applied_patches.log

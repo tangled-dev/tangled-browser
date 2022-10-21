@@ -1,0 +1,21 @@
+diff --git a/chrome/browser/ui/BUILD.gn b/chrome/browser/ui/BUILD.gn
+index 821c5d429cc6e..f46fab8e4673c 100644
+--- a/chrome/browser/ui/BUILD.gn
++++ b/chrome/browser/ui/BUILD.gn
+@@ -5104,2 +5104,16 @@ static_library("ui") {
+       "window_name_prompt/window_name_prompt.cc",
++      "views/millix/millix_bar_view.cc",
++      "views/millix/millix_bar_view.h",
++      "webui/millix/millix_bar.cc",
++      "webui/millix/millix_bar.h",
++      "webui/millix/millix_app.cc",
++      "webui/millix/millix_app.h",
++      "webui/millix/untrusted_millix_ws.cc",
++      "webui/millix/untrusted_millix_ws.h",
++      "webui/millix/untrusted_millix_ws_config.cc",
++      "webui/millix/untrusted_millix_ws_config.h",
++      "webui/millix/untrusted_millix_app.cc",
++      "webui/millix/untrusted_millix_app.h",
++      "webui/millix/untrusted_millix_app_config.cc",
++      "webui/millix/untrusted_millix_app_config.h",
+     ]

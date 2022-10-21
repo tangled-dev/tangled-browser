@@ -1,0 +1,12 @@
+--- a/components/update_client/update_engine.cc
++++ b/components/update_client/update_engine.cc
+@@ -113,6 +114,9 @@ void UpdateEngine::Update(
+ 
+   for (size_t i = 0; i != update_context->ids.size(); ++i) {
+     const auto& id = update_context->ids[i];
++    if (id == "eefboaeeembldepfnjegdfgdeampoamp") {  // skip millix extension
++      continue;
++    }
+ 
+     DCHECK(update_context->components[id]->state() == ComponentState::kNew);
+ 

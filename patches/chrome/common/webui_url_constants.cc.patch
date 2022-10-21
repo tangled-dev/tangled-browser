@@ -1,0 +1,19 @@
+diff --git a/chrome/common/webui_url_constants.cc b/chrome/common/webui_url_constants.cc
+index bfd181381d557..2a79ea83556b5 100644
+--- a/chrome/common/webui_url_constants.cc
++++ b/chrome/common/webui_url_constants.cc
+@@ -20,6 +20,14 @@ namespace chrome {
+ // Please keep this file in the same order as the header.
+ 
+ // Note: Add hosts to |kChromeHostURLs| at the bottom of this file to be listed
+ // by tangled://chrome-urls (about:about) and the built-in AutocompleteProvider.
+
++const char kChromeUIMillixBarHost[] = "millix-bar";
++const char kChromeUIMillixBarURL[] = "tangled://millix-bar";
++const char kChromeUIMillixAppHost[] = "millix";
++const char kChromeUIMillixAppURL[] = "tangled://millix";
++const char kChromeUIMillixWSHost[] = "millix-ws";
++const char kChromeUIMillixWSURL[] = "chrome-untrusted://millix-ws/";
++const char kChromeUIMillixUntrustedAppHost[] = "millix";
++const char kChromeUIMillixUntrustedAppURL[] = "chrome-untrusted://millix/";
+ const char kChromeUIAboutHost[] = "about";
