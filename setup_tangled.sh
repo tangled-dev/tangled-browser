@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 git_apply() {
     echo "appling patch $1"

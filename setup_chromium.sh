@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd src
 
 echo "reset git changes"

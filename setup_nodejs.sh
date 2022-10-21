@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -d "./nodejs" ]; then
     echo "using cached nodejs"
