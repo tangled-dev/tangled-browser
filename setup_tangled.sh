@@ -22,6 +22,12 @@ git_apply() {
     echo "$1" >> ../applied_patches.log 
 }
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  SEDOPTION="-i ''"
+else
+  SEDOPTION="-i"
+fi
+
 cd src
 
 echo "replace chrome: with tangled: in the following folders"
@@ -29,35 +35,35 @@ echo "android_webview ash base build chrome chromecast chromeos components conte
 
 for folder in android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer; do
     echo "processing folder $folder"
-    LC_ALL=C find $folder -not -path '*/.*' -type f -exec sed -i '' 's/"chrome:/"tangled:/gi' {} \; -exec sed -i '' 's/chrome:\/\//tangled:\/\//gi' {} \;
+    LC_ALL=C find $folder -not -path '*/.*' -type f -exec sed $SEDOPTION 's/"chrome:/"tangled:/gi' {} \; -exec sed $SEDOPTION 's/chrome:\/\//tangled:\/\//gi' {} \;
 done
 
 echo "activate tangled: schema"
 
 for folder in chrome chromeos components content ios; do
     echo "processing folder $folder"
-    LC_ALL=C find $folder -not -path '*/.*' -type f \( -name "*.cc" -or -name "*.h" \) -exec sed -i '' 's/Scheme\[\] = "chrome"/Scheme\[\] = "tangled"/g' {} \;
+    LC_ALL=C find $folder -not -path '*/.*' -type f \( -name "*.cc" -or -name "*.h" \) -exec sed $SEDOPTION 's/Scheme\[\] = "chrome"/Scheme\[\] = "tangled"/g' {} \;
 done
 
 
 echo "rebranding: rename app"
 
-sed -i '' 's/PRODUCT_STRING "Chromium"/PRODUCT_STRING "Tangled"/g' chrome/common/chrome_constants.cc
-sed -i '' "s/'Chromium/'Tangled/g" tools/mb/mb.py
+sed $SEDOPTION 's/PRODUCT_STRING "Chromium"/PRODUCT_STRING "Tangled"/g' chrome/common/chrome_constants.cc
+sed $SEDOPTION "s/'Chromium/'Tangled/g" tools/mb/mb.py
 
 echo "regranding: update texts"
 for folder in chrome chromeos components content ios; do
     echo "processing folder $folder"
-    LC_ALL=C find $folder -not -path '*/.*' -type f \( -name "*.grdp" -or -name "*.grd" -or -name "*.xtb" \) -exec sed -i '' "s/Chromium/Tangled/g" {} \;
+    LC_ALL=C find $folder -not -path '*/.*' -type f \( -name "*.grdp" -or -name "*.grd" -or -name "*.xtb" \) -exec sed $SEDOPTION "s/Chromium/Tangled/g" {} \;
 done
 
 echo "regranding: fix chrominum link"
-sed -i '' 's/Tangled<ph name="END_LINK_CHROMIUM"/Chromium<ph name="END_LINK_CHROMIUM"/g' components/components_chromium_strings.grd
-LC_ALL=C find components/strings -not -path '*/.*' -type f \( -name "*.grdp" -or -name "*.grd" -or -name "*.xtb" \) -exec sed -i '' "s/Chromium/Tangled/g" {} \;
+sed $SEDOPTION 's/Tangled<ph name="END_LINK_CHROMIUM"/Chromium<ph name="END_LINK_CHROMIUM"/g' components/components_chromium_strings.grd
+LC_ALL=C find components/strings -not -path '*/.*' -type f \( -name "*.grdp" -or -name "*.grd" -or -name "*.xtb" \) -exec sed $SEDOPTION "s/Chromium/Tangled/g" {} \;
 
 echo "regranding: fix default data folder"
-sed -i '' 's/"Chromium"/"Tangled"/g' chrome/browser/mac/initial_prefs.mm
-sed -i '' 's/"Chromium"/"Tangled"/g' chrome/common/chrome_paths_mac.mm
+sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/browser/mac/initial_prefs.mm
+sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/common/chrome_paths_mac.mm
 
 echo "apply tangled patches"
 LC_ALL=C find ../patches -not -path '*/.*' -type f -name "*.patch" | while read fpatch; do
