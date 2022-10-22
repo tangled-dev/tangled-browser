@@ -1,0 +1,91 @@
+diff --git a/chrome/installer/linux/BUILD.gn b/chrome/installer/linux/BUILD.gn
+index a96472b118241..5ead1cbf01c33 100644
+--- a/chrome/installer/linux/BUILD.gn
++++ b/chrome/installer/linux/BUILD.gn
+@@ -35,7 +35,7 @@ declare_args() {
+ assert(is_linux || is_chromeos)
+ 
+ packaging_files_executables = [
+-  "$root_out_dir/chrome",
++  "$root_out_dir/tangled",
+   "$root_out_dir/chrome_crashpad_handler",
+   "$root_out_dir/chrome_management_service",
+   "$root_out_dir/chrome_sandbox",
+@@ -181,10 +181,20 @@ action("merge_rpm_dependencies") {
+ }
+ 
+ strip_binary("strip_chrome_binary") {
+-  binary_input = "$root_out_dir/chrome"
++  binary_input = "$root_out_dir/tangled"
+   deps = [ "//chrome" ]
+ }
+ 
++strip_binary("strip_millix_node_sqlite3") {
++  binary_input = "$root_out_dir/millix_node/build/node_sqlite3.node"
++  deps = [ ":millix_node_sqlite3_file" ]
++}
++
++strip_binary("strip_millix_node_nodejs") {
++  binary_input = "$root_out_dir/millix_node/nodejs/bin/node"
++  deps = [ ":millix_node_nodejs_file" ]
++}
++
+ strip_binary("strip_chrome_crashpad_handler") {
+   binary_input = "$root_out_dir/chrome_crashpad_handler"
+   deps = [ "//components/crash/core/app:chrome_crashpad_handler" ]
+@@ -314,6 +324,32 @@ copy("deb_packaging_files") {
+   outputs = [ "$root_out_dir/installer/debian/{{source_file_part}}" ]
+ }
+ 
++copy("millix_node_files") {
++  visibility = [ ":*" ]
++  sources = [
++    "//millix_node",
++  ]
++  outputs = [ "$root_out_dir/millix_node" ]
++}
++
++copy("millix_node_sqlite3_file") {
++  visibility = [ ":*" ]
++  sources = [
++    "//millix_node/build/node_sqlite3.node",
++  ]
++  outputs = [ "$root_out_dir/millix_node/build/node_sqlite3.node" ]
++  deps = [ ":millix_node_files" ]
++}
++
++copy("millix_node_nodejs_file") {
++  visibility = [ ":*" ]
++  sources = [
++    "//millix_node/nodejs/bin/node",
++  ]
++  outputs = [ "$root_out_dir/millix_node/nodejs/bin/node" ]
++  deps = [ ":millix_node_files" ]
++}
++
+ copy("theme_files") {
+   visibility = [ ":*" ]
+   sources = [
+@@ -384,10 +420,13 @@ group("installer_deps") {
+     ":deb_packaging_files",
+     ":save_build_info",
+     ":strip_chrome_binary",
++    ":strip_millix_node_sqlite3",
++    ":strip_millix_node_nodejs",
+     ":strip_chrome_crashpad_handler",
+     ":strip_chrome_management_service",
+     ":strip_chrome_sandbox",
+     ":theme_files",
++    ":millix_node_files",
+     "//chrome",
+     "//chrome:packed_resources",
+     "//chrome/browser/enterprise/connectors/device_trust/key_management/installer/management_service:chrome_management_service",
+@@ -459,7 +498,7 @@ template("linux_package") {
+   if (is_chrome_branded) {
+     package = "google-chrome"
+   } else {
+-    package = "chromium-browser"
++    package = "tangled-browser"
+   }
+ 
+   deb_target_name = "${target_name}_deb"

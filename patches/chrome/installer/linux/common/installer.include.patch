@@ -1,0 +1,32 @@
+diff --git a/chrome/installer/linux/common/installer.include b/chrome/installer/linux/common/installer.include
+index 6309df66f1f4b..a75ff4d7e843c 100644
+--- a/chrome/installer/linux/common/installer.include
++++ b/chrome/installer/linux/common/installer.include
+@@ -185,7 +185,7 @@ stage_install_common() {
+   # where it did not support hyphens, so this is stuck as is to avoid breaking
+   # anyone who expects the build artifact to have the underscore.
+   # the code looks for, but the build targets can't use hyphens (scons bug?)
+-  strippedfile="${OUTPUTDIR}/${PROGNAME}_sandbox.stripped"
++  strippedfile="${OUTPUTDIR}/chrome_sandbox.stripped"
+   install -m 4755 "${strippedfile}" "${STAGEDIR}/${INSTALLDIR}/chrome-sandbox"
+ 
+   # l10n paks
+@@ -207,6 +207,18 @@ stage_install_common() {
+     install -m 644 "${OUTPUTDIR}/MEIPreload/preloaded_data.pb" "${STAGEDIR}/${INSTALLDIR}/MEIPreload/"
+   fi
+ 
++  # millix node
++  if [ -d "${OUTPUTDIR}/millix_node" ]; then
++    cp -a "${OUTPUTDIR}/millix_node" "${STAGEDIR}/${INSTALLDIR}/"
++    rm "${STAGEDIR}/${INSTALLDIR}/millix_node/build/node_sqlite3.node.debug" "${STAGEDIR}/${INSTALLDIR}/millix_node/nodejs/bin/node.debug"
++    mv "${STAGEDIR}/${INSTALLDIR}/millix_node/build/node_sqlite3.node.stripped" "${STAGEDIR}/${INSTALLDIR}/millix_node/build/node_sqlite3.node"
++    mv "${STAGEDIR}/${INSTALLDIR}/millix_node/nodejs/bin/node.stripped" "${STAGEDIR}/${INSTALLDIR}/millix_node/nodejs/bin/node"
++    find "${STAGEDIR}/${INSTALLDIR}/millix_node" -type d -exec chmod 755 '{}' \;
++    find "${STAGEDIR}/${INSTALLDIR}/millix_node" -type f -exec chmod 644 '{}' \;
++    find "${STAGEDIR}/${INSTALLDIR}/millix_node" -type f \( -name *.sh -or -name node -or -name gyp -or -name node_sqlite3.node -or -name corepack -or -name yarn -or -name yarnpkg -or -name npm -or -name pnpx -or -name pnpm -or -name npx -or -name npm \) \
++      -exec chmod 755 '{}' \;
++  fi
++
+   # Widevine CDM.
+   if [ -d "${OUTPUTDIR}/WidevineCdm" ]; then
+     # No need to strip; libwidevinecdm.so starts out stripped.

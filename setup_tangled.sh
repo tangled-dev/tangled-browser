@@ -81,20 +81,22 @@ cp -r ../millix-wallet-ui/build/* chrome/browser/resources/millix/app/
 
 gn gen out/Default --args="cc_wrapper=\"ccache\" target_cpu = \"$2\" is_debug = false ffmpeg_branding = \"Chrome\" proprietary_codecs = true enable_widevine = true"
 
+echo "copy millix node to the tangled browser app"
+rm -rf millix_node
+mkdir -p millix_node
+cp -r ../millix-node/{scripts,package.json} millix_node
+cp -r ../millix-node/dist/* millix_node
+cp -r ../tangled-advertisement/lib/tangled-advertisement.js millix_node
+cp -r ../nodejs millix_node
+
 if [[ "$1" == "darwin" ]]; then
     echo "build tangled for macos"
     autoninja -C out/Default chrome
-    MILLIX_NODE_FOLDER=out/Default/Tangled.app/Contents/Resources/millix_node
-    rm -rf $MILLIX_NODE_FOLDER
-    mkdir -p $MILLIX_NODE_FOLDER
+    cp -r millix_node out/Default/Tangled.app/Contents/Resources/millix_node
 elif [[ "$1" == "linux" ]]; then
     echo "build tangled for linux"
+    autoninja -C out/Default chrome
+    autoninja -C out/Default installer
 elif [[ "$1" == "win" ]]; then
     echo "build tangled for windows"
 fi
-
-echo "copy millix node to the tangled browser app"
-cp -r ../millix-node/{scripts,package.json} $MILLIX_NODE_FOLDER
-cp -r ../millix-node/dist/* $MILLIX_NODE_FOLDER
-cp -r ../tangled-advertisement/lib/tangled-advertisement.js $MILLIX_NODE_FOLDER
-cp -r ../nodejs $MILLIX_NODE_FOLDER

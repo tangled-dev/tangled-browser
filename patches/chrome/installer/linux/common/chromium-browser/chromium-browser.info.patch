@@ -1,0 +1,47 @@
+diff --git a/chrome/installer/linux/common/chromium-browser/chromium-browser.info b/chrome/installer/linux/common/chromium-browser/chromium-browser.info
+index b02a49c4d44d9..471539b3caea8 100644
+--- a/chrome/installer/linux/common/chromium-browser/chromium-browser.info
++++ b/chrome/installer/linux/common/chromium-browser/chromium-browser.info
+@@ -6,31 +6,31 @@
+ # chromium-browser packages for various platforms.
+ 
+ # Base name of the package.
+-PACKAGE="chromium-browser"
++PACKAGE="tangled-browser"
+ 
+ # Base name of the snap package
+-SNAPNAME="chromium"
++SNAPNAME="tangled"
+ 
+ # Filename of the main executable (for generating launcher scripts, etc.)
+-PROGNAME=chrome
++PROGNAME=tangled
+ 
+ # Base directory for package installation.
+-INSTALLDIR=/opt/chromium.org/chromium
++INSTALLDIR=/opt/tangled.com/tangled
+ 
+ # Directory for device policy enrollments.
+-ENROLLMENTDIR=/etc/chromium/policies/enrollment
++ENROLLMENTDIR=/etc/tangled/policies/enrollment
+ 
+ # Display string for desktop menu/icon.
+-MENUNAME="Chromium Web Browser"
++MENUNAME="Tangled Browser"
+ 
+ # Brief package description.
+-SHORTDESC="The web browser from Chromium.org"
++SHORTDESC="The web browser from tangled.com"
+ 
+ # Detailed package description.
+-FULLDESC="Chromium is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier."
++FULLDESC="Tangled is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier."
+ 
+ # Package maintainer information.
+ # TODO(mmoss) Setup a mailbox for this address
+-MAINTNAME="Chromium Linux Team"
+-MAINTMAIL="chromium-linux-packager@chromium.org"
+-PRODUCTURL="http://www.chromium.org/"
++MAINTNAME="Tangled Team"
++MAINTMAIL="developer@tangled.com"
++PRODUCTURL="http://www.tangled.com/"
