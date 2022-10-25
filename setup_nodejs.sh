@@ -10,13 +10,15 @@ NODEJS_DIST_UNIX=("darwin-x64" "darwin-arm64" "linux-x64")
 
 if [[ " ${NODEJS_DIST_UNIX[@]} " =~ " ${NODEJS_DIST} " ]]; then
     NODEJS_FILE="node-v16.18.0-$1.tar.gz"
+    TAR_ARGS="-xvf"
 else
     NODEJS_FILE="node-v16.18.0-$1.zip"
+    TAR_ARGS="-zxvf"
 fi
 NODE_URL="https://nodejs.org/dist/v16.18.0/$NODEJS_FILE"
 echo "downloading node v16.18.0 for $NODE_URL"
 curl $NODE_URL -O $NODEJS_FILE
-tar xvf $NODEJS_FILE
+tar $TAR_ARGS $NODEJS_FILE
 mv "node-v16.18.0-$1" nodejs
 rm -rf $NODEJS_FILE
 
