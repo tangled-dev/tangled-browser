@@ -8,6 +8,7 @@ clone the repository and it's submodules
 
 ````
     git clone https://github.com/tangled-dev/tangled-browser.git
+    git submodule init
     git submodule update
 ````
 
