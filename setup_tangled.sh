@@ -79,11 +79,6 @@ LC_ALL=C find ../patches -not -path '*/.*' -type f -name "*.patch" | while read 
     git_apply $fpatch
 done
 
-echo "apply tangled patches"
-LC_ALL=C find ../patches -not -path '*/.*' -type f -name "*.patch" | while read fpatch; do
-    git_apply $fpatch
-done
-
 cp -r ../chromium_resources/* .
 cp -r ../tangled-millix-bar-ui/* chrome/browser/resources/millix/
 cp -r ../millix-wallet-ui/build/* chrome/browser/resources/millix/app/
