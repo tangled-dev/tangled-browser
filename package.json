@@ -1,0 +1,27 @@
+{
+  "name": "tangled",
+  "version": "1.22.0",
+  "description": "the tangled browser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tangled-dev/tangled-browser.git"
+  },
+  "keywords": [
+    "crypto",
+    "browser",
+    "millix"
+  ],
+  "author": "developer@tangled.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tangled-dev/tangled-browser/issues"
+  },
+  "homepage": "https://github.com/tangled-dev/tangled-browser#readme",
+  "dependencies": {
+    "replace-in-file": "^6.3.5"
+  }
+}

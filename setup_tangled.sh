@@ -35,14 +35,15 @@ echo "android_webview ash base build chrome chromecast chromeos components conte
 
 for folder in android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer; do
     echo "processing folder $folder"
-    LC_ALL=C find $folder -not -path '*/.*' -type f -exec sed $SEDOPTION 's/"chrome:/"tangled:/gi' {} \; -exec sed $SEDOPTION 's/chrome:\/\//tangled:\/\//gi' {} \;
+    npx replace-in-file '"chrome:' '"tangled:' $folder/**/*  --verbose
+    npx replace-in-file 'chrome://' 'tangled://' $folder/**/*  --verbose
 done
 
 echo "activate tangled: schema"
 
 for folder in chrome chromeos components content ios; do
     echo "processing folder $folder"
-    LC_ALL=C find $folder -not -path '*/.*' -type f \( -name "*.cc" -or -name "*.h" \) -exec sed $SEDOPTION 's/Scheme\[\] = "chrome"/Scheme\[\] = "tangled"/g' {} \;
+    npx replace-in-file 'Scheme[] = "chrome"' 'Scheme[] = "tangled"' $folder/**/*.cc,$folder/**/*.h --verbose
 done
 
 
@@ -54,12 +55,12 @@ sed $SEDOPTION "s/'Chromium/'Tangled/g" tools/mb/mb.py
 echo "regranding: update texts"
 for folder in chrome chromeos components content ios; do
     echo "processing folder $folder"
-    LC_ALL=C find $folder -not -path '*/.*' -type f \( -name "*.grdp" -or -name "*.grd" -or -name "*.xtb" \) -exec sed $SEDOPTION "s/Chromium/Tangled/g" {} \;
+    npx replace-in-file 'Chromium' 'Tangled' $folder/**/*.grdp,$folder/**/*.grd,$folder/**/*.xtb --verbose
 done
 
 echo "regranding: fix chrominum link"
 sed $SEDOPTION 's/Tangled<ph name="END_LINK_CHROMIUM"/Chromium<ph name="END_LINK_CHROMIUM"/g' components/components_chromium_strings.grd
-LC_ALL=C find components/strings -not -path '*/.*' -type f \( -name "*.grdp" -or -name "*.grd" -or -name "*.xtb" \) -exec sed $SEDOPTION "s/Chromium/Tangled/g" {} \;
+npx replace-in-file 'Chromium' 'Tangled' components/strings/**/*.grdp,components/strings/**/*.grd,components/strings/**/*.xtb --verbose
 
 echo "regranding: fix default data folder"
 sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/browser/mac/initial_prefs.mm

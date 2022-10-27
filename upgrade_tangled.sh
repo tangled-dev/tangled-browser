@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "remove applied patch log"
+rm -rf applied_patches.log
+
 echo "working on chromium"
 bash setup_chromium.sh $1
 

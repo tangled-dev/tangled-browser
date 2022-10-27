@@ -3,3 +3,4 @@ src
 nodejs
 .gclient*
 applied_patches.log
+node_modules
