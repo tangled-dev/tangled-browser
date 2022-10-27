@@ -1,0 +1,5 @@
+module.exports = {
+    from: #FROM,
+    to: #TO,
+    files: #FILES,   
+}
