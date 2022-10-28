@@ -7,7 +7,7 @@ index 3cccb47aa88be..37529488a36bb 100644
    static const char kMimeType[];
  
 +  static const char MILLIX_EXTENSION_ID[];
-+  
++
    // See Type definition in Manifest.
    Manifest::Type GetType() const;
  

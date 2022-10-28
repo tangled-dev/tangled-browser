@@ -29,4 +29,6 @@ rm -rf $NODEJS_FILE
 
 if [[ " ${NODEJS_DIST_UNIX[@]} " =~ " ${NODEJS_DIST} " ]]; then
     chmod +x ./nodejs/bin/node
+    chmod +x ./nodejs/bin/npm
+    chmod +x ./nodejs/bin/npx
 fi
