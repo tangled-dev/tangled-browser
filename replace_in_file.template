@@ -1,5 +1,6 @@
 module.exports = {
     from: #FROM,
     to: #TO,
+    regex: true,
     files: #FILES,   
 }

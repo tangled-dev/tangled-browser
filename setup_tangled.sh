@@ -24,9 +24,9 @@ git_apply() {
 
 replace_in_file() {
     cp ../replace_in_file.template options.js;
-    npx replace-in-file "#FROM" $1  options.js
-    npx replace-in-file "#TO" $2  options.js
-    npx replace-in-file "#FILES" $3  options.js
+    npx replace-in-file "#FROM" "$1"  options.js
+    npx replace-in-file "#TO" "$2"  options.js
+    npx replace-in-file "#FILES" "$3"  options.js
     npx replace-in-file --configFile=options.js  --verbose
 }
 
@@ -43,15 +43,15 @@ echo "android_webview ash base build chrome chromecast chromeos components conte
 
 for folder in android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer; do
     echo "processing folder $folder"
-    replace_in_file "'\"chrome:'" "'\"tangled:'" "'$folder/**'"
-    replace_in_file "'chrome://'" "'tangled://'" "'$folder/**'"
+    replace_in_file "/\"chrome:/gi" "'\"tangled:'" "'$folder/**'"
+    replace_in_file "/chrome:\/\//gi" "'tangled://'" "'$folder/**'"
 done
 
 echo "activate tangled: schema"
 
 for folder in chrome chromeos components content ios; do
     echo "processing folder $folder"
-    replace_in_file "'Scheme[] = \"chrome\"'" "'Scheme[] = \"tangled\"'" "['$folder/**/*.cc','$folder/**/*.h']"
+    replace_in_file "/Scheme\[\] = \"chrome\"/g" "'Scheme[] = \"tangled\"'" "['$folder/**/*.cc','$folder/**/*.h']"
 done
 
 
@@ -63,12 +63,12 @@ sed $SEDOPTION "s/'Chromium/'Tangled/g" tools/mb/mb.py
 echo "regranding: update texts"
 for folder in chrome chromeos components content ios; do
     echo "processing folder $folder"
-    replace_in_file "'Chromium'" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
+    replace_in_file "/Chromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
 done
 
 echo "regranding: fix chrominum link"
 sed $SEDOPTION 's/Tangled<ph name="END_LINK_CHROMIUM"/Chromium<ph name="END_LINK_CHROMIUM"/g' components/components_chromium_strings.grd
-replace_in_file "'Chromium'" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
+replace_in_file "/Chromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
 
 echo "regranding: fix default data folder"
 sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/browser/mac/initial_prefs.mm
