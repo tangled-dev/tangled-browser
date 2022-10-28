@@ -63,12 +63,12 @@ sed $SEDOPTION "s/'Chromium/'Tangled/g" tools/mb/mb.py
 echo "regranding: update texts"
 for folder in chrome chromeos components content ios; do
     echo "processing folder $folder"
-    replace_in_file "/Chromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
+    replace_in_file "/[C]hromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
 done
 
 echo "regranding: fix chrominum link"
 sed $SEDOPTION 's/Tangled<ph name="END_LINK_CHROMIUM"/Chromium<ph name="END_LINK_CHROMIUM"/g' components/components_chromium_strings.grd
-replace_in_file "/Chromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
+replace_in_file "/[C]hromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
 
 echo "regranding: fix default data folder"
 sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/browser/mac/initial_prefs.mm
