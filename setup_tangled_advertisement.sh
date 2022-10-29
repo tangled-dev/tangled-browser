@@ -3,7 +3,7 @@
 cd tangled-advertisement
 
 NODEJS_DIST=$1
-NODEJS_DIST_UNIX=("darwin-x64" "darwin-arm64" "linux-x64")
+NODEJS_DIST_UNIX=("darwin" "linux")
 
 if [[ " ${NODEJS_DIST_UNIX[@]} " =~ " ${NODEJS_DIST} " ]]; then
   ../nodejs/bin/node ../nodejs/bin/npm install --scripts-prepend-node-path
