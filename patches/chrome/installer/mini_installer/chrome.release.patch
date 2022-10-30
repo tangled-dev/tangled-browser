@@ -1,0 +1,28 @@
+diff --git a/chrome/installer/mini_installer/chrome.release b/chrome/installer/mini_installer/chrome.release
+index 50e7498203d8f..ff37e39c52613 100644
+--- a/chrome/installer/mini_installer/chrome.release
++++ b/chrome/installer/mini_installer/chrome.release
+@@ -6,8 +6,8 @@
+ #
+ # Chrome Application dir entries, sorted alphabetically.
+ #
+-chrome.exe: %(ChromeDir)s\
+-chrome_proxy.exe: %(ChromeDir)s\
++tangled.exe: %(ChromeDir)s\
++tangled_proxy.exe: %(ChromeDir)s\
+ #
+ # Chrome version dir assembly manifest.
+ # The name of this file must match the name of the version dir, so we cannot
+@@ -18,10 +18,10 @@ chrome_proxy.exe: %(ChromeDir)s\
+ #
+ # Chrome version dir entries, sorted alphabetically.
+ #
+-chrome.dll: %(VersionDir)s\
++tangled.dll: %(VersionDir)s\
+ chrome_100_percent.pak: %(VersionDir)s\
+ chrome_child.dll: %(VersionDir)s\
+-chrome_elf.dll: %(VersionDir)s\
++tangled_elf.dll: %(VersionDir)s\
+ chrome_pwa_launcher.exe: %(VersionDir)s\
+ chrome_wer.dll: %(VersionDir)s\
+ d3dcompiler_47.dll: %(VersionDir)s\
