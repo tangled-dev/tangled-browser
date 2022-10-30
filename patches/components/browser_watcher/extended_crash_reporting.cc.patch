@@ -1,0 +1,13 @@
+diff --git a/components/browser_watcher/extended_crash_reporting.cc b/components/browser_watcher/extended_crash_reporting.cc
+index 444eb5b17931c..7ec57b2c4d985 100644
+--- a/components/browser_watcher/extended_crash_reporting.cc
++++ b/components/browser_watcher/extended_crash_reporting.cc
+@@ -84,7 +84,7 @@ void RecordChromeModuleInfo(
+     memset(module.identifier, 0, sizeof(module.identifier));
+   }
+ 
+-  module.file = "chrome.dll";
++  module.file = "tangled.dll";
+   module.debug_file =
+       std::string(base::StringPiece(pdb_filename, pdb_filename_length));
+ 

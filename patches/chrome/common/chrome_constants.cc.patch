@@ -2,16 +2,7 @@ diff --git a/chrome/common/chrome_constants.cc b/chrome/common/chrome_constants.
 index 47f9bf73a41a0..5801dea83f2b7 100644
 --- a/chrome/common/chrome_constants.cc
 +++ b/chrome/common/chrome_constants.cc
-@@ -15,7 +15,7 @@
- #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
- #define PRODUCT_STRING "Google Chrome"
- #elif BUILDFLAG(CHROMIUM_BRANDING)
--#define PRODUCT_STRING "Chromium"
-+#define PRODUCT_STRING "Tangled"
- #else
- #error Unknown branding
- #endif
-@@ -44,9 +44,9 @@ const char kChromeVersion[] = CHROME_VERSION_STRING;
+@@ -44,9 +44,9 @@
  
  #if BUILDFLAG(IS_WIN)
  const base::FilePath::CharType kBrowserProcessExecutableName[] =
