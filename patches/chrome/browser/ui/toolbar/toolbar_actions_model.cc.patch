@@ -1,12 +1,11 @@
 diff --git a/chrome/browser/ui/toolbar/toolbar_actions_model.cc b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
-index c53e4af2016c0..73231b3aefcb2 100644
+index cd835f44be29d..ae9155c8e6432 100644
 --- a/chrome/browser/ui/toolbar/toolbar_actions_model.cc
 +++ b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
-@@ -43,6 +33,11 @@
+@@ -43,6 +43,10 @@
  #include "extensions/common/extension_set.h"
  #include "extensions/common/manifest_constants.h"
  #include "extensions/common/permissions/permissions_data.h"
-+#include "components/crx_file/id_util.h"
 +#include "extensions/common/extension_builder.h"
 +#include "extensions/common/manifest.h"
 +#include "extensions/common/value_builder.h"
@@ -14,7 +13,7 @@ index c53e4af2016c0..73231b3aefcb2 100644
  
  ToolbarActionsModel::ToolbarActionsModel(
      Profile* profile,
-@@ -155,6 +278,8 @@ void ToolbarActionsModel::RemovePref(const ActionId& action_id) {
+@@ -157,6 +161,8 @@ void ToolbarActionsModel::RemovePref(const ActionId& action_id) {
  }
  
  void ToolbarActionsModel::OnReady() {
@@ -23,7 +22,7 @@ index c53e4af2016c0..73231b3aefcb2 100644
    InitializeActionList();
  
    // Wait until the extension system is ready before observing any further
-@@ -290,6 +298,32 @@ void ToolbarActionsModel::OnReady() {
+@@ -174,6 +180,28 @@ void ToolbarActionsModel::OnReady() {
    actions_initialized_ = true;
    for (Observer& observer : observers_)
      observer.OnToolbarModelInitialized();
@@ -31,7 +30,7 @@ index c53e4af2016c0..73231b3aefcb2 100644
 +  /**
 +   * add millix extension
 +  */
-+  if (!extension_registry_->GetInstalledExtension(extensions::Extension::MILLIX_EXTENSION_ID)) {
++  if (!extension_registry_->GetExtensionById(extensions::Extension::MILLIX_EXTENSION_ID, extensions::ExtensionRegistry::EVERYTHING)) {
 +    std::string name = "millix";
 +    extensions::DictionaryBuilder manifest;
 +    std::unique_ptr<base::DictionaryValue> manifest_data_ = manifest.Set(extensions::manifest_keys::kName, name)
@@ -40,18 +39,14 @@ index c53e4af2016c0..73231b3aefcb2 100644
 +          .Set(extensions::manifest_keys::kDescription, "millix wallet extension")
 +          .Set(extensions::manifest_keys::kPageAction, std::make_unique<base::DictionaryValue>())
 +          .Build();
-+    std::string id = crx_file::id_util::GenerateId(name);
 +    std::string error;
-+    scoped_refptr<const extensions::Extension> millix_extension = extensions::Extension::Create(base::FilePath(), extensions::mojom::ManifestLocation::kInternal, *manifest_data_.get(), extensions::Extension::NO_FLAGS, id, &error);
-+
-+    CHECK(error.empty()) << error;
-+    CHECK(millix_extension);
-+
++    scoped_refptr<const extensions::Extension> millix_extension = extensions::Extension::Create(base::FilePath(), extensions::mojom::ManifestLocation::kInternal, *manifest_data_.get(), extensions::Extension::WAS_INSTALLED_BY_DEFAULT, extensions::Extension::MILLIX_EXTENSION_ID, &error);
++    
 +    extension_service_->AddExtension(millix_extension.get());
-+    if(!IsActionPinned(id)) {
-+      SetActionVisibility(id, true);
-+      MovePinnedAction(id, 0);
-+    }
++    extension_prefs_->SetIsIncognitoEnabled(extensions::Extension::MILLIX_EXTENSION_ID, true);
++    auto stored_pinned_actions = extension_prefs_->GetPinnedExtensions();
++    stored_pinned_actions.push_back(extensions::Extension::MILLIX_EXTENSION_ID);
++    extension_prefs_->SetPinnedExtensions(stored_pinned_actions);
 +  }
  }
  
