@@ -1,0 +1,13 @@
+diff --git a/chrome/app/chrome_exe.vsprops b/chrome/app/chrome_exe.vsprops
+index 95b044a1328ff..c52b2d16258f7 100644
+--- a/chrome/app/chrome_exe.vsprops
++++ b/chrome/app/chrome_exe.vsprops
+@@ -12,7 +12,7 @@
+ 	<Tool
+ 		Name="VCLinkerTool"
+ 		DelayLoadDLLs="ole32.dll;oleaut32.dll"
+-		OutputFile="$(OutDir)\chrome.exe"
++		OutputFile="$(OutDir)\tangled.exe"
+ 		ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
+ 	/>
+ 	<Tool

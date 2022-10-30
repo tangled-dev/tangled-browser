@@ -1,0 +1,8 @@
+diff --git a/chrome/chrome_elf/chrome_elf.ver b/chrome/chrome_elf/chrome_elf.ver
+index 78f890e7ece7d..3189b5d2dc995 100644
+--- a/chrome/chrome_elf/chrome_elf.ver
++++ b/chrome/chrome_elf/chrome_elf.ver
+@@ -1,2 +1,2 @@
+ INTERNAL_NAME=chrome_elf_dll
+-ORIGINAL_FILENAME=chrome_elf.dll
++ORIGINAL_FILENAME=tangled_elf.dll

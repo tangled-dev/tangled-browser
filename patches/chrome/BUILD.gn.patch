@@ -1,13 +1,48 @@
 diff --git a/chrome/BUILD.gn b/chrome/BUILD.gn
-index aee9abd99a03a..0cf65e699f196 100644
+index aee9abd99a03a..b88faafd53820 100644
 --- a/chrome/BUILD.gn
 +++ b/chrome/BUILD.gn
-@@ -139,7 +139,7 @@ if (!is_android && !is_mac) {
+@@ -73,10 +73,10 @@ if (is_win) {
+ 
+     # See comment in chrome_dll.gypi in the hardlink_to_output
+     # target for why this cannot be 'initial' like the DLL.
+-    inputs = [ "$root_out_dir/initialexe/chrome.exe" ]
++    inputs = [ "$root_out_dir/initialexe/tangled.exe" ]
+     outputs = [
+-      "$root_out_dir/chrome.exe",
+-      "$root_out_dir/chrome.exe.pdb",
++      "$root_out_dir/tangled.exe",
++      "$root_out_dir/tangled.exe.pdb",
+     ]
+     args = [
+       "-i",
+@@ -137,9 +137,9 @@ if (!is_android && !is_mac) {
+     configs -= [ "//build/config/compiler:thinlto_optimize_default" ]
+     configs += [ "//build/config/compiler:thinlto_optimize_max" ]
      if (is_win) {
-       output_name = "initialexe/chrome"
+-      output_name = "initialexe/chrome"
++      output_name = "initialexe/tangled"
      } else {
 -      output_name = "chrome"
 +      output_name = "tangled"
      }
  
      # Because the sources list varies so significantly per-platform, generally
+@@ -384,7 +384,7 @@ if (is_win) {
+       "app/chrome_main_delegate.h",
+     ]
+ 
+-    output_name = "chrome"
++    output_name = "tangled"
+ 
+     deps = [
+       ":chrome_dll_manifest",
+@@ -1704,7 +1704,7 @@ if (is_android) {
+ if (is_win && enable_resource_allowlist_generation) {
+   generate_resource_allowlist("resource_allowlist") {
+     deps = [ ":chrome_dll" ]
+-    inputs = [ "$root_out_dir/chrome.dll.pdb" ]
++    inputs = [ "$root_out_dir/tangled.dll.pdb" ]
+     output = _chrome_resource_allowlist
+   }
+ }

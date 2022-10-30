@@ -1,0 +1,13 @@
+diff --git a/tools/win/IdleWakeups/idle_wakeups.cpp b/tools/win/IdleWakeups/idle_wakeups.cpp
+index 5549eb4a08f37..d311b9beec466 100644
+--- a/tools/win/IdleWakeups/idle_wakeups.cpp
++++ b/tools/win/IdleWakeups/idle_wakeups.cpp
+@@ -335,7 +335,7 @@ int wmain(int argc, wchar_t* argv[]) {
+   }
+   const char cpu_usage_unit = cpu_usage_in_seconds ? 's' : '%';
+   SystemInformationSampler system_information_sampler(
+-      target_process_name ? target_process_name : L"chrome.exe");
++      target_process_name ? target_process_name : L"tangled.exe");
+ 
+   // Take the initial snapshot.
+   std::unique_ptr<ProcessDataSnapshot> previous_snapshot =

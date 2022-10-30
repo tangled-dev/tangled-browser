@@ -1,0 +1,11 @@
+diff --git a/chrome/app/version_assembly/version_assembly_manifest.template b/chrome/app/version_assembly/version_assembly_manifest.template
+index 9bd1fc58f9fb1..9cd525b80bce6 100644
+--- a/chrome/app/version_assembly/version_assembly_manifest.template
++++ b/chrome/app/version_assembly/version_assembly_manifest.template
+@@ -4,5 +4,5 @@
+       name='@MAJOR@.@MINOR@.@BUILD@.@PATCH@'
+       version='@MAJOR@.@MINOR@.@BUILD@.@PATCH@'
+       type='win32'/>
+-  <file name='chrome_elf.dll'/>
++  <file name='tangled_elf.dll'/>
+ </assembly>

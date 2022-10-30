@@ -1,0 +1,13 @@
+diff --git a/chrome/chrome_elf/chrome_elf_arm64.def b/chrome/chrome_elf/chrome_elf_arm64.def
+index 977e9591920a8..cfdaf6af65c69 100644
+--- a/chrome/chrome_elf/chrome_elf_arm64.def
++++ b/chrome/chrome_elf/chrome_elf_arm64.def
+@@ -1,7 +1,7 @@
+ ; Copyright 2013 The Chromium Authors. All rights reserved.
+ ; Use of this source code is governed by a BSD-style license that can be
+ ; found in the LICENSE file.
+-LIBRARY  "chrome_elf.dll"
++LIBRARY  "tangled_elf.dll"
+ 
+ EXPORTS
+   ; When functions are added to this file, they must also be added to

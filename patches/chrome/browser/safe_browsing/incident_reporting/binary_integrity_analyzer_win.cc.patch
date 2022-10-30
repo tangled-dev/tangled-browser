@@ -1,0 +1,20 @@
+diff --git a/chrome/browser/safe_browsing/incident_reporting/binary_integrity_analyzer_win.cc b/chrome/browser/safe_browsing/incident_reporting/binary_integrity_analyzer_win.cc
+index e2a5fe78ff39d..482287c82537a 100644
+--- a/chrome/browser/safe_browsing/incident_reporting/binary_integrity_analyzer_win.cc
++++ b/chrome/browser/safe_browsing/incident_reporting/binary_integrity_analyzer_win.cc
+@@ -23,12 +23,12 @@ namespace safe_browsing {
+ 
+ std::vector<base::FilePath> GetCriticalBinariesPath() {
+   static const base::FilePath::CharType* const kUnversionedFiles[] = {
+-      FILE_PATH_LITERAL("chrome.exe"),
++      FILE_PATH_LITERAL("tangled.exe"),
+   };
+   static const base::FilePath::CharType* const kVersionedFiles[] = {
+-      FILE_PATH_LITERAL("chrome.dll"),
++      FILE_PATH_LITERAL("tangled.dll"),
+       FILE_PATH_LITERAL("chrome_child.dll"),
+-      FILE_PATH_LITERAL("chrome_elf.dll"),
++      FILE_PATH_LITERAL("tangled_elf.dll"),
+   };
+ 
+   // Find where chrome.exe is installed.

@@ -1,0 +1,15 @@
+diff --git a/chrome/browser/safe_browsing/incident_reporting/environment_data_collection_win.cc b/chrome/browser/safe_browsing/incident_reporting/environment_data_collection_win.cc
+index 29b02efa70393..803dbe226e6da 100644
+--- a/chrome/browser/safe_browsing/incident_reporting/environment_data_collection_win.cc
++++ b/chrome/browser/safe_browsing/incident_reporting/environment_data_collection_win.cc
+@@ -35,8 +35,8 @@ const REGSAM kKeyReadNoNotify = (KEY_READ) & ~(KEY_NOTIFY);
+ 
+ // The modules on which we will run VerifyModule.
+ const wchar_t* const kModulesToVerify[] = {
+-    L"chrome.dll",
+-    L"chrome_elf.dll",
++    L"tangled.dll",
++    L"tangled_elf.dll",
+     L"ntdll.dll",
+ };
+ 

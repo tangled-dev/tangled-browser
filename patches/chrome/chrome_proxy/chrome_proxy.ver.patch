@@ -1,0 +1,8 @@
+diff --git a/chrome/chrome_proxy/chrome_proxy.ver b/chrome/chrome_proxy/chrome_proxy.ver
+index 32083b145e37d..f786dbdd1b431 100644
+--- a/chrome/chrome_proxy/chrome_proxy.ver
++++ b/chrome/chrome_proxy/chrome_proxy.ver
+@@ -1,2 +1,2 @@
+ INTERNAL_NAME=chrome_proxy
+-ORIGINAL_FILENAME=chrome_proxy.exe
++ORIGINAL_FILENAME=tangled_proxy.exe

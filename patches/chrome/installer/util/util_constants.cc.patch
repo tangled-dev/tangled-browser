@@ -1,0 +1,19 @@
+diff --git a/chrome/installer/util/util_constants.cc b/chrome/installer/util/util_constants.cc
+index fef9775deb570..601d4844f8222 100644
+--- a/chrome/installer/util/util_constants.cc
++++ b/chrome/installer/util/util_constants.cc
+@@ -216,11 +216,11 @@ const char kGoogleUpdateIsMachineEnvVar[] = "GoogleUpdateIsMachine";
+ // TODO(gab): Rename setup.exe itself altogether and use the same binary for
+ // Active Setup.
+ const wchar_t kActiveSetupExe[] = L"chrmstp.exe";
+-const wchar_t kChromeDll[] = L"chrome.dll";
+-const wchar_t kChromeExe[] = L"chrome.exe";
++const wchar_t kChromeDll[] = L"tangled.dll";
++const wchar_t kChromeExe[] = L"tangled.exe";
+ const wchar_t kChromeNewExe[] = L"new_chrome.exe";
+ const wchar_t kChromeOldExe[] = L"old_chrome.exe";
+-const wchar_t kChromeProxyExe[] = L"chrome_proxy.exe";
++const wchar_t kChromeProxyExe[] = L"tangled_proxy.exe";
+ const wchar_t kChromeProxyNewExe[] = L"new_chrome_proxy.exe";
+ const wchar_t kChromeProxyOldExe[] = L"old_chrome_proxy.exe";
+ const wchar_t kCmdOnOsUpgrade[] = L"on-os-upgrade";

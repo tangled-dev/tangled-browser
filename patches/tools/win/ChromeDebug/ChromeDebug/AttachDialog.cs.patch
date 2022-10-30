@@ -1,0 +1,13 @@
+diff --git a/tools/win/ChromeDebug/ChromeDebug/AttachDialog.cs b/tools/win/ChromeDebug/ChromeDebug/AttachDialog.cs
+index 2c38983b0d443..dcdc81b3ca9e6 100644
+--- a/tools/win/ChromeDebug/ChromeDebug/AttachDialog.cs
++++ b/tools/win/ChromeDebug/ChromeDebug/AttachDialog.cs
+@@ -156,7 +156,7 @@ namespace ChromeDebug {
+       string file = Path.GetFileName(imagePath);
+       if (file.Equals("delegate_execute.exe", StringComparison.CurrentCultureIgnoreCase))
+         return ProcessCategory.DelegateExecute;
+-      else if (file.Equals("chrome.exe", StringComparison.CurrentCultureIgnoreCase)) {
++      else if (file.Equals("tangled.exe", StringComparison.CurrentCultureIgnoreCase)) {
+           if (cmdline.Contains("--type=renderer"))
+               return ProcessCategory.Renderer;
+           else if (cmdline.Contains("--type=plugin") || cmdline.Contains("--type=ppapi"))

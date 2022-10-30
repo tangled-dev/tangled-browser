@@ -1,0 +1,8 @@
+diff --git a/chrome/app/chrome_dll.ver b/chrome/app/chrome_dll.ver
+index 910fca21d178a..2246844dab7e9 100644
+--- a/chrome/app/chrome_dll.ver
++++ b/chrome/app/chrome_dll.ver
+@@ -1,2 +1,2 @@
+ INTERNAL_NAME=chrome_dll
+-ORIGINAL_FILENAME=chrome.dll
++ORIGINAL_FILENAME=tangled.dll
