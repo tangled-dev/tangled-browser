@@ -1,0 +1,13 @@
+diff --git a/chrome/installer/mac/signing/config.py b/chrome/installer/mac/signing/config.py
+index c6ae4b5a059f2..10636226fb042 100644
+--- a/chrome/installer/mac/signing/config.py
++++ b/chrome/installer/mac/signing/config.py
+@@ -209,7 +209,7 @@ class CodeSignConfig(object):
+         """Returns whether the final code signed binary should be assessed by
+         Gatekeeper after signing.
+         """
+-        return True
++        return False
+ 
+     @property
+     def inject_get_task_allow_entitlement(self):
