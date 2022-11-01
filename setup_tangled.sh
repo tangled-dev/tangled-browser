@@ -38,52 +38,55 @@ fi
 
 cd src
 
-echo "replace chrome: with tangled: in the following folders"
-echo "android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer "
+if [[ $4 == "true" ]]; then
+    echo "replace chrome: with tangled: in the following folders"
+    echo "android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer "
 
-for folder in android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer; do
-    echo "processing folder $folder"
-    replace_in_file "/\"chrome:/gi" "'\"tangled:'" "'$folder/**'"
-    replace_in_file "/chrome:\/\//gi" "'tangled://'" "'$folder/**'"
-done
+    for folder in android_webview ash base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer; do
+        echo "processing folder $folder"
+        replace_in_file "/\"chrome:/gi" "'\"tangled:'" "'$folder/**'"
+        replace_in_file "/chrome:\/\//gi" "'tangled://'" "'$folder/**'"
+    done
 
-echo "activate tangled: schema"
+    echo "activate tangled: schema"
 
-for folder in chrome chromeos components content ios; do
-    echo "processing folder $folder"
-    replace_in_file "/Scheme\[\] = \"chrome\"/g" "'Scheme[] = \"tangled\"'" "['$folder/**/*.cc','$folder/**/*.h']"
-done
+    for folder in chrome chromeos components content ios; do
+        echo "processing folder $folder"
+        replace_in_file "/Scheme\[\] = \"chrome\"/g" "'Scheme[] = \"tangled\"'" "['$folder/**/*.cc','$folder/**/*.h']"
+    done
 
 
-echo "rebranding: rename app"
+    echo "rebranding: rename app"
 
-sed $SEDOPTION 's/PRODUCT_STRING "Chromium"/PRODUCT_STRING "Tangled"/g' chrome/common/chrome_constants.cc
-sed $SEDOPTION "s/'Chromium/'Tangled/g" tools/mb/mb.py
+    sed $SEDOPTION 's/PRODUCT_STRING "Chromium"/PRODUCT_STRING "Tangled"/g' chrome/common/chrome_constants.cc
+    sed $SEDOPTION "s/'Chromium/'Tangled/g" tools/mb/mb.py
 
-echo "regranding: update texts"
-for folder in chrome chromeos components content ios; do
-    echo "processing folder $folder"
+    echo "regranding: update texts"
+    for folder in chrome chromeos components content ios; do
+        echo "processing folder $folder"
+        replace_in_file "/[C]hromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
+    done
+
+    echo "regranding: fix chrominum link"
+    sed $SEDOPTION 's/Tangled<ph name="END_LINK_CHROMIUM"/Chromium<ph name="END_LINK_CHROMIUM"/g' components/components_chromium_strings.grd
     replace_in_file "/[C]hromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
-done
 
-echo "regranding: fix chrominum link"
-sed $SEDOPTION 's/Tangled<ph name="END_LINK_CHROMIUM"/Chromium<ph name="END_LINK_CHROMIUM"/g' components/components_chromium_strings.grd
-replace_in_file "/[C]hromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
-
-echo "regranding: fix default data folder"
-sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/browser/mac/initial_prefs.mm
-sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/common/chrome_paths_mac.mm
+    echo "regranding: fix default data folder"
+    sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/browser/mac/initial_prefs.mm
+    sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/common/chrome_paths_mac.mm
+fi    
 
 echo "apply tangled patches"
 LC_ALL=C find ../patches -not -path '*/.*' -type f -name "*.patch" | while read fpatch; do
     git_apply $fpatch
 done
 
-cp -r ../chromium_resources/* .
-cp -r ../tangled-millix-bar-ui/* chrome/browser/resources/millix/
-cp -r ../millix-wallet-ui/build/* chrome/browser/resources/millix/app/
+cp -p -r ../chromium_resources/* .
+cp -p -r ../tangled-millix-bar-ui/* chrome/browser/resources/millix/
+cp -p -r ../millix-wallet-ui/build/* chrome/browser/resources/millix/app/
 
-gn gen out/Default --args="cc_wrapper=\"ccache\" target_cpu = \"$2\" is_debug = false ffmpeg_branding = \"Chrome\" proprietary_codecs = true enable_widevine = true"
+BUILD_FOLDER=$3
+gn gen $BUILD_FOLDER --args="cc_wrapper=\"ccache\" target_cpu = \"$2\" is_debug = false ffmpeg_branding = \"Chrome\" proprietary_codecs = true enable_widevine = true"
 
 echo "copy millix node to the tangled browser app"
 rm -rf millix_node
@@ -95,14 +98,15 @@ cp -r ../nodejs millix_node
 
 if [[ "$1" == "darwin" ]]; then
     echo "build tangled for macos"
-    autoninja -C out/Default chrome
-    cp -r millix_node out/Default/Tangled.app/Contents/Resources/millix_node
+    autoninja -C $BUILD_FOLDER chrome
+    rm -rf $BUILD_FOLDER/Tangled.app/Contents/Resources/millix_node
+    cp -r millix_node $BUILD_FOLDER/Tangled.app/Contents/Resources/millix_node
 elif [[ "$1" == "linux" ]]; then
     echo "build tangled for linux"
-    autoninja -C out/Default chrome
-    autoninja -C out/Default installer
+    autoninja -C $BUILD_FOLDER chrome
+    autoninja -C $BUILD_FOLDER installer
 elif [[ "$1" == "win" ]]; then
     echo "build tangled for windows"
-    autoninja -C out/Default chrome
-    autoninja -C out/Default mini_installer
+    autoninja -C $BUILD_FOLDER chrome
+    autoninja -C $BUILD_FOLDER mini_installer
 fi
