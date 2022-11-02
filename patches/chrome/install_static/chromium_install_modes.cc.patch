@@ -1,0 +1,34 @@
+diff --git a/chrome/install_static/chromium_install_modes.cc b/chrome/install_static/chromium_install_modes.cc
+index 3f842612575e9..b9a415cf446ee 100644
+--- a/chrome/install_static/chromium_install_modes.cc
++++ b/chrome/install_static/chromium_install_modes.cc
+@@ -16,11 +16,11 @@ namespace install_static {
+ 
+ const wchar_t kCompanyPathName[] = L"";
+ 
+-const wchar_t kProductPathName[] = L"Chromium";
++const wchar_t kProductPathName[] = L"Tangled";
+ 
+ const size_t kProductPathNameLength = _countof(kProductPathName) - 1;
+ 
+-const char kSafeBrowsingName[] = "chromium";
++const char kSafeBrowsingName[] = "tangled";
+ 
+ const InstallConstants kInstallModes[] = {
+     // The primary (and only) install mode for Chromium.
+@@ -34,11 +34,11 @@ const InstallConstants kInstallModes[] = {
+         .logo_suffix = L"",  // No logo suffix for the primary install mode.
+         .app_guid =
+             L"",  // Empty app_guid since no integraion with Google Update.
+-        .base_app_name = L"Chromium",      // A distinct base_app_name.
+-        .base_app_id = L"Chromium",        // A distinct base_app_id.
+-        .prog_id_prefix = L"ChromiumHTM",  // ProgID prefix.
++        .base_app_name = L"Tangled",      // A distinct base_app_name.
++        .base_app_id = L"Tangled",        // A distinct base_app_id.
++        .prog_id_prefix = L"TangledHTM",  // ProgID prefix.
+         .prog_id_description =
+-            L"Chromium HTML Document",  // ProgID description.
++            L"Tangled HTML Document",  // ProgID description.
+         .active_setup_guid =
+             L"{7D2B3E1D-D096-4594-9D8F-A6667F12E0AC}",  // Active Setup GUID.
+         .legacy_command_execute_clsid =
