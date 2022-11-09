@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd millix-wallet-ui
+cp -r ../millix_wallet_ui_resources/* .
 
 NODEJS_DIST=$1
 NODEJS_DIST_UNIX=("darwin" "linux")
