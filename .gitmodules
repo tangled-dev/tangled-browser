@@ -4,9 +4,12 @@
 [submodule "millix-wallet-ui"]
 	path = millix-wallet-ui
 	url = https://github.com/millix/millix-wallet-ui.git
+	branch = main
 [submodule "tangled-advertisement"]
 	path = tangled-advertisement
 	url = https://github.com/tangled-dev/tangled-advertisement.git
+	branch = main
 [submodule "tangled-millix-bar-ui"]
 	path = tangled-millix-bar-ui
 	url = https://github.com/tangled-dev/tangled-millix-bar-ui.git
+	branch = main
