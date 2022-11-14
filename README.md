@@ -44,5 +44,5 @@ to start the process, you use the script `upgrade_tangled.sh <version> < win | l
 for example:
 
 ````
-    sh upgrade_tangled.sh 106.0.5249.119 linux x64 out/Default true
+    sh upgrade_tangled.sh 107.0.5304.87 linux x64 out/Default true
 ````

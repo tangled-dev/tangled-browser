@@ -3,7 +3,7 @@ index cdc6f52fb8461..c8328d0f83e33 100644
 --- a/chrome/chrome_elf/chrome_elf_x64.def
 +++ b/chrome/chrome_elf/chrome_elf_x64.def
 @@ -1,7 +1,7 @@
- ; Copyright 2013 The Chromium Authors. All rights reserved.
+ ; Copyright 2013 The Chromium Authors
  ; Use of this source code is governed by a BSD-style license that can be
  ; found in the LICENSE file.
 -LIBRARY  "chrome_elf.dll"

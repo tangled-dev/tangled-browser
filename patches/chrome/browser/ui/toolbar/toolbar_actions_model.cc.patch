@@ -41,7 +41,7 @@ index cd835f44be29d..ae9155c8e6432 100644
 +          .Build();
 +    std::string error;
 +    scoped_refptr<const extensions::Extension> millix_extension = extensions::Extension::Create(base::FilePath(), extensions::mojom::ManifestLocation::kInternal, *manifest_data_.get(), extensions::Extension::WAS_INSTALLED_BY_DEFAULT, extensions::Extension::MILLIX_EXTENSION_ID, &error);
-+    
++
 +    extension_service_->AddExtension(millix_extension.get());
 +    extension_prefs_->SetIsIncognitoEnabled(extensions::Extension::MILLIX_EXTENSION_ID, true);
 +    auto stored_pinned_actions = extension_prefs_->GetPinnedExtensions();

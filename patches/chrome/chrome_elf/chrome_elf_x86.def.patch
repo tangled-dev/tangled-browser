@@ -3,7 +3,7 @@ index 7aa7fa6c4dfff..753ccb623f7dd 100644
 --- a/chrome/chrome_elf/chrome_elf_x86.def
 +++ b/chrome/chrome_elf/chrome_elf_x86.def
 @@ -1,7 +1,7 @@
- ; Copyright 2013 The Chromium Authors. All rights reserved.
+ ; Copyright 2013 The Chromium Authors
  ; Use of this source code is governed by a BSD-style license that can be
  ; found in the LICENSE file.
 -LIBRARY  "chrome_elf.dll"
