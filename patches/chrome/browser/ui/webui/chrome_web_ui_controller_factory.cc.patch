@@ -27,7 +27,7 @@ index 20fdf4e6d02ff..0cd1ae8161c86 100644
 +    if (url.host_piece() == chrome::kChromeUIMillixAppHost)
 +      return &NewWebUI<MillixAppUI>;
 +  }
-+  
++
    if (!profile->IsOffTheRecord()) {
      if (url.host_piece() == chrome::kChromeUINewTabPageHost)
        return &NewWebUI<NewTabPageUI>;
