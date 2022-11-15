@@ -1,20 +1,33 @@
 diff --git a/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc b/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc
-index b1846840f938f..4679ac4c3d8e4 100644
+index 20fdf4e6d02ff..0cd1ae8161c86 100644
 --- a/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc
 +++ b/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc
-@@ -108,2 +108,4 @@
+@@ -107,6 +107,10 @@
+ #include "ui/gfx/favicon_size.h"
+ #include "ui/web_dialogs/web_dialog_ui.h"
  #include "url/gurl.h"
 +#include "chrome/browser/ui/webui/millix/millix_bar.h"
 +#include "chrome/browser/ui/webui/millix/millix_app.h"
++#include "chrome/browser/ui/views/frame/browser_view.h"
++#include "chrome/browser/ui/browser_finder.h"
  
-@@ -849,6 +849,10 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
+ #if BUILDFLAG(ENABLE_NACL)
+ #include "chrome/browser/ui/webui/nacl_ui.h"
+@@ -863,6 +867,17 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
      return &NewWebUI<IdentityInternalsUI>;
    if (url.host_piece() == chrome::kChromeUINewTabHost)
      return &NewWebUI<NewTabUI>;
 +  if (url.host_piece() == chrome::kChromeUIMillixBarHost)
-+    return &NewWebUI<MillixBarUI>;
-+  if (url.host_piece() == chrome::kChromeUIMillixAppHost)
-+    return &NewWebUI<MillixAppUI>;
++      return &NewWebUI<MillixBarUI>;
++  if (url.host_piece() == chrome::kChromeUIMillixAppHost) {
++    Browser* browser = chrome::FindTabbedBrowser(profile, false);
++    BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
++    if (browser_view->GetMillixBarView()->GetVisible() == false)
++      return nullptr;
++    if (url.host_piece() == chrome::kChromeUIMillixAppHost)
++      return &NewWebUI<MillixAppUI>;
++  }
++  
    if (!profile->IsOffTheRecord()) {
      if (url.host_piece() == chrome::kChromeUINewTabPageHost)
        return &NewWebUI<NewTabPageUI>;
