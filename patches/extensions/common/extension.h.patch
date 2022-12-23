@@ -2,11 +2,12 @@ diff --git a/extensions/common/extension.h b/extensions/common/extension.h
 index 3cccb47aa88be..37529488a36bb 100644
 --- a/extensions/common/extension.h
 +++ b/extensions/common/extension.h
-@@ -179,6 +179,8 @@ class Extension final : public base::RefCountedThreadSafe<Extension> {
+@@ -179,6 +179,9 @@ class Extension final : public base::RefCountedThreadSafe<Extension> {
    // The mimetype used for extensions.
    static const char kMimeType[];
  
 +  static const char MILLIX_EXTENSION_ID[];
++  static const char METAMASK_EXTENSION_ID[];
 +
    // See Type definition in Manifest.
    Manifest::Type GetType() const;

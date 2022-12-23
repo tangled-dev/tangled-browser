@@ -1,0 +1,15 @@
+diff --git a/extensions/renderer/user_script_set.cc b/extensions/renderer/user_script_set.cc
+index 4136eccd0fccb..77f7ca136918d 100644
+--- a/extensions/renderer/user_script_set.cc
++++ b/extensions/renderer/user_script_set.cc
+@@ -150,6 +150,10 @@ bool UserScriptSet::UpdateUserScripts(
+     if (only_inject_incognito && !script->is_incognito_enabled())
+       continue;  // This script shouldn't run in an incognito tab.
+ 
++    if(script-> extension_id() == Extension::METAMASK_EXTENSION_ID){
++      script->add_url_pattern(URLPattern(URLPattern::SCHEME_ALL, "chrome-untrusted://millix/*"));
++      script->add_url_pattern(URLPattern(URLPattern::SCHEME_ALL, "tangled://millix/*"));
++    }
+     scripts_.push_back(std::move(script));
+   }
+ 
