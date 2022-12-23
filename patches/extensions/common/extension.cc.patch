@@ -2,11 +2,12 @@ diff --git a/extensions/common/extension.cc b/extensions/common/extension.cc
 index 1170f0c9d9f6b..d07152c3efb3f 100644
 --- a/extensions/common/extension.cc
 +++ b/extensions/common/extension.cc
-@@ -202,6 +202,8 @@ const int Extension::kInitFromValueFlagBits = 15;
+@@ -202,6 +202,9 @@ const int Extension::kInitFromValueFlagBits = 15;
  
  const char Extension::kMimeType[] = "application/x-chrome-extension";
  
 +const char Extension::MILLIX_EXTENSION_ID[] = "eefboaeeembldepfnjegdfgdeampoamp";
++const char Extension::METAMASK_EXTENSION_ID[] = "nkbihfbeogaeaoehlefnkodbefgpgknn";
 +
  const int Extension::kValidWebExtentSchemes =
      URLPattern::SCHEME_HTTP | URLPattern::SCHEME_HTTPS;

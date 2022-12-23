@@ -1,0 +1,33 @@
+diff --git a/extensions/common/permissions/permissions_data.cc b/extensions/common/permissions/permissions_data.cc
+index 52d8de95be2db..44ddcd7c76a53 100644
+--- a/extensions/common/permissions/permissions_data.cc
++++ b/extensions/common/permissions/permissions_data.cc
+@@ -14,6 +14,7 @@
+ #include "content/public/common/url_constants.h"
+ #include "extensions/common/constants.h"
+ #include "extensions/common/error_utils.h"
++#include "extensions/common/extension.h"
+ #include "extensions/common/extension_features.h"
+ #include "extensions/common/extension_urls.h"
+ #include "extensions/common/extensions_client.h"
+@@ -150,6 +151,7 @@ bool PermissionsData::IsRestrictedUrl(const GURL& document_url,
+   bool allow_on_chrome_urls = base::CommandLine::ForCurrentProcess()->HasSwitch(
+                                   switches::kExtensionsOnChromeURLs);
+   if (document_url.SchemeIs(content::kChromeUIScheme) &&
++      !(document_url.DomainIs("millix") && extension_id_ == Extension::METAMASK_EXTENSION_ID) &&
+       !allow_on_chrome_urls) {
+     if (error)
+       *error = manifest_errors::kCannotAccessChromeUrl;
+@@ -608,6 +610,12 @@ PermissionsData::PageAccess PermissionsData::CanRunOnPage(
+     const URLPatternSet* tab_url_patterns,
+     std::string* error) const {
+   runtime_lock_.AssertAcquired();
++
++  if(extension_id_ == Extension::METAMASK_EXTENSION_ID &&
++    (document_url.SchemeIs("tangled") || document_url.SchemeIs("chrome-untrusted")) &&
++      document_url.DomainIs("millix"))
++    return PageAccess::kAllowed;
++
+   if (location_ != mojom::ManifestLocation::kComponent &&
+       IsPolicyBlockedHostUnsafe(document_url)) {
+     if (error)

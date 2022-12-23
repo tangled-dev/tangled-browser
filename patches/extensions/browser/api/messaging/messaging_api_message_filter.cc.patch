@@ -1,0 +1,13 @@
+diff --git a/extensions/browser/api/messaging/messaging_api_message_filter.cc b/extensions/browser/api/messaging/messaging_api_message_filter.cc
+index f299af87a7f66..cee981d9c7c83 100644
+--- a/extensions/browser/api/messaging/messaging_api_message_filter.cc
++++ b/extensions/browser/api/messaging/messaging_api_message_filter.cc
+@@ -92,7 +92,7 @@ bool IsValidMessagingSource(RenderProcessHost& process,
+         bool is_content_script_expected =
+             ContentScriptTracker::DidProcessRunContentScriptFromExtension(
+                 process, extension_id);
+-        if (!is_content_script_expected) {
++        if (!is_content_script_expected && extension_id != Extension::METAMASK_EXTENSION_ID) {
+           bad_message::ReceivedBadMessage(
+               &process,
+               bad_message::EMF_INVALID_EXTENSION_ID_FOR_CONTENT_SCRIPT);
