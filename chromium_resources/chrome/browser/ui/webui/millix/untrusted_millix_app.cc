@@ -41,6 +41,10 @@ UntrustedMillixAppUI::UntrustedMillixAppUI(content::WebUI* web_ui)
   untrusted_source->AddResourcePath("static/media/roboto_medium.woff", IDR_MILLIX_APP_ROBOTO_MEDIUM_WOFF2);
   untrusted_source->AddResourcePath("static/media/roboto_regular.woff", IDR_MILLIX_APP_ROBOTO_REGULAR_WOFF);
   untrusted_source->AddResourcePath("static/media/roboto_regular.woff2", IDR_MILLIX_APP_ROBOTO_REGULAR_WOFF2);
+  untrusted_source->AddResourcePath("static/media/import_token.png", IDR_MILLIX_APP_IMPORT_TOKEN_PNG);
+  untrusted_source->AddResourcePath("static/media/import_token_result.png", IDR_MILLIX_APP_IMPORT_TOKEN_RESULT_PNG);
+  untrusted_source->AddResourcePath("static/media/import_token_confirmation.png", IDR_MILLIX_APP_IMPORT_TOKEN_CONFIRMATION_PNG);
+  untrusted_source->AddResourcePath("static/media/wallet.png", IDR_MILLIX_APP_WALLET_PNG);
 
   untrusted_source->SetDefaultResource(IDR_MILLIX_APP_UNTRUSTED_HTML);
 
