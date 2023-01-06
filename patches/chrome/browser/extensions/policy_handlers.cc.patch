@@ -1,0 +1,23 @@
+diff --git a/chrome/browser/extensions/policy_handlers.cc b/chrome/browser/extensions/policy_handlers.cc
+index 58f34f4083f90..173ef92349780 100644
+--- a/chrome/browser/extensions/policy_handlers.cc
++++ b/chrome/browser/extensions/policy_handlers.cc
+@@ -95,11 +95,14 @@ void ExtensionInstallForceListPolicyHandler::ApplyPolicySettings(
+     PrefValueMap* prefs) {
+   const base::Value* value = nullptr;
+   base::Value::Dict dict;
+-  if (CheckAndGetValue(policies, nullptr, &value) && value &&
+-      ParseList(value, &dict, nullptr)) {
+-    prefs->SetValue(pref_names::kInstallForceList,
+-                    base::Value(std::move(dict)));
++  if (CheckAndGetValue(policies, nullptr, &value) && value) {
++    ParseList(value, &dict, nullptr);
+   }
++
++  ExternalPolicyLoader::AddExtension(dict, extensions::Extension::METAMASK_EXTENSION_ID,
++                                      "https://clients2.google.com/service/update2/crx");
++  prefs->SetValue(pref_names::kInstallForceList,
++                    base::Value(std::move(dict)));
+ }
+ 
+ bool ExtensionInstallForceListPolicyHandler::ParseList(
