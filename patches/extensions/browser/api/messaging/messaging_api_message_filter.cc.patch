@@ -8,6 +8,6 @@ index f299af87a7f66..cee981d9c7c83 100644
                  process, extension_id);
 -        if (!is_content_script_expected) {
 +        if (!is_content_script_expected && extension_id != Extension::METAMASK_EXTENSION_ID) {
-           bad_message::ReceivedBadMessage(
-               &process,
-               bad_message::EMF_INVALID_EXTENSION_ID_FOR_CONTENT_SCRIPT);
+           // TODO(https://crbug.com/1212918): Remove some of the more excessive
+           // tracing once there are no more bad message reports to investigate.
+           // (Remove here + in ContentScriptTracker.)
