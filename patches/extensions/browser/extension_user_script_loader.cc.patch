@@ -2,11 +2,13 @@ diff --git a/extensions/browser/extension_user_script_loader.cc b/extensions/bro
 index 38ac74bcf1273..f2556ebbdeb94 100644
 --- a/extensions/browser/extension_user_script_loader.cc
 +++ b/extensions/browser/extension_user_script_loader.cc
-@@ -182,6 +182,16 @@ void LoadScriptContent(const mojom::HostID& host_id,
+@@ -182,6 +182,18 @@ void LoadScriptContent(const mojom::HostID& host_id,
    if (!content)
      return;
  
-+  if(host_id.id == Extension::METAMASK_EXTENSION_ID && script_file->url().GetContent().ends_with("contentscript.js")) {
++  std::string contentStr = script_file->url().GetContent();
++  std::string endStr = "contentscript.js";
++  if(host_id.id == Extension::METAMASK_EXTENSION_ID && contentStr.size() >= endStr.size() && contentStr.compare(contentStr.size() - endStr.size(), endStr.size(), endStr) == 0) {
 +    size_t start_pos = 0;
 +    const std::string target = ":https?";
 +    const std::string newValue = ":(https?|tangled|chrome-untrusted)";
