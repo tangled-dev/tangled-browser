@@ -16,4 +16,4 @@ index fef9775deb570..601d4844f8222 100644
 +const wchar_t kChromeProxyExe[] = L"tangled_proxy.exe";
  const wchar_t kChromeProxyNewExe[] = L"new_chrome_proxy.exe";
  const wchar_t kChromeProxyOldExe[] = L"old_chrome_proxy.exe";
- const wchar_t kCmdOnOsUpgrade[] = L"on-os-upgrade";
+ const wchar_t kCmdAlternateRenameChromeExe[] = L"rename-chrome-exe";

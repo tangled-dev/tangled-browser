@@ -528,6 +528,7 @@ margin-top: 0!important;
     margin: auto;
     display: block;
     width: 100%;
+    z-index: 1;
 }
 
 @media only screen and (max-height: 840px){

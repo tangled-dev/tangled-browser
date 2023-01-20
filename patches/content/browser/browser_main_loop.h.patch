@@ -3,7 +3,7 @@ index fcb6305990748..4e5b4264bd81c 100644
 --- a/content/browser/browser_main_loop.h
 +++ b/content/browser/browser_main_loop.h
 @@ -11,6 +11,7 @@
- #include "base/gtest_prod_util.h"
+ #include "base/memory/raw_ref.h"
  #include "base/memory/ref_counted.h"
  #include "base/task/thread_pool/thread_pool_instance.h"
 +#include "base/process/process.h"
@@ -20,11 +20,11 @@ index fcb6305990748..4e5b4264bd81c 100644
    // Return value is exit status. Anything other than RESULT_CODE_NORMAL_EXIT
    // is considered an error.
    int EarlyInitialization();
-@@ -289,6 +292,7 @@ class CONTENT_EXPORT BrowserMainLoop {
+@@ -290,6 +293,7 @@ class CONTENT_EXPORT BrowserMainLoop {
    //   OnFirstIdle()
  
    // Members initialized on construction ---------------------------------------
 +  std::unique_ptr<base::Process> millix_process_;
    MainFunctionParams parameters_;
-   const base::CommandLine& parsed_command_line_;
+   const raw_ref<const base::CommandLine> parsed_command_line_;
    int result_code_;

@@ -1,0 +1,15 @@
+diff --git a/chrome/browser/ui/webui/new_tab_page/new_tab_page_ui.cc b/chrome/browser/ui/webui/new_tab_page/new_tab_page_ui.cc
+index 3a26125383767..8cc5d485ba187 100644
+--- a/chrome/browser/ui/webui/new_tab_page/new_tab_page_ui.cc
++++ b/chrome/browser/ui/webui/new_tab_page/new_tab_page_ui.cc
+@@ -516,7 +516,9 @@ content::WebUIDataSource* CreateNewTabPageUiHtmlSource(Profile* profile) {
+       base::StringPrintf("child-src https: %s %s;",
+                          google_util::CommandLineGoogleBaseURL().spec().c_str(),
+                          chrome::kChromeUIUntrustedNewTabPageUrl));
+-
++ 
++  source->DisableTrustedTypesCSP();
++ 
+   return source;
+ }
+ 

@@ -3,7 +3,7 @@ index f89ada10c4ad3..a1abf5d9a743f 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
 @@ -38,6 +38,50 @@
-         <include name="IDR_ABOUT_SYS_CSS" file="resources\about_sys\about_sys.css" flattenhtml="true" type="BINDATA" />
+         <include name="IDR_ABOUT_SYS_CSS" file="resources\about_sys\about_sys.css" type="BINDATA" />
          <include name="IDR_ABOUT_SYS_JS" file="resources\about_sys\about_sys.js" preprocess="true" type="BINDATA" />
        </if>
 +      <if expr="not is_android">

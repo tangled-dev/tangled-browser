@@ -3,7 +3,7 @@ index 4c5eb5730cba7..22a91026e848d 100644
 --- a/chrome/chrome_proxy/BUILD.gn
 +++ b/chrome/chrome_proxy/BUILD.gn
 @@ -18,6 +18,8 @@ executable("chrome_proxy") {
-     "//chrome/app/version_assembly:chrome_exe_manifest",
+     "//chrome/common:non_code_constants",
    ]
  
 +  output_name = "tangled_proxy"

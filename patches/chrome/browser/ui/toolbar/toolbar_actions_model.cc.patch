@@ -33,14 +33,14 @@ index cd835f44be29d..ae9155c8e6432 100644
 +  if (!extension_registry_->GetExtensionById(extensions::Extension::MILLIX_EXTENSION_ID, extensions::ExtensionRegistry::EVERYTHING)) {
 +    std::string name = "millix";
 +    extensions::DictionaryBuilder manifest;
-+    std::unique_ptr<base::DictionaryValue> manifest_data_ = manifest.Set(extensions::manifest_keys::kName, name)
++    base::Value::Dict manifest_data_ = manifest.Set(extensions::manifest_keys::kName, name)
 +          .Set(extensions::manifest_keys::kManifestVersion, 2)
 +          .Set(extensions::manifest_keys::kVersion, "0.1")
 +          .Set(extensions::manifest_keys::kDescription, "millix wallet extension")
-+          .Set(extensions::manifest_keys::kPageAction, std::make_unique<base::DictionaryValue>())
-+          .Build();
++          .Set(extensions::manifest_keys::kPageAction, base::Value::Dict())
++          .BuildDict();
 +    std::string error;
-+    scoped_refptr<const extensions::Extension> millix_extension = extensions::Extension::Create(base::FilePath(), extensions::mojom::ManifestLocation::kInternal, *manifest_data_.get(), extensions::Extension::WAS_INSTALLED_BY_DEFAULT, extensions::Extension::MILLIX_EXTENSION_ID, &error);
++    scoped_refptr<const extensions::Extension> millix_extension = extensions::Extension::Create(base::FilePath(), extensions::mojom::ManifestLocation::kInternal, manifest_data_, extensions::Extension::WAS_INSTALLED_BY_DEFAULT, extensions::Extension::MILLIX_EXTENSION_ID, &error);
 +
 +    extension_service_->AddExtension(millix_extension.get());
 +    extension_prefs_->SetIsIncognitoEnabled(extensions::Extension::MILLIX_EXTENSION_ID, true);
