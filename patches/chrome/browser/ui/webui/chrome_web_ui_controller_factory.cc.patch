@@ -1,22 +1,26 @@
 diff --git a/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc b/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc
-index 20fdf4e6d02ff..0cd1ae8161c86 100644
+index 9164ded909bac..d6eb9fa0b2378 100644
 --- a/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc
 +++ b/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc
-@@ -107,6 +107,10 @@
+@@ -111,7 +111,12 @@
  #include "ui/gfx/favicon_size.h"
  #include "ui/web_dialogs/web_dialog_ui.h"
  #include "url/gurl.h"
+-
++#if !BUILDFLAG(IS_ANDROID)
 +#include "chrome/browser/ui/webui/millix/millix_bar.h"
 +#include "chrome/browser/ui/webui/millix/millix_app.h"
 +#include "chrome/browser/ui/views/frame/browser_view.h"
 +#include "chrome/browser/ui/browser_finder.h"
- 
++#endif
  #if BUILDFLAG(ENABLE_NACL)
  #include "chrome/browser/ui/webui/nacl_ui.h"
-@@ -863,6 +867,17 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
+ #endif
+@@ -886,6 +891,19 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
      return &NewWebUI<IdentityInternalsUI>;
    if (url.host_piece() == chrome::kChromeUINewTabHost)
      return &NewWebUI<NewTabUI>;
++  #if !BUILDFLAG(IS_ANDROID)
 +  if (url.host_piece() == chrome::kChromeUIMillixBarHost)
 +      return &NewWebUI<MillixBarUI>;
 +  if (url.host_piece() == chrome::kChromeUIMillixAppHost) {
@@ -27,6 +31,7 @@ index 20fdf4e6d02ff..0cd1ae8161c86 100644
 +    if (url.host_piece() == chrome::kChromeUIMillixAppHost)
 +      return &NewWebUI<MillixAppUI>;
 +  }
++  #endif
 +
    if (!profile->IsOffTheRecord()) {
      if (url.host_piece() == chrome::kChromeUINewTabPageHost)

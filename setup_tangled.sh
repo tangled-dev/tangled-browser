@@ -42,7 +42,12 @@ if [[ $4 == "true" ]]; then
     echo "replace chrome: with tangled: in the following folders"
     echo "base build chrome chromecast chromeos components content device docs extensions fuchsia_web gin google_apis gpu headless ios media mojo native_client_sdk net pdf ppapi sandbox services skia sql storage styleguide testing third_party/blink third_party/closure_compiler third_party/wpt_tools tools ui url weblayer "
 
-    for folder in base build chrome components content extensions media mojo skia sandbox tools ui url; do
+    echo "processing folder chrome"
+    replace_in_file "/\"chrome:/gi" "'\"tangled:'" "'chrome/**'"
+    replace_in_file "/chrome:\/\//gi" "'tangled://'" "'chrome/**'"
+    replace_in_file "/JNINamespace\(\"tangled:/gi" "'JNINamespace\(\"chrome:'" "'chrome/**'"
+
+    for folder in base build components content extensions media mojo skia sandbox tools ui url; do
         echo "processing folder $folder"
         replace_in_file "/\"chrome:/gi" "'\"tangled:'" "'$folder/**'"
         replace_in_file "/chrome:\/\//gi" "'tangled://'" "'$folder/**'"
@@ -64,12 +69,11 @@ if [[ $4 == "true" ]]; then
     echo "regranding: update texts"
     for folder in chrome components content; do
         echo "processing folder $folder"
-        replace_in_file "/[C]hromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
+        replace_in_file "/([C]hromium|[C]hrome)/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
     done
 
     echo "regranding: fix chrominum link"
     sed $SEDOPTION 's/Tangled<ph name="END_LINK_CHROMIUM"/Chromium<ph name="END_LINK_CHROMIUM"/g' components/components_chromium_strings.grd
-    replace_in_file "/[C]hromium/g" "'Tangled'" "['$folder/**/*.grdp','$folder/**/*.grd','$folder/**/*.xtb']" --verbose
 
     echo "regranding: fix default data folder"
     sed $SEDOPTION 's/"Chromium"/"Tangled"/g' chrome/browser/mac/initial_prefs.mm
@@ -86,7 +90,11 @@ cp -p -r ../tangled-millix-bar-ui/* chrome/browser/resources/millix/
 cp -p -r ../millix-wallet-ui/build/* chrome/browser/resources/millix/app/
 
 BUILD_FOLDER=$3
-gn gen $BUILD_FOLDER --args="cc_wrapper=\"ccache\" target_cpu = \"$2\" is_debug = false dcheck_always_on = false is_component_build = false ffmpeg_branding = \"Chrome\" proprietary_codecs = true enable_widevine = true"
+if [[ "$1" == "android" ]]; then
+    gn gen $BUILD_FOLDER --args="cc_wrapper=\"ccache\" target_os = \"$1\" target_cpu = \"$2\" is_debug = false dcheck_always_on = false is_component_build = false ffmpeg_branding = \"Chrome\" proprietary_codecs = true enable_widevine = true"
+else
+    gn gen $BUILD_FOLDER --args="cc_wrapper=\"ccache\" target_cpu = \"$2\" is_debug = false dcheck_always_on = false is_component_build = false ffmpeg_branding = \"Chrome\" proprietary_codecs = true enable_widevine = true"
+fi
 
 echo "copy millix node to the tangled browser app"
 rm -rf millix_node
@@ -105,6 +113,9 @@ elif [[ "$1" == "linux" ]]; then
     echo "build tangled for linux"
     autoninja -C $BUILD_FOLDER chrome
     autoninja -C $BUILD_FOLDER installer
+elif [[ "$1" == "android" ]]; then
+    echo "build tangled for android"
+    autoninja -C $BUILD_FOLDER chrome_public_apk
 elif [[ "$1" == "win" ]]; then
     echo "build tangled for windows"
     autoninja -C $BUILD_FOLDER chrome
