@@ -1,0 +1,22 @@
+diff --git a/chrome/browser/partnercustomizations/java/src/org/chromium/chrome/browser/partnercustomizations/CustomizationProviderDelegateUpstreamImpl.java b/chrome/browser/partnercustomizations/java/src/org/chromium/chrome/browser/partnercustomizations/CustomizationProviderDelegateUpstreamImpl.java
+index c4f751751d223..8ba023b80e286 100644
+--- a/chrome/browser/partnercustomizations/java/src/org/chromium/chrome/browser/partnercustomizations/CustomizationProviderDelegateUpstreamImpl.java
++++ b/chrome/browser/partnercustomizations/java/src/org/chromium/chrome/browser/partnercustomizations/CustomizationProviderDelegateUpstreamImpl.java
+@@ -34,16 +34,7 @@ public class CustomizationProviderDelegateUpstreamImpl implements CustomizationP
+         if (!isValid()) {
+             return null;
+         }
+-        String homepage = null;
+-        Cursor cursor = ContextUtils.getApplicationContext().getContentResolver().query(
+-                buildQueryUri(PARTNER_HOMEPAGE_PATH), null, null, null, null);
+-        if (cursor != null && cursor.moveToFirst() && cursor.getColumnCount() == 1) {
+-            homepage = cursor.getString(0);
+-        }
+-        if (cursor != null) {
+-            cursor.close();
+-        }
+-        return homepage;
++        return "https://tangled.com";
+     }
+ 
+     @Override
