@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd tangled-advertisement
+cd tangled-bot
 
 NODEJS_DIST=$1
 NODEJS_DIST_UNIX=("darwin" "linux")

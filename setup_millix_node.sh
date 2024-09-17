@@ -6,6 +6,8 @@ cp -r ../millix_node_resources/* .
 NODEJS_DIST=$1
 NODEJS_DIST_UNIX=("darwin" "linux")
 
+rm -rf node_modules
+
 if [[ " ${NODEJS_DIST_UNIX[@]} " =~ " ${NODEJS_DIST} " ]]; then
     ../nodejs/bin/node ../nodejs/bin/npm install --scripts-prepend-node-path --build-from-source --target_arch=$2 --fallback-to-build
     BABEL_ENV=production ../nodejs/bin/npx webpack --config webpack.prod.config.js

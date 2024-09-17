@@ -94,6 +94,7 @@ mkdir -p millix_node
 cp -r ../millix-node/{scripts,package.json} millix_node
 cp -r ../millix-node/dist/* millix_node
 cp -r ../tangled-advertisement/lib/tangled-advertisement.js millix_node
+cp -r ../tangled-bot/lib/tangled-bot.js millix_node
 cp -r ../nodejs millix_node
 
 if [[ "$1" == "darwin" ]]; then

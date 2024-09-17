@@ -12,7 +12,10 @@ if [[ $5 == "true" ]]; then
 fi
 
 echo "working on tangled advertisement"
-bash setup_tangled_advertisement.sh $2
+bash setup_tangled_advertisement.sh $2 $3
+
+echo "working on tangled bot"
+bash setup_tangled_bot.sh $2 $3
 
 echo "working on millix node"
 bash setup_millix_node.sh $2 $3

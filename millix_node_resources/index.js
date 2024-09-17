@@ -12,7 +12,8 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 const childProcess   = require('child_process');
-let tangledProcess;
+let tangledAdvertisementProcess;
+let tangledBotProcess;
 
 const argv = require('yargs')
     .options({
@@ -164,17 +165,35 @@ const checkTangledAdvertisementProcess = () => {
     }, (err, response, body) => {
         console.log(`[advertisement] status: ${err || response.statusCode}`);
         if (err || response.statusCode !== 200) {
-            tangledProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-advertisement.js`, '--pid-file', './tangled-advertisement.pid'], { stdio: 'ignore' });
+            tangledAdvertisementProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-advertisement.js`, '--pid-file', './tangled-advertisement.pid'], { stdio: 'ignore' });
         }
         setTimeout(() => checkTangledAdvertisementProcess(), 60000);
     });
 }
 
+const checkTangledBotProcess = () => {
+    console.log(`[bot] check process status`);
+    request.get('https://localhost:16666/', {
+        strictSSL: false,
+        encoding: null
+    }, (err, response, body) => {
+        console.log(`[bot] status: ${err || response.statusCode}`);
+        if (err || response.statusCode !== 200) {
+            tangledBotProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-bot.js`, '--pid-file', './tangled-bot.pid'], { stdio: 'ignore' });
+        }
+        setTimeout(() => checkTangledBotProcess(), 60000);
+    });
+}
+
 eventBus.on('wallet_unlock', () => {
     console.log(`[advertisement] wallet unlocked`);
-    if (!tangledProcess) {
-        tangledProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-advertisement.js`, '--pid-file', './tangled-advertisement.pid'], { stdio: 'ignore' });
+    if (!tangledAdvertisementProcess) {
+        tangledAdvertisementProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-advertisement.js`, '--pid-file', './tangled-advertisement.pid'], { stdio: 'ignore' });
         setTimeout(() => checkTangledAdvertisementProcess(), 60000);
+    }
+    if (!tangledBotProcess) {
+        tangledBotProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-bot.js`, '--pid-file', './tangled-bot.pid'], { stdio: 'ignore' });
+        setTimeout(() => checkTangledBotProcess(), 60000);
     }
 });
 

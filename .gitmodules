@@ -13,3 +13,6 @@
 	path = tangled-millix-bar-ui
 	url = https://github.com/tangled-dev/tangled-millix-bar-ui.git
 	branch = main
+[submodule "tangled-bot"]
+	path = tangled-bot
+	url = https://github.com/tangled-dev/tangled-bot.git
