@@ -16,3 +16,4 @@
 [submodule "tangled-bot"]
 	path = tangled-bot
 	url = https://github.com/tangled-dev/tangled-bot.git
+	branch = main
