@@ -51,13 +51,16 @@ UntrustedMillixAppUI::UntrustedMillixAppUI(content::WebUI* web_ui)
   untrusted_source->DisableTrustedTypesCSP();
 
   untrusted_source->OverrideContentSecurityPolicy(
-      network::mojom::CSPDirectiveName::ConnectSrc, "connect-src https:;");
+      network::mojom::CSPDirectiveName::ConnectSrc, "connect-src https: blob:;");
 
   untrusted_source->OverrideContentSecurityPolicy(
         network::mojom::CSPDirectiveName::DefaultSrc, "default-src 'self' 'unsafe-inline';");
 
   untrusted_source->OverrideContentSecurityPolicy(
         network::mojom::CSPDirectiveName::ImgSrc, "img-src 'self' data: blob:;");
+
+  untrusted_source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::MediaSrc, "media-src 'self' data: blob:;");
 
   untrusted_source->OverrideContentSecurityPolicy(
       network::mojom::CSPDirectiveName::ScriptSrc, "script-src tangled://resources 'self' 'unsafe-inline';");
