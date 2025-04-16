@@ -63,6 +63,9 @@ UntrustedMillixAppUI::UntrustedMillixAppUI(content::WebUI* web_ui)
       network::mojom::CSPDirectiveName::MediaSrc, "media-src 'self' data: blob:;");
 
   untrusted_source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::ObjectSrc, "object-src 'self' data: blob:;");
+
+  untrusted_source->OverrideContentSecurityPolicy(
       network::mojom::CSPDirectiveName::ScriptSrc, "script-src tangled://resources 'self' 'unsafe-inline';");
   untrusted_source->AddFrameAncestor(GURL(chrome::kChromeUIMillixAppURL));
 
