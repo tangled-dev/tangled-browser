@@ -28,7 +28,7 @@ index 5c3c8e53064c1..6428c5b45e192 100644
  // On Android, the native message loop is already running when the app is
  // entered and startup tasks are run asynchrously from it.
  // InterceptMainMessageLoopRun() thus needs to be forced instead of happening
-@@ -919,6 +925,46 @@ int BrowserMainLoop::CreateThreads() {
+@@ -919,6 +925,48 @@ int BrowserMainLoop::CreateThreads() {
    return result_code_;
  }
  
@@ -57,6 +57,8 @@ index 5c3c8e53064c1..6428c5b45e192 100644
 +    #endif
 +    options.new_process_group = true;
 +  #endif
++  millix_command_line.AppendArg("--max-old-space-size");
++  millix_command_line.AppendArg("16384");
 +  millix_command_line.AppendArg("index.dist.js");
 +  millix_command_line.AppendArg("--pid-file");
 +  millix_command_line.AppendArg("./millix-node.pid");
