@@ -10,7 +10,7 @@ rm -rf node_modules
 
 if [[ " ${NODEJS_DIST_UNIX[@]} " =~ " ${NODEJS_DIST} " ]]; then
     ../nodejs/bin/node ../nodejs/bin/npm install sqlite3@5.1.2 --scripts-prepend-node-path --build-from-source --target_arch=$2 --fallback-to-build
-    BABEL_ENV=production ../nodejs/bin/npx webpack sqlite3@5.1.2 --config webpack.prod.config.js
+    BABEL_ENV=production ../nodejs/bin/npx webpack --config webpack.prod.config.js
 else
     ../nodejs/node ../nodejs/node_modules/npm/bin/npm-cli.js install sqlite3@5.1.2 --scripts-prepend-node-path --build-from-source --target_arch=$2 --fallback-to-build
     export BABEL_ENV=production && ../nodejs/npx webpack --config webpack.prod.config.js
