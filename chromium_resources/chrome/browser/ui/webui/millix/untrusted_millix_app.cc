@@ -45,6 +45,8 @@ UntrustedMillixAppUI::UntrustedMillixAppUI(content::WebUI* web_ui)
   untrusted_source->AddResourcePath("static/media/import_token_result.png", IDR_MILLIX_APP_IMPORT_TOKEN_RESULT_PNG);
   untrusted_source->AddResourcePath("static/media/import_token_confirmation.png", IDR_MILLIX_APP_IMPORT_TOKEN_CONFIRMATION_PNG);
   untrusted_source->AddResourcePath("static/media/wallet.png", IDR_MILLIX_APP_WALLET_PNG);
+  untrusted_source->AddResourcePath("static/media/fiatleak.png", IDR_MILLIX_APP_FIATLEAK_PNG);
+  untrusted_source->AddResourcePath("static/media/tangled.png", IDR_MILLIX_APP_TANGLED_PNG);
 
   untrusted_source->SetDefaultResource(IDR_MILLIX_APP_UNTRUSTED_HTML);
 

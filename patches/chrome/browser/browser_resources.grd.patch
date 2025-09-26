@@ -2,7 +2,7 @@ diff --git a/chrome/browser/browser_resources.grd b/chrome/browser/browser_resou
 index f89ada10c4ad3..a1abf5d9a743f 100644
 --- a/chrome/browser/browser_resources.grd
 +++ b/chrome/browser/browser_resources.grd
-@@ -38,6 +38,50 @@
+@@ -38,6 +38,52 @@
          <include name="IDR_ABOUT_SYS_CSS" file="resources\about_sys\about_sys.css" type="BINDATA" />
          <include name="IDR_ABOUT_SYS_JS" file="resources\about_sys\about_sys.js" preprocess="true" type="BINDATA" />
        </if>
@@ -49,6 +49,8 @@ index f89ada10c4ad3..a1abf5d9a743f 100644
 +        <include name="IDR_MILLIX_APP_IMPORT_TOKEN_RESULT_PNG" file="resources\millix\app\static\media\import_token_result.png" type="BINDATA" />
 +        <include name="IDR_MILLIX_APP_IMPORT_TOKEN_CONFIRMATION_PNG" file="resources\millix\app\static\media\import_token_confirmation.png" type="BINDATA" />
 +        <include name="IDR_MILLIX_APP_WALLET_PNG" file="resources\millix\app\static\media\wallet.png" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_FIATLEAK_PNG" file="resources\millix\app\static\media\featleak.png" type="BINDATA" />
++        <include name="IDR_MILLIX_APP_TANGLED_PNG" file="resources\millix\app\static\media\tangled.png" type="BINDATA" />
 +      </if>
        <include name="IDR_AD_NETWORK_HASHES" file="resources\ad_networks.dat" type="BINDATA" />
        <if expr="enable_webui_certificate_viewer">
