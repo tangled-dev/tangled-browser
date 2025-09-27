@@ -71,7 +71,7 @@ UntrustedMillixAppUI::UntrustedMillixAppUI(content::WebUI* web_ui)
      network::mojom::CSPDirectiveName::FrameSrc, "frame-src 'self' data: blob:;");
 
   untrusted_source->OverrideContentSecurityPolicy(
-      network::mojom::CSPDirectiveName::ScriptSrc, "script-src tangled://resources 'self' 'unsafe-inline';");
+      network::mojom::CSPDirectiveName::ScriptSrc, "script-src tangled://resources https: 'self' 'unsafe-inline';");
   untrusted_source->AddFrameAncestor(GURL(chrome::kChromeUIMillixAppURL));
 
   Profile* profile = Profile::FromWebUI(web_ui);

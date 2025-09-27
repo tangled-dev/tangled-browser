@@ -7,15 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Web site created using create-react-app" />
     <title>millix</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://tangled.com/browser/download/gtag.js"></script>
     <script>
+        window.dataLayer = window.dataLayer || [];
+
         function gtag() {
-            if (window.parent) {
-                window.parent.postMessage({
-                    type: 'gtag_event',
-                    arguments
-                }, '*');
-            }
+            dataLayer.push(arguments);
         }
+
+        gtag('js', new Date());
+        gtag('config', 'G-57CQ9Y8LPV',{
+        'send_page_view': true   // force pageview
+        });
     </script>
 </head>
 
