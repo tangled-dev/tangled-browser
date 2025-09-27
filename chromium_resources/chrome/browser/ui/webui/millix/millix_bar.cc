@@ -160,7 +160,10 @@ MillixBarUI::MillixBarUI(content::WebUI* web_ui)
 
   html_source->OverrideContentSecurityPolicy(
       network::mojom::CSPDirectiveName::ScriptSrc,
-      "script-src tangled://resources 'self' 'unsafe-inline';");
+      "script-src tangled://resources https: 'self' 'unsafe-inline';");
+  
+  html_source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::ConnectSrc, "connect-src https: blob:;");
 
   html_source->OverrideContentSecurityPolicy(
       network::mojom::CSPDirectiveName::ChildSrc,

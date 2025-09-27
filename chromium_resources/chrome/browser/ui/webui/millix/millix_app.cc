@@ -77,6 +77,9 @@ MillixAppUI::MillixAppUI(content::WebUI* web_ui)
       "script-src tangled://resources https: 'self' 'unsafe-inline';");
 
   html_source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::ConnectSrc, "connect-src https: blob:;");
+
+  html_source->OverrideContentSecurityPolicy(
       network::mojom::CSPDirectiveName::ChildSrc,
       base::StringPrintf("child-src %s;",
                          chrome::kChromeUIMillixUntrustedAppURL));
