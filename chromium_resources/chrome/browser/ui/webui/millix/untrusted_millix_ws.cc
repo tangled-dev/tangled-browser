@@ -23,6 +23,8 @@ UntrustedMillixWSUI::UntrustedMillixWSUI(content::WebUI* web_ui)
 
   untrusted_source->OverrideContentSecurityPolicy(
       network::mojom::CSPDirectiveName::ConnectSrc, "connect-src wss: https:;");
+  untrusted_source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::ScriptSrc, "script-src chrome-untrusted://resources https: 'self' 'unsafe-inline';");
   untrusted_source->AddFrameAncestor(GURL(chrome::kChromeUIMillixBarURL));
 
   Profile* profile = Profile::FromWebUI(web_ui);
