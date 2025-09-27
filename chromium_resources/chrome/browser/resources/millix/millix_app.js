@@ -1,6 +1,7 @@
 function onFrameReady() {
     console.log("inframe ready");
     chrome.send('initialize', []);
+    window.gtag('event', 'tangled_browser_event', { event_category: 'millix_app_initialize' })
 }
 
 function onLoadNodeApiConfig(apiConfig) {
@@ -20,6 +21,9 @@ window.addEventListener('message', ({ data }) => {
             break;
         case 'wallet_notification_volume':
             chrome.send('updateMillixWallet', [data]);
+            break;
+        case 'gtag_event':
+            window.gtag(...data.arguments);
             break;    
     }
 });
