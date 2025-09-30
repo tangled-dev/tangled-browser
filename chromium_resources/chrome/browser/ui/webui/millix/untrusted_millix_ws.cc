@@ -21,6 +21,8 @@ UntrustedMillixWSUI::UntrustedMillixWSUI(content::WebUI* web_ui)
   untrusted_source->AddResourcePath("config.js", IDR_MILLIX_BAR_CONFIG_JS);
   untrusted_source->SetDefaultResource(IDR_MILLIX_WS_HTML);
 
+  untrusted_source->DisableTrustedTypesCSP();
+
   untrusted_source->OverrideContentSecurityPolicy(
       network::mojom::CSPDirectiveName::ConnectSrc, "connect-src wss: https:;");
   untrusted_source->OverrideContentSecurityPolicy(
