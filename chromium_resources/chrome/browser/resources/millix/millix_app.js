@@ -1,11 +1,30 @@
+let millixFrame;
+
 function onFrameReady() {
     console.log("inframe ready");
     chrome.send('initialize', []);
+    settimeout(refreshNotificationVolume, 1000);
+}
+
+function refreshNotificationVolume() {
+    if (!millixFrame) {
+        console.log("frame not ready yet");
+        return setTimeout(refreshNotificationVolume, 10000);
+    }
+
+    millixFrame.contentWindow.postMessage({
+        type: 'refresh_notification_volume'
+    }, 'chrome-untrusted://millix/');
+
+    setTimeout(refreshNotificationVolume, 10000);
 }
 
 function onLoadNodeApiConfig(apiConfig) {
+    if (!millixFrame) {
+        console.log("frame not ready yet");
+        return;
+    }
     console.log("[onLoadNodeApiConfig]", apiConfig);
-    const millixFrame = document.getElementById('millix_frame');
     millixFrame.contentWindow.postMessage({
         type: 'update_api',
         ...apiConfig
@@ -20,25 +39,25 @@ window.addEventListener('message', ({ data }) => {
             break;
         case 'wallet_notification_volume':
             chrome.send('updateMillixWallet', [data]);
-            break;    
+            break;
     }
 });
 
 
 function refreshIframe() {
-    let iframe = document.getElementById('millix_frame');
-    
+    millixFrame = document.getElementById('millix_frame');
+
     let page = window.location.pathname.substring(1) + window.location.search + window.location.hash;
 
-    if (iframe) {
-        iframe.src = `chrome-untrusted://millix/${page}`
+    if (millixFrame) {
+        millixFrame.src = `chrome-untrusted://millix/${page}`
     } else {
-        iframe = document.createElement('iframe');
-        iframe.id = 'millix_frame';
-        iframe.allow = "clipboard-write"
-        iframe.onload = onFrameReady;
-        iframe.src = `chrome-untrusted://millix/${page}`
-        document.body.appendChild(iframe);
+        millixFrame = document.createElement('iframe');
+        millixFrame.id = 'millix_frame';
+        millixFrame.allow = "clipboard-write"
+        millixFrame.onload = onFrameReady;
+        millixFrame.src = `chrome-untrusted://millix/${page}`
+        millixFrame.body.appendChild(iframe);
     }
 }
 
