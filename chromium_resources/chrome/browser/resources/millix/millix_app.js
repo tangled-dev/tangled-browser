@@ -3,7 +3,7 @@ let millixFrame;
 function onFrameReady() {
     console.log("inframe ready");
     chrome.send('initialize', []);
-    settimeout(refreshNotificationVolume, 1000);
+    setTimeout(refreshNotificationVolume, 1000);
 }
 
 function refreshNotificationVolume() {
@@ -57,7 +57,7 @@ function refreshIframe() {
         millixFrame.allow = "clipboard-write"
         millixFrame.onload = onFrameReady;
         millixFrame.src = `chrome-untrusted://millix/${page}`
-        millixFrame.body.appendChild(iframe);
+        document.body.appendChild(millixFrame);
     }
 }
 
