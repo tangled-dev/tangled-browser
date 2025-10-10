@@ -3,20 +3,6 @@ let millixFrame;
 function onFrameReady() {
     console.log("inframe ready");
     chrome.send('initialize', []);
-    setTimeout(refreshNotificationVolume, 1000);
-}
-
-function refreshNotificationVolume() {
-    if (!millixFrame) {
-        console.log("frame not ready yet");
-        return setTimeout(refreshNotificationVolume, 10000);
-    }
-
-    millixFrame.contentWindow.postMessage({
-        type: 'refresh_notification_volume'
-    }, 'chrome-untrusted://millix/');
-
-    setTimeout(refreshNotificationVolume, 10000);
 }
 
 function onLoadNodeApiConfig(apiConfig) {
