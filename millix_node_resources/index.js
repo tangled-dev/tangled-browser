@@ -122,6 +122,8 @@ process.on('SIGINT', async function() {
 
         process.exit(0);
     }
+}).on('unhandledRejection', (reason) => {
+    console.error('[millix-node] unhandled rejection at promise:', reason);
 });
 
 const checkPIDFile = () => {
