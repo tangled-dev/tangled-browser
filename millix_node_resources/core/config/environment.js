@@ -1,4 +1,4 @@
-const NODE_MILLIX_VERSION        = '1.25.4.4-tangled';
+const NODE_MILLIX_VERSION        = '1.25.5.0-tangled';
 const DATA_BASE_DIR_MAIN_NETWORK = './millix-tangled';
 const DATA_BASE_DIR_TEST_NETWORK = './millix-tangled-testnet';
 
