@@ -11,8 +11,11 @@
 #include "content/public/common/url_constants.h"
 #include "content/public/browser/web_ui_message_handler.h"
 #include "ui/webui/mojo_web_ui_controller.h"
-#include "net/base/io_buffer.h"
-#include "storage/browser/file_system/file_stream_reader.h"
+
+#include <optional>
+#include <string>
+
+#include "base/memory/weak_ptr.h"
 
 namespace ui {
   class NativeTheme;
@@ -50,13 +53,14 @@ class MillixBarUI : public ui::MojoWebUIController {
   std::string GetNodeId() const;
   std::string GetNodeSignature() const;
   void ReadNodeConfig();
- private: 
-  void ReadNodeConfigJson(int64_t size);
-  void OnReadNodeConfigJson(int result);
+ private:
+  // Called on the UI thread with the contents of node.json, if it was read.
+  void OnNodeConfigRead(std::optional<std::string> json);
   void OnUpdateNodeApiConfig();
-  std::unique_ptr<storage::FileStreamReader> node_config_file_reader;
-  scoped_refptr<net::IOBufferWithSize> node_config_buffer;
   raw_ptr<MillixBarMessageHandler> message_handler;
+  // Node config reads and retries are bound to this, so none run after the
+  // WebUI is destroyed (e.g. when tangled://millix-bar is reloaded).
+  base::WeakPtrFactory<MillixBarUI> weak_factory_{this};
 };
 
 #endif  // CHROME_BROWSER_UI_WEBUI_MILLIX_BAR_UI_H_

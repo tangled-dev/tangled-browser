@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/metrics/chrome_feature_list_creator.cc b/chrome/browser/metrics/chrome_feature_list_creator.cc
-index c8ab55cf0bb3f..233e0b543079b 100644
+index c8ab55cf0bb3f..a01446957e23f 100644
 --- a/chrome/browser/metrics/chrome_feature_list_creator.cc
 +++ b/chrome/browser/metrics/chrome_feature_list_creator.cc
 @@ -7,6 +7,7 @@
@@ -10,13 +10,15 @@ index c8ab55cf0bb3f..233e0b543079b 100644
  #include "base/files/file_path.h"
  #include "base/files/file_util.h"
  #include "base/memory/scoped_refptr.h"
-@@ -250,6 +251,10 @@ void ChromeFeatureListCreator::ConvertFlagsToSwitches() {
+@@ -250,6 +251,12 @@ void ChromeFeatureListCreator::ConvertFlagsToSwitches() {
    flags_ui::PrefServiceFlagsStorage flags_storage(local_state_.get());
  #endif  // BUILDFLAG(IS_CHROMEOS)
  
-+  auto active_flags = flags_storage.GetFlags();
-+  active_flags.insert(switches::kAllowInsecureLocalhost);
-+  flags_storage.SetFlags(active_flags);
++  // Tangled: the bundled millix node serves its API on https://localhost with
++  // a self-signed certificate. The about:flags entry for this switch expired
++  // in M130, so set the switch directly.
++  base::CommandLine::ForCurrentProcess()->AppendSwitch(
++      switches::kAllowInsecureLocalhost);
 +
    about_flags::ConvertFlagsToSwitches(&flags_storage,
                                        base::CommandLine::ForCurrentProcess(),

@@ -1,6 +1,7 @@
 #include "chrome/browser/ui/webui/millix/millix_bar.h"
 
 #include "base/functional/bind.h"
+#include "base/files/file_util.h"
 #include "base/json/json_reader.h"
 #include "base/path_service.h"
 #include "base/strings/stringprintf.h"
@@ -184,9 +185,7 @@ MillixBarUI::MillixBarUI(content::WebUI* web_ui)
   web_ui->AddRequestableScheme(content::kChromeUIUntrustedScheme);
 
 
-  content::GetIOThreadTaskRunner({})->PostTask(
-      FROM_HERE,
-      base::BindOnce(&MillixBarUI::ReadNodeConfig, base::Unretained(this)));
+  ReadNodeConfig();
 }
 
 MillixBarUI::~MillixBarUI() {}
@@ -195,75 +194,51 @@ void MillixBarUI::ReadNodeConfig() {
   base::FilePath file_path;
   base::PathService::Get(base::DIR_HOME, &file_path);
   file_path = file_path.AppendASCII("millix-tangled").AppendASCII("node.json");
-  LOG(ERROR) << "reading node config from " << file_path.value().c_str();
-  this->node_config_file_reader = storage::FileStreamReader::CreateForLocalFile(
-      base::ThreadPool::CreateTaskRunner(
-          {base::MayBlock(), base::TaskPriority::USER_VISIBLE}),
-      file_path, 0, base::Time());
-  this->node_config_file_reader->GetLength(
-      base::BindOnce(&MillixBarUI::ReadNodeConfigJson, base::Unretained(this)));
+  base::ThreadPool::PostTaskAndReplyWithResult(
+      FROM_HERE, {base::MayBlock(), base::TaskPriority::USER_VISIBLE},
+      base::BindOnce(
+          [](const base::FilePath& path) -> std::optional<std::string> {
+            std::string contents;
+            if (!base::ReadFileToString(path, &contents) || contents.empty()) {
+              return std::nullopt;
+            }
+            return contents;
+          },
+          file_path),
+      base::BindOnce(&MillixBarUI::OnNodeConfigRead,
+                     weak_factory_.GetWeakPtr()));
 }
 
-void MillixBarUI::ReadNodeConfigJson(int64_t size = -1) {
-  LOG(ERROR) << "reading node config. size: " << size;
-  if (size <= 0) {
-    // retry later
-    content::GetIOThreadTaskRunner({})->PostDelayedTask(
+void MillixBarUI::OnNodeConfigRead(std::optional<std::string> json) {
+  std::optional<base::Value> node_config;
+  if (json) {
+    node_config = base::JSONReader::Read(*json, base::JSON_PARSE_RFC);
+  }
+  const std::string* node_id = nullptr;
+  const std::string* node_signature = nullptr;
+  if (node_config && node_config->is_dict()) {
+    node_id = node_config->GetDict().FindString("node_id");
+    node_signature = node_config->GetDict().FindString("node_signature");
+  }
+
+  if (!node_id || !node_signature || node_id->empty() ||
+      node_signature->empty()) {
+    // The node writes node.json once it has started; retry until it exists.
+    VLOG(1) << "millix node config not available yet, retrying";
+    content::GetUIThreadTaskRunner({})->PostDelayedTask(
         FROM_HERE,
-        base::BindOnce(&MillixBarUI::ReadNodeConfig, base::Unretained(this)),
-        base::Milliseconds(1000));
+        base::BindOnce(&MillixBarUI::ReadNodeConfig,
+                       weak_factory_.GetWeakPtr()),
+        base::Seconds(1));
     return;
   }
-  this->node_config_buffer = base::MakeRefCounted<net::IOBufferWithSize>(size);
-  int rv = this->node_config_file_reader->Read(
-      this->node_config_buffer.get(), size,
-      base::BindOnce(&MillixBarUI::OnReadNodeConfigJson,
-                     base::Unretained(this)));
-  if (rv > 0) {
-    this->OnReadNodeConfigJson(rv);
-  }
-}
 
-void MillixBarUI::OnReadNodeConfigJson(int result) {
-  char* data = this->node_config_buffer->data();
-  auto json_data = std::string_view(data, result);
-  LOG(ERROR) << "reading node config. json (" << result << ") "
-             << json_data;
-  auto node_config_json =
-      base::JSONReader::Read(json_data, base::JSON_PARSE_RFC);
-
-  if (node_config_json.has_value() && node_config_json->is_dict()) {
-    std::string* node_id = node_config_json->GetDict().FindString("node_id");
-    std::string* node_signature =
-        node_config_json->GetDict().FindString("node_signature");
-
-    if (!node_id || !node_signature || node_id->empty() ||
-        node_signature->empty()) {
-      LOG(ERROR) << "reading node config. invalid configs! ";
-      this->ReadNodeConfigJson();
-      return;
-    }
-
-    LOG(ERROR) << "reading node config. id " << *node_id << " signature "
-               << *node_signature;
-    this->message_handler->node_id = *node_id;
-    this->message_handler->node_signature = *node_signature;
-    content::GetUIThreadTaskRunner({})->PostTask(
-        FROM_HERE, base::BindOnce(&MillixBarUI::OnUpdateNodeApiConfig,
-                                  base::Unretained(this)));
-  } else {
-    LOG(ERROR) << "reading node config. invalid json";
-    // retry later
-    content::GetIOThreadTaskRunner({})->PostDelayedTask(
-        FROM_HERE,
-        base::BindOnce(&MillixBarUI::ReadNodeConfig, base::Unretained(this)),
-        base::Milliseconds(1000));
-  }
+  this->message_handler->node_id = *node_id;
+  this->message_handler->node_signature = *node_signature;
+  OnUpdateNodeApiConfig();
 }
 
 void MillixBarUI::OnUpdateNodeApiConfig() {
-  LOG(ERROR) << "sending node config. id " << this->message_handler->node_id
-             << " signature " << this->message_handler->node_signature;
   base::DictValue apiConfig;
   apiConfig.Set("node_id", this->message_handler->node_id);
   apiConfig.Set("node_signature", this->message_handler->node_signature);
