@@ -1,17 +1,13 @@
-diff --git a/chrome/installer/linux/common/chromium-browser/chromium-browser.info b/chrome/installer/linux/common/chromium-browser/chromium-browser.info
-index b02a49c4d44d9..471539b3caea8 100644
---- a/chrome/installer/linux/common/chromium-browser/chromium-browser.info
-+++ b/chrome/installer/linux/common/chromium-browser/chromium-browser.info
-@@ -6,31 +6,31 @@
+diff --git a/chrome/installer/linux/common/chromium-browser.info b/chrome/installer/linux/common/chromium-browser.info
+index 395c019f7dd5f..d22c1b33adea4 100644
+--- a/chrome/installer/linux/common/chromium-browser.info
++++ b/chrome/installer/linux/common/chromium-browser.info
+@@ -6,37 +6,37 @@
  # chromium-browser packages for various platforms.
  
  # Base name of the package.
 -PACKAGE="chromium-browser"
 +PACKAGE="tangled-browser"
- 
- # Base name of the snap package
--SNAPNAME="chromium"
-+SNAPNAME="tangled"
  
  # Filename of the main executable (for generating launcher scripts, etc.)
 -PROGNAME=chrome
@@ -30,7 +26,7 @@ index b02a49c4d44d9..471539b3caea8 100644
 +MENUNAME="Tangled Browser"
  
  # Brief package description.
--SHORTDESC="The web browser from Chromium.org"
+-SHORTDESC="The web browser from the Chromium projects"
 +SHORTDESC="The web browser from tangled.com"
  
  # Detailed package description.
@@ -38,10 +34,21 @@ index b02a49c4d44d9..471539b3caea8 100644
 +FULLDESC="Tangled is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier."
  
  # Package maintainer information.
- # TODO(mmoss) Setup a mailbox for this address
 -MAINTNAME="Chromium Linux Team"
--MAINTMAIL="chromium-linux-packager@chromium.org"
--PRODUCTURL="http://www.chromium.org/"
+-MAINTMAIL="chromium-packagers@chromium.org"
+-PRODUCTURL="https://www.chromium.org/Home"
 +MAINTNAME="Tangled Team"
 +MAINTMAIL="developer@tangled.com"
-+PRODUCTURL="http://www.tangled.com/"
++PRODUCTURL="https://www.tangled.com/"
+ 
+ PROJECT_LICENSE="BSD-3-Clause and LGPL-2.1+ and Apache-2.0 and IJG and MIT and GPL-2.0+ and ISC and OpenSSL and (MPL-1.1 or GPL-2.0 or LGPL-2.0)"
+ 
+-DEVELOPER_NAME="The Chromium Authors"
++DEVELOPER_NAME="The Tangled Authors"
+ 
+ BUGTRACKERURL="https://www.chromium.org/for-testers/bug-reporting-guidelines"
+ 
+ HELPURL="https://chromium.googlesource.com/chromium/src/+/main/docs/linux/debugging.md"
+ 
+-RDN="org.chromium.Chromium"
++RDN="com.tangled.Tangled"

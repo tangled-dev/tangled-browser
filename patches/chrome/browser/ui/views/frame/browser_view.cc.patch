@@ -1,21 +1,10 @@
 diff --git a/chrome/browser/ui/views/frame/browser_view.cc b/chrome/browser/ui/views/frame/browser_view.cc
-index 5b3bbc40a9bb8..c6d86bd41118c 100644
+index bcebaf44f71c0..837da4ac427c3 100644
 --- a/chrome/browser/ui/views/frame/browser_view.cc
 +++ b/chrome/browser/ui/views/frame/browser_view.cc
-@@ -254,6 +254,10 @@
- #include "ui/views/widget/sublevel_manager.h"
- #include "ui/views/widget/widget.h"
- #include "ui/views/window/dialog_delegate.h"
-+#include "chrome/browser/ui/views/millix/millix_bar_view.h"
-+#include "content/public/browser/site_instance.h"
-+#include "content/public/browser/navigation_controller.h"
-+#include "content/public/common/bindings_policy.h"
- 
- #if BUILDFLAG(IS_CHROMEOS)
- #include "chrome/browser/ui/views/frame/top_controls_slide_controller_chromeos.h"
-@@ -939,6 +943,18 @@ BrowserView::BrowserView(std::unique_ptr<Browser> browser)
-   web_contents_close_handler_ =
-       std::make_unique<WebContentsCloseHandler>(contents_web_view_);
+@@ -958,6 +958,18 @@ BrowserView::BrowserView(Browser* browser)
+   top_container_separator_->SetProperty(views::kElementIdentifierKey,
+                                         kContentsSeparatorTopEdgeElementId);
  
 +  millix_bar_view_ = AddChildView(std::make_unique<views::MillixBarView>(this));
 +  millix_bar_view_->SetVisible(false);
@@ -32,8 +21,16 @@ index 5b3bbc40a9bb8..c6d86bd41118c 100644
    contents_container_ = AddChildView(std::move(contents_container));
    set_contents_view(contents_container_);
  
-@@ -1187,6 +1203,10 @@ bool BrowserView::GetTabStripVisible() const {
-   return tabstrip_ != nullptr;
+@@ -1121,6 +1133,7 @@ BrowserView::~BrowserView() {
+   loading_bar_ = nullptr;
+   find_bar_host_view_ = nullptr;
+   infobar_container_ = nullptr;
++  millix_bar_view_ = nullptr;
+   multi_contents_view_ = nullptr;
+   main_shadow_overlay_ = nullptr;
+   lens_overlay_view_ = nullptr;
+@@ -1421,6 +1434,10 @@ bool BrowserView::IsVerticalTabStripCollapsed() const {
+   return false;
  }
  
 +views::MillixBarView* BrowserView::GetMillixBarView() {
@@ -41,14 +38,13 @@ index 5b3bbc40a9bb8..c6d86bd41118c 100644
 +}
 +
  bool BrowserView::GetIncognito() const {
-   return browser_->profile()->IsIncognitoProfile();
+   return browser_->GetProfile()->IsIncognitoProfile();
  }
-@@ -3984,7 +4004,7 @@ void BrowserView::AddedToWidget() {
-   SetLayoutManager(std::make_unique<BrowserViewLayout>(
-       std::make_unique<BrowserViewLayoutDelegateImpl>(this), this,
-       top_container_, tab_strip_region_view_, tabstrip_, toolbar_,
--      infobar_container_, contents_container_, side_search_side_panel_,
-+      infobar_container_, millix_bar_view_, contents_container_, side_search_side_panel_,
-       left_aligned_side_panel_separator_, unified_side_panel_,
-       right_aligned_side_panel_separator_, lens_side_panel_,
-       immersive_mode_controller_.get(), contents_separator_));
+@@ -5143,6 +5160,7 @@ void BrowserView::AddedToWidget() {
+   layout_views.projects_panel_container = projects_panel_container_;
+   layout_views.toolbar = toolbar_;
+   layout_views.infobar_container = infobar_container_;
++  layout_views.millix_bar = millix_bar_view_;
+   layout_views.contents_container = contents_container_;
+   layout_views.multi_contents_view = multi_contents_view_;
+   layout_views.toolbar_height_side_panel = toolbar_height_side_panel_;

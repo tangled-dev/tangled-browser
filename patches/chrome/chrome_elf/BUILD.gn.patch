@@ -1,14 +1,13 @@
 diff --git a/chrome/chrome_elf/BUILD.gn b/chrome/chrome_elf/BUILD.gn
-index 9d96774f5f3de..dc02359f66fb4 100644
+index 218548918c62a..f3c574b5136d3 100644
 --- a/chrome/chrome_elf/BUILD.gn
 +++ b/chrome/chrome_elf/BUILD.gn
-@@ -55,6 +55,9 @@ shared_library("chrome_elf") {
-     "chrome_elf_main.cc",
+@@ -57,6 +57,8 @@ shared_library("chrome_elf") {
      "chrome_elf_main.h",
    ]
-+
+ 
 +  output_name = "tangled_elf"
 +
-   if (target_cpu == "x86") {
-     sources += [ "chrome_elf_x86.def" ]
-   } else if (target_cpu == "arm64") {
+   deps = [
+     ":chrome_elf_manifest",
+     ":chrome_elf_resources",

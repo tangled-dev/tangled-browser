@@ -1,0 +1,53 @@
+diff --git a/chrome/browser/ui/extensions/extension_action_view_model.cc b/chrome/browser/ui/extensions/extension_action_view_model.cc
+index f42c725ac2e83..ac02e982b503f 100644
+--- a/chrome/browser/ui/extensions/extension_action_view_model.cc
++++ b/chrome/browser/ui/extensions/extension_action_view_model.cc
+@@ -4,6 +4,14 @@
+ 
+ #include "chrome/browser/ui/extensions/extension_action_view_model.h"
+ 
++#include "chrome/browser/ui/views/frame/browser_view.h"
++#include "chrome/browser/ui/views/millix/millix_bar_view.h"
++#include "chrome/common/webui_url_constants.h"
++#include "content/public/browser/web_ui.h"
++#include "extensions/common/extension.h"
++#include "ui/gfx/color_palette.h"
++#include "ui/views/vector_icons.h"
++
+ #include <memory>
+ #include <string>
+ #include <utility>
+@@ -199,6 +207,11 @@ ui::ImageModel ExtensionActionViewModel::GetIcon(
+     return ui::ImageModel();
+   }
+ 
++  if (extension_->id() == extensions::Extension::MILLIX_EXTENSION_ID) {
++    return ui::ImageModel::FromVectorIcon(views::kMillixIcon,
++                                          gfx::kGooglePurple400);
++  }
++
+   return ui::ImageModel::FromImageSkia(
+       gfx::ImageSkia(GetIconImageSource(web_contents, size), size));
+ }
+@@ -374,6 +387,21 @@ void ExtensionActionViewModel::ExecuteUserAction(InvocationSource source) {
+     return;
+   }
+ 
++  // The millix action has no popup; it opens the wallet through the millix bar.
++  if (extension_->id() == extensions::Extension::MILLIX_EXTENSION_ID) {
++    BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser_);
++    if (browser_view && browser_view->GetMillixBarView()) {
++      content::WebContents* millix_contents =
++          browser_view->GetMillixBarView()->GetWebContents();
++      if (millix_contents && millix_contents->GetWebUI()) {
++        millix_contents->GetWebUI()->ProcessWebUIMessage(
++            GURL(chrome::kChromeUIMillixBarURL), "showMillixWallet",
++            base::ListValue());
++      }
++    }
++    return;
++  }
++
+   content::WebContents* const web_contents = GetCurrentWebContents();
+   if (!IsEnabled(web_contents)) {
+     delegate_->ShowContextMenuAsFallback();

@@ -1,13 +1,14 @@
 diff --git a/tools/polymer/html_to_wrapper.gni b/tools/polymer/html_to_wrapper.gni
-index 58e39405a00df..9b884014bc36a 100644
+index 37a146356b772..74c30c9eb457c 100644
 --- a/tools/polymer/html_to_wrapper.gni
 +++ b/tools/polymer/html_to_wrapper.gni
-@@ -58,7 +58,7 @@ template("html_to_wrapper") {
+@@ -74,7 +74,8 @@ template("html_to_wrapper") {
      }
  
      if (defined(invoker.scheme)) {
 -      assert(invoker.scheme == "chrome" || invoker.scheme == "relative")
-+      assert(invoker.scheme == "tangled" || invoker.scheme == "relative")
++      assert(invoker.scheme == "chrome" || invoker.scheme == "tangled" ||
++             invoker.scheme == "relative")
        args += [
          "--scheme",
          invoker.scheme,

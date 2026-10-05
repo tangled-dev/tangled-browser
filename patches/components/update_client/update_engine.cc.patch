@@ -1,6 +1,8 @@
+diff --git a/components/update_client/update_engine.cc b/components/update_client/update_engine.cc
+index b6c31e7e00194..2c373025ac4f2 100644
 --- a/components/update_client/update_engine.cc
 +++ b/components/update_client/update_engine.cc
-@@ -113,6 +114,9 @@ void UpdateEngine::Update(
+@@ -200,6 +200,9 @@ void UpdateEngine::StartOperation(
  
    for (size_t i = 0; i != update_context->ids.size(); ++i) {
      const auto& id = update_context->ids[i];
@@ -8,5 +10,5 @@
 +      continue;
 +    }
  
-     DCHECK(update_context->components[id]->state() == ComponentState::kNew);
+     CHECK_EQ(update_context->components[id]->state(), ComponentState::kNew);
  

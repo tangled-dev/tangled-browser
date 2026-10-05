@@ -16,18 +16,20 @@ git_apply() {
     git apply -v $1
     if [ $? -ne 0 ]; then
         echo "git apply failed"
-        exit $?
+        exit 1
     fi
 
     echo "$1" >> ../applied_patches.log 
 }
 
 replace_in_file() {
-    cp ../replace_in_file.template options.js;
-    npx replace-in-file "#FROM" "$1"  options.js
-    npx replace-in-file "#TO" "$2"  options.js
-    npx replace-in-file "#FILES" "$3"  options.js
-    npx replace-in-file --configFile=options.js  --verbose
+    # .cjs: src/package.json declares "type": "module", so a .js config fails to load
+    cp ../replace_in_file.template options.cjs;
+    npx replace-in-file "#FROM" "$1"  options.cjs
+    npx replace-in-file "#TO" "$2"  options.cjs
+    npx replace-in-file "#FILES" "$3"  options.cjs
+    npx replace-in-file --configFile=options.cjs  --verbose
+    rm -f options.cjs
 }
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -77,15 +79,22 @@ if [[ $4 == "true" ]]; then
 fi    
 
 echo "apply tangled patches"
-LC_ALL=C find ../patches -not -path '*/.*' -type f -name "*.patch" | while read fpatch; do
+# read from process substitution (not a pipe) so a failed patch exits the script
+while read fpatch; do
     git_apply $fpatch
-done
+done < <(LC_ALL=C find ../patches -not -path '*/.*' -type f -name "*.patch" | sort)
 
 cp -p -r ../chromium_resources/* .
 cp -p -r ../tangled-millix-bar-ui/* chrome/browser/resources/millix/
 cp -p -r ../millix-wallet-ui/build/* chrome/browser/resources/millix/app/
 
 BUILD_FOLDER=$3
+
+# Optional: limit parallel build jobs, e.g. TANGLED_BUILD_JOBS=4 on low-memory machines.
+NINJA_JOBS=()
+if [[ -n "$TANGLED_BUILD_JOBS" ]]; then
+    NINJA_JOBS=(-j "$TANGLED_BUILD_JOBS")
+fi
 gn gen $BUILD_FOLDER --args="cc_wrapper=\"ccache\" target_cpu = \"$2\" is_debug = false dcheck_always_on = false is_component_build = false ffmpeg_branding = \"Chrome\" proprietary_codecs = true enable_widevine = true"
 
 echo "copy millix node to the tangled browser app"
@@ -99,15 +108,15 @@ cp -r ../nodejs millix_node
 
 if [[ "$1" == "darwin" ]]; then
     echo "build tangled for macos"
-    autoninja -C $BUILD_FOLDER chrome
+    autoninja -C $BUILD_FOLDER "${NINJA_JOBS[@]}" chrome
     rm -rf $BUILD_FOLDER/Tangled.app/Contents/Resources/millix_node
     cp -r millix_node $BUILD_FOLDER/Tangled.app/Contents/Resources/millix_node
 elif [[ "$1" == "linux" ]]; then
     echo "build tangled for linux"
-    autoninja -C $BUILD_FOLDER chrome
-    autoninja -C $BUILD_FOLDER installer
+    autoninja -C $BUILD_FOLDER "${NINJA_JOBS[@]}" chrome
+    autoninja -C $BUILD_FOLDER "${NINJA_JOBS[@]}" installer
 elif [[ "$1" == "win" ]]; then
     echo "build tangled for windows"
-    autoninja -C $BUILD_FOLDER chrome
-    autoninja -C $BUILD_FOLDER mini_installer
+    autoninja -C $BUILD_FOLDER "${NINJA_JOBS[@]}" chrome
+    autoninja -C $BUILD_FOLDER "${NINJA_JOBS[@]}" mini_installer
 fi

@@ -3,7 +3,12 @@
 #pragma once
 
 #include "base/compiler_specific.h"
+#include "base/memory/raw_ptr.h"
+#include "base/values.h"
+#include "chrome/common/webui_url_constants.h"
 #include "content/public/browser/web_ui_controller.h"
+#include "content/public/browser/webui_config.h"
+#include "content/public/common/url_constants.h"
 #include "content/public/browser/web_ui_message_handler.h"
 #include "ui/webui/mojo_web_ui_controller.h"
 #include "net/base/io_buffer.h"
@@ -12,6 +17,15 @@
 namespace ui {
   class NativeTheme;
 }
+
+class MillixBarUI;
+
+class MillixBarUIConfig : public content::DefaultWebUIConfig<MillixBarUI> {
+ public:
+  MillixBarUIConfig()
+      : DefaultWebUIConfig(content::kChromeUIScheme,
+                           chrome::kChromeUIMillixBarHost) {}
+};
 
 // The WebUI for tangled://millix-bar
 class MillixBarUI : public ui::MojoWebUIController {
@@ -24,10 +38,10 @@ class MillixBarUI : public ui::MojoWebUIController {
    protected:
     void RegisterMessages() override;
    private:
-    void HandleInitializeMessage(const base::Value::List& args);
-    void ShowMillixWallet(const base::Value::List& args);
-    void UpdateMillixWallet(const base::Value::List& args);
-    void RestarMillixNode(const base::Value::List& args);
+    void HandleInitializeMessage(const base::ListValue& args);
+    void ShowMillixWallet(const base::ListValue& args);
+    void UpdateMillixWallet(const base::ListValue& args);
+    void RestarMillixNode(const base::ListValue& args);
  };
 
  public:
@@ -42,7 +56,7 @@ class MillixBarUI : public ui::MojoWebUIController {
   void OnUpdateNodeApiConfig();
   std::unique_ptr<storage::FileStreamReader> node_config_file_reader;
   scoped_refptr<net::IOBufferWithSize> node_config_buffer;
-  MillixBarMessageHandler* message_handler;
+  raw_ptr<MillixBarMessageHandler> message_handler;
 };
 
 #endif  // CHROME_BROWSER_UI_WEBUI_MILLIX_BAR_UI_H_

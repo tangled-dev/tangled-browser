@@ -1,0 +1,22 @@
+diff --git a/chrome/browser/ui/webui/chrome_untrusted_web_ui_configs.cc b/chrome/browser/ui/webui/chrome_untrusted_web_ui_configs.cc
+index 4972d6e079609..6e80b39197d39 100644
+--- a/chrome/browser/ui/webui/chrome_untrusted_web_ui_configs.cc
++++ b/chrome/browser/ui/webui/chrome_untrusted_web_ui_configs.cc
+@@ -10,6 +10,8 @@
+ 
+ #if defined(TOOLKIT_VIEWS)
+ #include "chrome/browser/ui/webui/data_sharing/data_sharing_ui.h"
++#include "chrome/browser/ui/webui/millix/untrusted_millix_app_config.h"
++#include "chrome/browser/ui/webui/millix/untrusted_millix_ws_config.h"
+ #include "chrome/browser/ui/webui/privacy_sandbox/privacy_sandbox_dialog_untrusted_ui.h"
+ #include "chrome/browser/ui/webui/side_panel/read_anything/read_anything_untrusted_ui.h"
+ #include "components/compose/buildflags.h"
+@@ -51,6 +53,8 @@ void RegisterChromeUntrustedWebUIConfigs() {
+   map.AddUntrustedWebUIConfig(
+       std::make_unique<ReadAnythingUIUntrustedConfig>());
+   map.AddUntrustedWebUIConfig(std::make_unique<DataSharingUIConfig>());
++  map.AddUntrustedWebUIConfig(std::make_unique<UntrustedMillixWSConfig>());
++  map.AddUntrustedWebUIConfig(std::make_unique<UntrustedMillixAppConfig>());
+   map.AddUntrustedWebUIConfig(
+       std::make_unique<PrivacySandboxDialogUntrustedUIConfig>());
+ 

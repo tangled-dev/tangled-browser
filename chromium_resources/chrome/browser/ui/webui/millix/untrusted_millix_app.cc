@@ -13,8 +13,9 @@
 UntrustedMillixAppUI::UntrustedMillixAppUI(content::WebUI* web_ui)
     : ui::UntrustedWebUIController(web_ui) {
   // Set up the chrome-untrusted://milix source.
+  Profile* profile = Profile::FromWebUI(web_ui);
   content::WebUIDataSource* untrusted_source =
-      content::WebUIDataSource::Create(chrome::kChromeUIMillixUntrustedAppURL);
+      content::WebUIDataSource::CreateAndAdd(profile, chrome::kChromeUIMillixUntrustedAppURL);
 
   // Add required resources.
   untrusted_source->AddResourcePath("favicon.ico", IDR_MILLIX_APP_FAVICON_HTML); 
@@ -74,6 +75,4 @@ UntrustedMillixAppUI::UntrustedMillixAppUI(content::WebUI* web_ui)
       network::mojom::CSPDirectiveName::ScriptSrc, "script-src tangled://resources https: 'self' 'unsafe-inline';");
   untrusted_source->AddFrameAncestor(GURL(chrome::kChromeUIMillixAppURL));
 
-  Profile* profile = Profile::FromWebUI(web_ui);
-  content::WebUIDataSource::Add(profile, untrusted_source);
 }

@@ -1,0 +1,13 @@
+diff --git a/chrome/browser/ui/views/frame/layout/browser_view_layout.h b/chrome/browser/ui/views/frame/layout/browser_view_layout.h
+index a30f71115cd5c..846ff4ef3e60b 100644
+--- a/chrome/browser/ui/views/frame/layout/browser_view_layout.h
++++ b/chrome/browser/ui/views/frame/layout/browser_view_layout.h
+@@ -63,6 +63,8 @@ struct BrowserViewLayoutViews {
+   raw_ptr<ProjectsPanelView> projects_panel_container = nullptr;
+   raw_ptr<views::View> toolbar = nullptr;
+   raw_ptr<InfoBarContainerView> infobar_container = nullptr;
++  // Tangled: hosts tangled://millix-bar below the toolbar. Shows/hides itself.
++  raw_ptr<views::View> millix_bar = nullptr;
+   raw_ptr<views::View> contents_container = nullptr;
+   raw_ptr<MultiContentsView> multi_contents_view = nullptr;
+   raw_ptr<SidePanel> toolbar_height_side_panel = nullptr;

@@ -1,47 +1,30 @@
 diff --git a/chrome/browser/ui/views/frame/browser_view.h b/chrome/browser/ui/views/frame/browser_view.h
-index b37a1c4e7a87b..bfffaa203aea8 100644
+index aa0ddbd7eef8b..617126f2081bc 100644
 --- a/chrome/browser/ui/views/frame/browser_view.h
 +++ b/chrome/browser/ui/views/frame/browser_view.h
-@@ -60,6 +60,7 @@
+@@ -62,6 +62,7 @@
  #include "ui/views/widget/widget_delegate.h"
  #include "ui/views/widget/widget_observer.h"
  #include "ui/views/window/client_view.h"
 +#include "chrome/browser/ui/views/millix/millix_bar_view.h"
  
- #if BUILDFLAG(IS_CHROMEOS_ASH)
- #include "ui/compositor/throughput_tracker.h"
-@@ -109,6 +110,7 @@ enum class Channel;
- namespace views {
- class ExternalFocusTracker;
- class WebView;
-+class MillixBarView;
- }
- 
- ///////////////////////////////////////////////////////////////////////////////
-@@ -165,6 +167,8 @@ class BrowserView : public BrowserWindow,
-     return top_controls_slide_controller_.get();
-   }
+ #if BUILDFLAG(IS_CHROMEOS)
+ #include "ui/compositor/compositor_metrics_tracker.h"
+@@ -344,6 +345,8 @@ class BrowserView : public BrowserWindow,
+   // Returns true if the top UI are visible on screen.
+   bool GetTabStripVisible() const;
  
 +  views::MillixBarView* GetMillixBarView();
 +
-   void SetDownloadShelfForTest(DownloadShelf* download_shelf);
+   // Returns true if the top UI should be drawn.
+   // On macOS, it is possible that the top UI is drawn but hidden.
+   bool ShouldDrawTabStrip() const;
+@@ -1217,6 +1220,8 @@ class BrowserView : public BrowserWindow,
+   // title Label for them here.
+   raw_ptr<views::Label> web_app_window_title_ = nullptr;
  
-   // This suppresses the slide behaviors of top-controls and so the top controls
-@@ -997,6 +1001,8 @@ class BrowserView : public BrowserWindow,
-   // |------------------------------------------------------------------|
-   // | All infobars (infobar_container_)                                |
-   // |------------------------------------------------------------------|
-+  // | Millix (millix_bar_view_)                                        |
-+  // |------------------------------------------------------------------|
-   // | Contents container (contents_container_)                         |
-   // |  --------------------------------------------------------------  |
-   // |  |  devtools_web_view_                                        |  |
-@@ -1012,6 +1018,8 @@ class BrowserView : public BrowserWindow,
-   // the top views in immersive fullscreen.
-   raw_ptr<TopContainerView, DanglingUntriaged> top_container_ = nullptr;
- 
-+  views::MillixBarView* millix_bar_view_ = nullptr;
++  raw_ptr<views::MillixBarView> millix_bar_view_ = nullptr;
 +
    // The view that contains the tabstrip, new tab button, and grab handle space.
-   raw_ptr<TabStripRegionView, DanglingUntriaged> tab_strip_region_view_ =
+   raw_ptr<HorizontalTabStripRegionView> horizontal_tab_strip_region_view_ =
        nullptr;

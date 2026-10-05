@@ -1,9 +1,10 @@
 #include "chrome/browser/ui/webui/millix/millix_app.h"
 
-#include "base/bind.h"
+#include "base/functional/bind.h"
 #include "base/strings/stringprintf.h"
 #include "base/values.h"
 #include "chrome/browser/profiles/profile.h"
+#include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
 #include "chrome/browser/ui/views/millix/millix_bar_view.h"
@@ -12,6 +13,7 @@
 #include "chrome/grit/browser_resources.h"
 #include "chrome/grit/generated_resources.h"
 #include "content/public/browser/web_contents.h"
+#include "content/public/browser/web_ui.h"
 #include "content/public/browser/web_ui_data_source.h"
 #include "services/network/public/mojom/content_security_policy.mojom.h"
 #include "ui/native_theme/native_theme.h"
@@ -20,25 +22,37 @@ namespace views {
 class MillixBarView;
 }
 
+bool MillixAppUIConfig::IsWebUIEnabled(
+    content::BrowserContext* browser_context) {
+  Browser* browser = chrome::FindTabbedBrowser(
+      Profile::FromBrowserContext(browser_context), false);
+  if (!browser) {
+    return false;
+  }
+  BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
+  return browser_view && browser_view->GetMillixBarView() &&
+         browser_view->GetMillixBarView()->GetVisible();
+}
+
 MillixAppUI::MillixAppMessageHandler::MillixAppMessageHandler() {}
 
 MillixAppUI::MillixAppMessageHandler::~MillixAppMessageHandler() {}
 
 void MillixAppUI::MillixAppMessageHandler::HandleInitializeMessage(
-    const base::Value::List& args) {
+    const base::ListValue& args) {
   auto* profile = Profile::FromWebUI(web_ui());
   Browser* browser = chrome::FindTabbedBrowser(profile, false);
   auto* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
-  auto* millix_bar = (MillixBarUI*)(browser_view->GetMillixBarView()->GetWebContents()->GetWebUI()->GetController());
-  base::DictionaryValue apiConfig;
-  apiConfig.SetStringKey("node_id", millix_bar->GetNodeId());
-  apiConfig.SetStringKey("node_signature", millix_bar->GetNodeSignature());
+  auto* millix_bar = static_cast<MillixBarUI*>(browser_view->GetMillixBarView()->GetWebContents()->GetWebUI()->GetController());
+  base::DictValue apiConfig;
+  apiConfig.Set("node_id", millix_bar->GetNodeId());
+  apiConfig.Set("node_signature", millix_bar->GetNodeSignature());
   AllowJavascript();
   CallJavascriptFunction("onLoadNodeApiConfig", apiConfig);
 }
 
 void MillixAppUI::MillixAppMessageHandler::UpdateMillixWallet(
-    const base::Value::List& args) {
+    const base::ListValue& args) {
   auto* profile = Profile::FromWebUI(web_ui());
   Browser* browser = chrome::FindTabbedBrowser(profile, false);
   auto* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
@@ -62,8 +76,10 @@ void MillixAppUI::MillixAppMessageHandler::RegisterMessages() {
 MillixAppUI::MillixAppUI(content::WebUI* web_ui)
     : ui::MojoWebUIController(web_ui, true) {
   // Set up the tangled://milix source.
+  Profile* profile = Profile::FromWebUI(web_ui);
   content::WebUIDataSource* html_source =
-      content::WebUIDataSource::Create(chrome::kChromeUIMillixAppHost);
+      content::WebUIDataSource::CreateAndAdd(profile,
+                                             chrome::kChromeUIMillixAppHost);
 
   // Add required resources.
 
@@ -91,8 +107,6 @@ MillixAppUI::MillixAppUI(content::WebUI* web_ui)
   web_ui->AddRequestableScheme(content::kChromeUIUntrustedScheme);
   web_ui->AddMessageHandler(std::make_unique<MillixAppMessageHandler>());
 
-  Profile* profile = Profile::FromWebUI(web_ui);
-  content::WebUIDataSource::Add(profile, html_source);
 }
 
 MillixAppUI::~MillixAppUI() {}

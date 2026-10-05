@@ -1,24 +1,22 @@
 diff --git a/tools/polymer/html_to_wrapper.py b/tools/polymer/html_to_wrapper.py
-index c04a7faefbd50..5faff2dc5da0e 100644
+index 4a361d517cfbe..e6daa50e1f325 100644
 --- a/tools/polymer/html_to_wrapper.py
 +++ b/tools/polymer/html_to_wrapper.py
-@@ -63,8 +63,8 @@ def main(argv):
-                       choices=['polymer', 'native'],
-                       default='polymer')
+@@ -159,7 +159,7 @@ def main(argv):
+                       choices=['polymer', 'lit', 'native', 'detect'],
+                       default='lit')
    parser.add_argument('--scheme',
 -                      choices=['chrome', 'relative'],
--                      default='chrome')
-+                      choices=['tangled', 'relative'],
-+                      default='tangled')
++                      choices=['chrome', 'tangled', 'relative'],
+                       default='relative')
  
    args = parser.parse_args(argv)
+@@ -229,7 +229,7 @@ def main(argv):
  
-@@ -118,7 +118,7 @@ def main(argv):
- 
-       wrapper = template % {
+       substitutions = {
            'content': html_content,
 -          'scheme': 'chrome:' if args.scheme == 'chrome' else '',
-+          'scheme': 'tangled:' if args.scheme == 'tangled' else '',
++          'scheme': 'tangled:' if args.scheme in ['chrome', 'tangled'] else '',
        }
  
-       out_folder_for_file = path.join(out_folder, path.dirname(in_file))
+       if template_type == 'lit_icons':

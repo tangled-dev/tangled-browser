@@ -1,13 +1,16 @@
 diff --git a/chrome/BUILD.gn b/chrome/BUILD.gn
-index aee9abd99a03a..b88faafd53820 100644
+index d6686618cb86b..0682f218e188e 100644
 --- a/chrome/BUILD.gn
 +++ b/chrome/BUILD.gn
-@@ -73,10 +73,10 @@ if (is_win) {
- 
-     # See comment in chrome_dll.gypi in the hardlink_to_output
-     # target for why this cannot be 'initial' like the DLL.
--    inputs = [ "$root_out_dir/initialexe/chrome.exe" ]
-+    inputs = [ "$root_out_dir/initialexe/tangled.exe" ]
+@@ -86,12 +86,12 @@ if (is_win) {
+     # initialexe/ is used so that the we can reorder imports and write back to
+     # the final destination at $root_out_dir/.
+     inputs = [
+-      "$root_out_dir/initialexe/chrome.exe",
+-      "$root_out_dir/initialexe/chrome.exe.pdb",
++      "$root_out_dir/initialexe/tangled.exe",
++      "$root_out_dir/initialexe/tangled.exe.pdb",
+     ]
      outputs = [
 -      "$root_out_dir/chrome.exe",
 -      "$root_out_dir/chrome.exe.pdb",
@@ -16,20 +19,20 @@ index aee9abd99a03a..b88faafd53820 100644
      ]
      args = [
        "-i",
-@@ -137,9 +137,9 @@ if (!is_android && !is_mac) {
-     configs -= [ "//build/config/compiler:thinlto_optimize_default" ]
-     configs += [ "//build/config/compiler:thinlto_optimize_max" ]
-     if (is_win) {
--      output_name = "initialexe/chrome"
-+      output_name = "initialexe/tangled"
-     } else {
--      output_name = "chrome"
-+      output_name = "tangled"
-     }
+@@ -149,9 +149,9 @@ if (!is_android && !is_mac) {
+   }
  
-     # Because the sources list varies so significantly per-platform, generally
-@@ -384,7 +384,7 @@ if (is_win) {
-       "app/chrome_main_delegate.h",
+   if (is_win) {
+-    _chrome_output_name = "initialexe/chrome"
++    _chrome_output_name = "initialexe/tangled"
+   } else {
+-    _chrome_output_name = "chrome"
++    _chrome_output_name = "tangled"
+   }
+ 
+   executable("chrome_initial") {
+@@ -410,7 +410,7 @@ if (is_win) {
+       "app/startup_timestamps.h",
      ]
  
 -    output_name = "chrome"
@@ -37,7 +40,7 @@ index aee9abd99a03a..b88faafd53820 100644
  
      deps = [
        ":chrome_dll_manifest",
-@@ -1704,7 +1704,7 @@ if (is_android) {
+@@ -1668,7 +1668,7 @@ if (is_android) {
  if (is_win && enable_resource_allowlist_generation) {
    generate_resource_allowlist("resource_allowlist") {
      deps = [ ":chrome_dll" ]

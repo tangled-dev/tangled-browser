@@ -1,24 +1,20 @@
 diff --git a/chrome/common/webui_url_constants.h b/chrome/common/webui_url_constants.h
-index 575e84985e8a6..4e35edbf1cdac 100644
+index 146e5590d27f6..de240056a5162 100644
 --- a/chrome/common/webui_url_constants.h
 +++ b/chrome/common/webui_url_constants.h
-@@ -23,10 +23,18 @@
- namespace chrome {
- 
- // chrome: components (without schemes) and URLs (including schemes).
- // e.g. kChromeUIFooHost = "foo" and kChromeUIFooURL = "tangled://foo/"
+@@ -32,6 +32,15 @@ namespace chrome {
  // Not all components have corresponding URLs and vice versa. Only add as
  // needed.
  // Please keep in alphabetical order, with OS/feature specific sections below.
-+extern const char kChromeUIMillixBarHost[];
-+extern const char kChromeUIMillixBarURL[];
-+extern const char kChromeUIMillixAppHost[];
-+extern const char kChromeUIMillixAppURL[];
-+extern const char kChromeUIMillixWSHost[];
-+extern const char kChromeUIMillixWSURL[];
-+extern const char kChromeUIMillixUntrustedAppHost[];
-+extern const char kChromeUIMillixUntrustedAppURL[];
- extern const char kChromeUIAboutHost[];
- extern const char kChromeUIAboutURL[];
- extern const char kChromeUIActivateSafetyCheckSettingsURL[];
- 
++inline constexpr char kChromeUIMillixBarHost[] = "millix-bar";
++inline constexpr char kChromeUIMillixBarURL[] = "tangled://millix-bar";
++inline constexpr char kChromeUIMillixAppHost[] = "millix";
++inline constexpr char kChromeUIMillixAppURL[] = "tangled://millix";
++inline constexpr char kChromeUIMillixWSHost[] = "millix-ws";
++inline constexpr char kChromeUIMillixWSURL[] = "chrome-untrusted://millix-ws/";
++inline constexpr char kChromeUIMillixUntrustedAppHost[] = "millix";
++inline constexpr char kChromeUIMillixUntrustedAppURL[] =
++    "chrome-untrusted://millix/";
+ inline constexpr char kChromeUIAboutHost[] = "about";
+ inline constexpr char kChromeUIAboutURL[] = "tangled://about/";
+ inline constexpr char kChromeUIAccessCodeCastHost[] = "access-code-cast";

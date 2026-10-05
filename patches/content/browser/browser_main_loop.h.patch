@@ -1,16 +1,16 @@
 diff --git a/content/browser/browser_main_loop.h b/content/browser/browser_main_loop.h
-index fcb6305990748..4e5b4264bd81c 100644
+index ccb212ea739e7..3ed7bad1e8a94 100644
 --- a/content/browser/browser_main_loop.h
 +++ b/content/browser/browser_main_loop.h
-@@ -11,6 +11,7 @@
+@@ -13,6 +13,7 @@
+ #include "base/gtest_prod_util.h"
  #include "base/memory/raw_ref.h"
- #include "base/memory/ref_counted.h"
- #include "base/task/thread_pool/thread_pool_instance.h"
+ #include "base/memory/scoped_refptr.h"
 +#include "base/process/process.h"
+ #include "base/task/execution_fence.h"
  #include "base/types/strong_alias.h"
  #include "build/build_config.h"
- #include "build/chromeos_buildflags.h"
-@@ -129,6 +133,9 @@ class CONTENT_EXPORT BrowserMainLoop {
+@@ -122,6 +123,9 @@ class CONTENT_EXPORT BrowserMainLoop {
  
    void Init();
  
@@ -20,7 +20,7 @@ index fcb6305990748..4e5b4264bd81c 100644
    // Return value is exit status. Anything other than RESULT_CODE_NORMAL_EXIT
    // is considered an error.
    int EarlyInitialization();
-@@ -290,6 +293,7 @@ class CONTENT_EXPORT BrowserMainLoop {
+@@ -276,6 +280,7 @@ class CONTENT_EXPORT BrowserMainLoop {
    //   OnFirstIdle()
  
    // Members initialized on construction ---------------------------------------

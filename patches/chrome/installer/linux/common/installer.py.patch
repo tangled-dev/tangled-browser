@@ -1,0 +1,56 @@
+diff --git a/chrome/installer/linux/common/installer.py b/chrome/installer/linux/common/installer.py
+index cee92db6487c4..ddf926293d8fe 100644
+--- a/chrome/installer/linux/common/installer.py
++++ b/chrome/installer/linux/common/installer.py
+@@ -453,7 +453,8 @@ class InstallerConfig:
+                 StandardPermissions.EXECUTABLE,
+             ),
+             Artifact(
+-                f"{progname}_sandbox.stripped",
++                # Tangled renames the browser binary, not the sandbox target.
++                "chrome_sandbox.stripped",
+                 "chrome-sandbox",
+                 ArtifactType.BINARY,
+                 StandardPermissions.SANDBOX,
+@@ -911,6 +912,41 @@ class Installer:
+         self._verify_elf_binaries(install_dir)
+         self._verify_file_permissions()
+ 
++        # Tangled: bundle the millix node. Done after verification since it
++        # ships its own node and native modules.
++        self._stage_millix_node(install_dir)
++
++    _MILLIX_EXECUTABLES = {
++        "node", "gyp", "node_sqlite3.node", "corepack", "yarn", "yarnpkg",
++        "npm", "pnpx", "pnpm", "npx"
++    }
++
++    def _stage_millix_node(self, install_dir: pathlib.Path) -> None:
++        src = self.config.output_dir / "millix_node"
++        if not src.is_dir():
++            return
++        dst = install_dir / "millix_node"
++        if dst.exists():
++            shutil.rmtree(dst)
++        shutil.copytree(src, dst, symlinks=True)
++        for rel in ("build/node_sqlite3.node", "nodejs/bin/node"):
++            (dst / f"{rel}.debug").unlink(missing_ok=True)
++            stripped = dst / f"{rel}.stripped"
++            if stripped.exists():
++                stripped.replace(dst / rel)
++        for root, dirs, files in os.walk(dst):
++            os.chmod(root, StandardPermissions.EXECUTABLE)
++            for d in dirs:
++                os.chmod(os.path.join(root, d), StandardPermissions.EXECUTABLE)
++            for f in files:
++                path = os.path.join(root, f)
++                if os.path.islink(path):
++                    continue
++                if f.endswith(".sh") or f in self._MILLIX_EXECUTABLES:
++                    os.chmod(path, StandardPermissions.EXECUTABLE)
++                else:
++                    os.chmod(path, StandardPermissions.REGULAR)
++
+     def _process_artifacts(self, artifacts: list[Artifact],
+                            install_dir: pathlib.Path) -> None:
+         for artifact in artifacts:

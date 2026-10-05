@@ -1,50 +1,60 @@
 diff --git a/chrome/browser/ui/toolbar/toolbar_actions_model.cc b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
-index cd835f44be29d..ae9155c8e6432 100644
+index 89c4445bf4185..93fa343564a98 100644
 --- a/chrome/browser/ui/toolbar/toolbar_actions_model.cc
 +++ b/chrome/browser/ui/toolbar/toolbar_actions_model.cc
-@@ -43,6 +43,10 @@
+@@ -38,6 +38,9 @@
+ #include "extensions/browser/unloaded_extension_reason.h"
  #include "extensions/common/extension_set.h"
  #include "extensions/common/manifest_constants.h"
++#include "extensions/browser/extension_registrar.h"
++#include "extensions/common/extension.h"
++#include "extensions/common/mojom/manifest.mojom-shared.h"
  #include "extensions/common/permissions/permissions_data.h"
-+#include "extensions/common/extension_builder.h"
-+#include "extensions/common/manifest.h"
-+#include "extensions/common/value_builder.h"
-+#include "extensions/browser/extension_registry.h"
  
- ToolbarActionsModel::ToolbarActionsModel(
-     Profile* profile,
-@@ -157,6 +161,8 @@ void ToolbarActionsModel::RemovePref(const ActionId& action_id) {
- }
- 
- void ToolbarActionsModel::OnReady() {
-+  extension_service_ =
-+      extensions::ExtensionSystem::Get(profile_)->extension_service();
-   InitializeActionList();
- 
-   // Wait until the extension system is ready before observing any further
-@@ -174,6 +180,28 @@ void ToolbarActionsModel::OnReady() {
-   actions_initialized_ = true;
-   for (Observer& observer : observers_)
+ #if !BUILDFLAG(IS_ANDROID)
+@@ -256,6 +259,48 @@ void ToolbarActionsModel::OnReady() {
+   for (Observer& observer : observers_) {
      observer.OnToolbarModelInitialized();
+   }
 +
-+  /**
-+   * add millix extension
-+  */
-+  if (!extension_registry_->GetExtensionById(extensions::Extension::MILLIX_EXTENSION_ID, extensions::ExtensionRegistry::EVERYTHING)) {
-+    std::string name = "millix";
-+    extensions::DictionaryBuilder manifest;
-+    base::Value::Dict manifest_data_ = manifest.Set(extensions::manifest_keys::kName, name)
-+          .Set(extensions::manifest_keys::kManifestVersion, 2)
-+          .Set(extensions::manifest_keys::kVersion, "0.1")
-+          .Set(extensions::manifest_keys::kDescription, "millix wallet extension")
-+          .Set(extensions::manifest_keys::kPageAction, base::Value::Dict())
-+          .BuildDict();
-+    std::string error;
-+    scoped_refptr<const extensions::Extension> millix_extension = extensions::Extension::Create(base::FilePath(), extensions::mojom::ManifestLocation::kInternal, manifest_data_, extensions::Extension::WAS_INSTALLED_BY_DEFAULT, extensions::Extension::MILLIX_EXTENSION_ID, &error);
++  AddMillixExtension();
++}
 +
-+    extension_service_->AddExtension(millix_extension.get());
-+    extension_prefs_->SetIsIncognitoEnabled(extensions::Extension::MILLIX_EXTENSION_ID, true);
-+    auto stored_pinned_actions = extension_prefs_->GetPinnedExtensions();
++// Tangled: the millix wallet is exposed as a built-in, pinned toolbar action.
++// It has no files; its icon and click handling live in
++// ExtensionActionViewModel.
++void ToolbarActionsModel::AddMillixExtension() {
++  if (extension_registry_->GetExtensionById(
++          extensions::Extension::MILLIX_EXTENSION_ID,
++          extensions::ExtensionRegistry::EVERYTHING)) {
++    return;
++  }
++
++  base::DictValue manifest;
++  manifest.Set(extensions::manifest_keys::kName, "millix");
++  manifest.Set(extensions::manifest_keys::kManifestVersion, 3);
++  manifest.Set(extensions::manifest_keys::kVersion, "0.1");
++  manifest.Set(extensions::manifest_keys::kDescription,
++               "millix wallet extension");
++  manifest.Set(extensions::manifest_keys::kAction, base::DictValue());
++
++  std::u16string error;
++  scoped_refptr<const extensions::Extension> millix_extension =
++      extensions::Extension::Create(
++          base::FilePath(), extensions::mojom::ManifestLocation::kInternal,
++          manifest, extensions::Extension::WAS_INSTALLED_BY_DEFAULT,
++          extensions::Extension::MILLIX_EXTENSION_ID, &error);
++  if (!millix_extension) {
++    LOG(ERROR) << "Unable to create millix extension: " << error;
++    return;
++  }
++
++  extensions::ExtensionRegistrar::Get(profile_)->AddExtension(millix_extension);
++  extension_prefs_->SetIsIncognitoEnabled(
++      extensions::Extension::MILLIX_EXTENSION_ID, true);
++  auto stored_pinned_actions = extension_prefs_->GetPinnedExtensions();
++  if (!std::ranges::contains(stored_pinned_actions,
++                             extensions::Extension::MILLIX_EXTENSION_ID)) {
 +    stored_pinned_actions.push_back(extensions::Extension::MILLIX_EXTENSION_ID);
 +    extension_prefs_->SetPinnedExtensions(stored_pinned_actions);
 +  }

@@ -13,8 +13,9 @@
 UntrustedMillixWSUI::UntrustedMillixWSUI(content::WebUI* web_ui)
     : ui::UntrustedWebUIController(web_ui) {
   // Set up the chrome-untrusted://milix-ws source.
+  Profile* profile = Profile::FromWebUI(web_ui);
   content::WebUIDataSource* untrusted_source =
-      content::WebUIDataSource::Create(chrome::kChromeUIMillixWSURL);
+      content::WebUIDataSource::CreateAndAdd(profile, chrome::kChromeUIMillixWSURL);
 
   // Add required resources.
   untrusted_source->AddResourcePath("millix_ws.js", IDR_MILLIX_WS_JS);
@@ -29,6 +30,4 @@ UntrustedMillixWSUI::UntrustedMillixWSUI(content::WebUI* web_ui)
       network::mojom::CSPDirectiveName::ScriptSrc, "script-src chrome-untrusted://resources https: 'self' 'unsafe-inline';");
   untrusted_source->AddFrameAncestor(GURL(chrome::kChromeUIMillixBarURL));
 
-  Profile* profile = Profile::FromWebUI(web_ui);
-  content::WebUIDataSource::Add(profile, untrusted_source);
 }

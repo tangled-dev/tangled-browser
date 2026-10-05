@@ -1,9 +1,9 @@
 diff --git a/ui/views/BUILD.gn b/ui/views/BUILD.gn
-index 00c34dc5d7208..44678f6d91d3e 100644
+index 5cbc7acdb196e..5827b8e1b6e6a 100644
 --- a/ui/views/BUILD.gn
 +++ b/ui/views/BUILD.gn
-@@ -34,6 +34,7 @@ aggregate_vector_icons("views_vector_icons") {
-     "menu_drop_arrow.icon",
+@@ -47,6 +47,7 @@ aggregate_vector_icons("views_vector_icons") {
+     "menu_open.icon",
      "menu_radio_empty.icon",
      "menu_radio_selected.icon",
 +    "millix.icon",

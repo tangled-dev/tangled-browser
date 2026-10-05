@@ -10,7 +10,8 @@ class UntrustedMillixWSConfig : public content::WebUIConfig {
   ~UntrustedMillixWSConfig() override = default;
 
   std::unique_ptr<content::WebUIController> CreateWebUIController(
-      content::WebUI* web_ui) override;
+      content::WebUI* web_ui,
+      const GURL& url) override;
 };
 
 #endif // CHROME_BROWSER_UI_WEBUI_MILLIX_WS_CONFIG_H_

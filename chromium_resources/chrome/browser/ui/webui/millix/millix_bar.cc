@@ -1,6 +1,6 @@
 #include "chrome/browser/ui/webui/millix/millix_bar.h"
 
-#include "base/bind.h"
+#include "base/functional/bind.h"
 #include "base/json/json_reader.h"
 #include "base/path_service.h"
 #include "base/strings/stringprintf.h"
@@ -10,6 +10,8 @@
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
+#include "chrome/browser/ui/browser_navigator_params.h"
+#include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "chrome/browser/ui/singleton_tabs.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
 #include "chrome/common/url_constants.h"
@@ -36,43 +38,45 @@ MillixBarUI::MillixBarMessageHandler::MillixBarMessageHandler() {}
 MillixBarUI::MillixBarMessageHandler::~MillixBarMessageHandler() {}
 
 void MillixBarUI::MillixBarMessageHandler::HandleInitializeMessage(
-  const base::Value::List& args) {
-  base::DictionaryValue apiConfig;
-  apiConfig.SetStringKey("node_id", this->node_id);
-  apiConfig.SetStringKey("node_signature", this->node_signature);
-  base::DictionaryValue message;
-  message.SetStringKey("type", "api_config_update");
-  message.Set(
-      "config", std::make_unique<base::DictionaryValue>(std::move(apiConfig)));
+  const base::ListValue& args) {
+  base::DictValue apiConfig;
+  apiConfig.Set("node_id", this->node_id);
+  apiConfig.Set("node_signature", this->node_signature);
+  base::DictValue message;
+  message.Set("type", "api_config_update");
+  message.Set("config", std::move(apiConfig));
   AllowJavascript();
   CallJavascriptFunction("millix_bar.onMillixBarMessage", message);
 }
 
 void MillixBarUI::MillixBarMessageHandler::UpdateMillixWallet(
-    const base::Value::List& args) {
+    const base::ListValue& args) {
   AllowJavascript();
+  if (args.empty() || !args[0].is_dict()) {
+    return;
+  }
   auto& message = args[0];
-  const std::string* message_type = message.FindStringPath("type");
-  if (*message_type == "wallet_update_state") {
+  const std::string* message_type = message.GetDict().FindString("type");
+  if (message_type && *message_type == "wallet_update_state") {
     auto* profile = Profile::FromWebUI(web_ui());
     Browser* browser = chrome::FindTabbedBrowser(profile, false);
     BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
     browser_view->GetMillixBarView()->SetVisible(true);
   }
 
-  if (message.FindStringPath("from_bar")) {
+  if (message.GetDict().FindString("from_bar")) {
     return;
   }
 
   CallJavascriptFunction("millix_bar.onMillixBarMessage", message);
 }
 
-void MillixBarUI::MillixBarMessageHandler::RestarMillixNode(const base::Value::List& args) {
+void MillixBarUI::MillixBarMessageHandler::RestarMillixNode(const base::ListValue& args) {
   content::BrowserMainLoop::GetInstance()->CreateMillixNode();
 }
 
 void MillixBarUI::MillixBarMessageHandler::ShowMillixWallet(
-    const base::Value::List& args) {
+    const base::ListValue& args) {
   auto* profile = Profile::FromWebUI(web_ui());
   Browser* browser = chrome::FindTabbedBrowser(profile, false);
   if (!browser)
@@ -91,14 +95,14 @@ void MillixBarUI::MillixBarMessageHandler::ShowMillixWallet(
     NavigateParams params(GetSingletonTabNavigateParams(
         browser, GURL(chrome::kChromeUIMillixAppURL)));
     params.path_behavior = NavigateParams::IGNORE_AND_NAVIGATE;
-    ShowSingletonTabOverwritingNTP(browser, &params);
+    ShowSingletonTabOverwritingNTP(&params);
   } else if (page == "refresh") {
-    int nTabs = browser->tab_strip_model()->GetTabCount();
+    int nTabs = browser->tab_strip_model()->count();
     for (int i = 0; i < nTabs; i++) {
       content::WebContents* webContents =
           browser->tab_strip_model()->GetWebContentsAt(i);
-      std::string host = webContents->GetURL().host();
-      std::string path = webContents->GetURL().path();
+      std::string_view host = webContents->GetURL().host();
+      std::string_view path = webContents->GetURL().path();
       if (host == chrome::kChromeUIMillixAppHost && path == "/") {
         webContents->GetPrimaryMainFrame()->Reload();
       }
@@ -107,13 +111,13 @@ void MillixBarUI::MillixBarMessageHandler::ShowMillixWallet(
     std::string newTabURL = args[1].GetString();
     NavigateParams params(GetSingletonTabNavigateParams(browser, GURL(newTabURL)));
     params.path_behavior = NavigateParams::IGNORE_AND_NAVIGATE;
-    ShowSingletonTabOverwritingNTP(browser, &params);
+    ShowSingletonTabOverwritingNTP(&params);
   } else {
     std::string url = base::StringPrintf("%s/%s", chrome::kChromeUIMillixAppURL,
                                          page.c_str());
     NavigateParams params(GetSingletonTabNavigateParams(browser, GURL(url)));
     params.path_behavior = NavigateParams::IGNORE_AND_NAVIGATE;
-    ShowSingletonTabOverwritingNTP(browser, &params);
+    ShowSingletonTabOverwritingNTP(&params);
   }
 }
 
@@ -138,8 +142,10 @@ void MillixBarUI::MillixBarMessageHandler::RegisterMessages() {
 MillixBarUI::MillixBarUI(content::WebUI* web_ui)
     : ui::MojoWebUIController(web_ui, true) {
   // Set up the tangled://milix-bar source.
+  Profile* profile = Profile::FromWebUI(web_ui);
   content::WebUIDataSource* html_source =
-      content::WebUIDataSource::Create(chrome::kChromeUIMillixBarHost);
+      content::WebUIDataSource::CreateAndAdd(profile,
+                                             chrome::kChromeUIMillixBarHost);
 
   // Add required resources.
   html_source->AddResourcePath("millix_bar.css", IDR_MILLIX_BAR_CSS);
@@ -152,7 +158,8 @@ MillixBarUI::MillixBarUI(content::WebUI* web_ui)
   html_source->AddResourcePath("deposit.mp3", IDR_MILLIX_APP_DEPOSIT_MP3);
   html_source->AddBoolean(
       "is_dark_theme",
-      ui::NativeTheme::GetInstanceForWeb()->ShouldUseDarkColors());
+      ui::NativeTheme::GetInstanceForWeb()->preferred_color_scheme() ==
+          ui::NativeTheme::PreferredColorScheme::kDark);
   html_source->UseStringsJs();
   html_source->SetDefaultResource(IDR_MILLIX_BAR_HTML);
 
@@ -176,8 +183,6 @@ MillixBarUI::MillixBarUI(content::WebUI* web_ui)
   web_ui->AddMessageHandler(std::move(message_handler_));
   web_ui->AddRequestableScheme(content::kChromeUIUntrustedScheme);
 
-  Profile* profile = Profile::FromWebUI(web_ui);
-  content::WebUIDataSource::Add(profile, html_source);
 
   content::GetIOThreadTaskRunner({})->PostTask(
       FROM_HERE,
@@ -221,16 +226,16 @@ void MillixBarUI::ReadNodeConfigJson(int64_t size = -1) {
 
 void MillixBarUI::OnReadNodeConfigJson(int result) {
   char* data = this->node_config_buffer->data();
-  auto json_data = base::StringPiece(data).substr(0, result);
+  auto json_data = std::string_view(data, result);
   LOG(ERROR) << "reading node config. json (" << result << ") "
              << json_data;
   auto node_config_json =
-      base::JSONReader::Read(json_data);
+      base::JSONReader::Read(json_data, base::JSON_PARSE_RFC);
 
-  if (node_config_json.has_value()) {
-    std::string* node_id = node_config_json->FindStringKey("node_id");
+  if (node_config_json.has_value() && node_config_json->is_dict()) {
+    std::string* node_id = node_config_json->GetDict().FindString("node_id");
     std::string* node_signature =
-        node_config_json->FindStringKey("node_signature");
+        node_config_json->GetDict().FindString("node_signature");
 
     if (!node_id || !node_signature || node_id->empty() ||
         node_signature->empty()) {
@@ -259,15 +264,13 @@ void MillixBarUI::OnReadNodeConfigJson(int result) {
 void MillixBarUI::OnUpdateNodeApiConfig() {
   LOG(ERROR) << "sending node config. id " << this->message_handler->node_id
              << " signature " << this->message_handler->node_signature;
-  base::DictionaryValue apiConfig;
-  apiConfig.SetStringKey("node_id", this->message_handler->node_id);
-  apiConfig.SetStringKey("node_signature",
-                         this->message_handler->node_signature);
-  base::DictionaryValue message;
-  message.SetStringKey("type", "api_config_update");
-  message.Set(
-      "config", std::make_unique<base::DictionaryValue>(std::move(apiConfig)));
-  base::Value::List args;
+  base::DictValue apiConfig;
+  apiConfig.Set("node_id", this->message_handler->node_id);
+  apiConfig.Set("node_signature", this->message_handler->node_signature);
+  base::DictValue message;
+  message.Set("type", "api_config_update");
+  message.Set("config", std::move(apiConfig));
+  base::ListValue args;
   args.Append(std::move(message));
   web_ui()->ProcessWebUIMessage(GURL(chrome::kChromeUIMillixBarURL),
                                 "updateMillixWallet", std::move(args));

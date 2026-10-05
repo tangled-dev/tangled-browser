@@ -1,0 +1,13 @@
+diff --git a/mojo/public/tools/bindings/generators/mojom_js_generator.py b/mojo/public/tools/bindings/generators/mojom_js_generator.py
+index 05c38b02a8b51..fbdb8d3bc4d01 100644
+--- a/mojo/public/tools/bindings/generators/mojom_js_generator.py
++++ b/mojo/public/tools/bindings/generators/mojom_js_generator.py
+@@ -224,7 +224,7 @@ _primitive_kind_to_fuzz_type = {
+ }
+ 
+ 
+-_CHROME_SCHEME_PREFIX = 'chrome:'
++_CHROME_SCHEME_PREFIX = 'tangled:'
+ _SHARED_MODULE_PREFIX = '//resources/mojo'
+ 
+ 

@@ -2,5 +2,7 @@ module.exports = {
     from: #FROM,
     to: #TO,
     regex: true,
-    files: #FILES,   
+    files: #FILES,
+    // test data is not shipped and some of it is read-only (cipd), which aborts the run
+    ignore: ['**/test_data/**', '**/test/data/**'],
 }

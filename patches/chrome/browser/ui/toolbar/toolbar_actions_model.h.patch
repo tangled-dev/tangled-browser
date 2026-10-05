@@ -1,22 +1,14 @@
 diff --git a/chrome/browser/ui/toolbar/toolbar_actions_model.h b/chrome/browser/ui/toolbar/toolbar_actions_model.h
-index cdc55e70364bb..587b044f04d26 100644
+index 30d19b4098641..96b232287a6ef 100644
 --- a/chrome/browser/ui/toolbar/toolbar_actions_model.h
 +++ b/chrome/browser/ui/toolbar/toolbar_actions_model.h
-@@ -14,6 +14,7 @@
- #include "base/scoped_observation.h"
- #include "chrome/browser/extensions/api/extension_action/extension_action_api.h"
- #include "chrome/browser/extensions/extension_management.h"
-+#include "chrome/browser/extensions/extension_service.h"
- #include "components/keyed_service/core/keyed_service.h"
- #include "components/prefs/pref_change_registrar.h"
- #include "extensions/browser/extension_action.h"
-@@ -214,6 +214,9 @@ class ToolbarActionsModel : public extensions::ExtensionActionAPI::Observer,
-   // The ExtensionRegistry object, cached for convenience.
-   raw_ptr<extensions::ExtensionRegistry> extension_registry_;
+@@ -139,6 +139,9 @@ class ToolbarActionsModel
+   // Callback when actions are ready.
+   void OnReady();
  
-+  // The ExtensionService object, cached for convenience.
-+  extensions::ExtensionService* extension_service_;
++  // Adds the built-in millix wallet action if it is not installed yet.
++  void AddMillixExtension();
 +
-   // The ExtensionActionManager, cached for convenience.
-   raw_ptr<extensions::ExtensionActionManager> extension_action_manager_;
- 
+   // ExtensionRegistryObserver:
+   void OnExtensionInstalled(content::BrowserContext* browser_context,
+                             const extensions::Extension* extension,

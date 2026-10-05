@@ -1,0 +1,15 @@
+diff --git a/extensions/browser/api/messaging/message_service_bindings.cc b/extensions/browser/api/messaging/message_service_bindings.cc
+index d2a6f8737bc1f..f6300961abe05 100644
+--- a/extensions/browser/api/messaging/message_service_bindings.cc
++++ b/extensions/browser/api/messaging/message_service_bindings.cc
+@@ -120,7 +120,9 @@ bool IsValidMessagingSource(RenderProcessHost& process,
+       bool is_content_script_expected =
+           ScriptInjectionTracker::DidProcessRunContentScriptFromExtension(
+               process, *source_endpoint.extension_id);
+-      if (!is_content_script_expected) {
++      // Tangled: MetaMask's content script also runs in tangled://millix.
++      if (!is_content_script_expected &&
++          *source_endpoint.extension_id != Extension::METAMASK_EXTENSION_ID) {
+         debug::ScopedScriptInjectionTrackerFailureCrashKeys tracker_keys(
+             *process.GetBrowserContext(), source_endpoint.extension_id.value());
+         bad_message::ReceivedBadMessage(

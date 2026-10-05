@@ -1,0 +1,43 @@
+diff --git a/chrome/browser/ui/views/frame/layout/browser_view_tabbed_layout_impl.cc b/chrome/browser/ui/views/frame/layout/browser_view_tabbed_layout_impl.cc
+index 2ad3b0006ad01..b7aa14156eeb5 100644
+--- a/chrome/browser/ui/views/frame/layout/browser_view_tabbed_layout_impl.cc
++++ b/chrome/browser/ui/views/frame/layout/browser_view_tabbed_layout_impl.cc
+@@ -371,6 +371,10 @@ gfx::Size BrowserViewTabbedLayoutImpl::GetMinimumMainAreaSize(
+           : gfx::Size();
+   const gfx::Size infobar_container_size =
+       views().infobar_container->GetMinimumSize();
++  const gfx::Size millix_bar_size =
++      (views().millix_bar && views().millix_bar->GetVisible())
++          ? views().millix_bar->GetPreferredSize()
++          : gfx::Size();
+   const gfx::Size contents_size = views().contents_container->GetMinimumSize();
+   const gfx::Size contents_height_side_panel_size =
+       views().contents_height_side_panel &&
+@@ -384,6 +388,7 @@ gfx::Size BrowserViewTabbedLayoutImpl::GetMinimumMainAreaSize(
+                                   kContentsContainerMinimumWidth});
+   const int height = toolbar_size.height() + bookmark_bar_size.height() +
+                      infobar_container_size.height() +
++                     millix_bar_size.height() +
+                      std::max(contents_size.height(),
+                               contents_height_side_panel_size.height());
+   return gfx::Size(width, height);
+@@ -782,6 +787,19 @@ BrowserViewTabbedLayoutImpl::CalculateProposedLayout(
+     params.SetTop(top_container_layout.bounds.bottom());
+   }
+ 
++  // Lay out the millix bar directly below the top container.
++  if (IsParentedTo(views().millix_bar, views().browser_view)) {
++    gfx::Rect millix_bar_bounds;
++    if (views().millix_bar->GetVisible()) {
++      millix_bar_bounds =
++          gfx::Rect(params.visual_client_area.x(), params.visual_client_area.y(),
++                    params.visual_client_area.width(),
++                    views().millix_bar->GetPreferredSize().height());
++      params.SetTop(millix_bar_bounds.bottom());
++    }
++    layout.AddChild(views().millix_bar, millix_bar_bounds);
++  }
++
+   // Lay out infobar container.
+   if (IsParentedTo(views().infobar_container, views().browser_view)) {
+     gfx::Rect infobar_bounds;
