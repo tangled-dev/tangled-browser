@@ -1,6 +1,7 @@
 #include "chrome/browser/ui/webui/millix/millix_app.h"
 
 #include "base/functional/bind.h"
+#include "base/logging.h"
 #include "base/strings/stringprintf.h"
 #include "base/values.h"
 #include "chrome/browser/profiles/profile.h"
@@ -12,6 +13,8 @@
 #include "chrome/common/url_constants.h"
 #include "chrome/grit/browser_resources.h"
 #include "chrome/grit/generated_resources.h"
+#include "content/public/browser/browser_task_traits.h"
+#include "content/public/browser/browser_thread.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_ui.h"
 #include "content/public/browser/web_ui_data_source.h"
@@ -22,42 +25,83 @@ namespace views {
 class MillixBarView;
 }
 
-bool MillixAppUIConfig::IsWebUIEnabled(
-    content::BrowserContext* browser_context) {
-  Browser* browser = chrome::FindTabbedBrowser(
-      Profile::FromBrowserContext(browser_context), false);
-  if (!browser) {
-    return false;
-  }
-  BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
-  return browser_view && browser_view->GetMillixBarView() &&
-         browser_view->GetMillixBarView()->GetVisible();
-}
-
 MillixAppUI::MillixAppMessageHandler::MillixAppMessageHandler() {}
 
 MillixAppUI::MillixAppMessageHandler::~MillixAppMessageHandler() {}
 
+content::WebContents*
+MillixAppUI::MillixAppMessageHandler::GetMillixBarContents() {
+  Browser* browser =
+      chrome::FindTabbedBrowser(Profile::FromWebUI(web_ui()), false);
+  if (!browser) {
+    VLOG(1) << "millix app: no tabbed browser";
+    return nullptr;
+  }
+  BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
+  if (!browser_view || !browser_view->GetMillixBarView()) {
+    VLOG(1) << "millix app: no millix bar view";
+    return nullptr;
+  }
+  content::WebContents* contents =
+      browser_view->GetMillixBarView()->GetWebContents();
+  if (!contents || !contents->GetWebUI() ||
+      contents->GetLastCommittedURL().host() !=
+          chrome::kChromeUIMillixBarHost) {
+    VLOG(1) << "millix app: millix bar webui not ready, url="
+            << (contents ? contents->GetLastCommittedURL().spec() : "none");
+    return nullptr;
+  }
+  return contents;
+}
+
 void MillixAppUI::MillixAppMessageHandler::HandleInitializeMessage(
     const base::ListValue& args) {
-  auto* profile = Profile::FromWebUI(web_ui());
-  Browser* browser = chrome::FindTabbedBrowser(profile, false);
-  auto* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
-  auto* millix_bar = static_cast<MillixBarUI*>(browser_view->GetMillixBarView()->GetWebContents()->GetWebUI()->GetController());
+  AllowJavascript();
+  // Drop retries from an earlier initialize; the page asks again on reload.
+  weak_factory_.InvalidateWeakPtrs();
+  SendNodeApiConfigWhenReady();
+}
+
+void MillixAppUI::MillixAppMessageHandler::SendNodeApiConfigWhenReady() {
+  if (!IsJavascriptAllowed()) {
+    VLOG(1) << "millix app: javascript not allowed, dropping config send";
+    return;
+  }
+  content::WebContents* bar_contents = GetMillixBarContents();
+  auto* millix_bar =
+      bar_contents
+          ? static_cast<MillixBarUI*>(bar_contents->GetWebUI()->GetController())
+          : nullptr;
+  if (!millix_bar || millix_bar->GetNodeId().empty() ||
+      millix_bar->GetNodeSignature().empty()) {
+    // The node writes node.json once it has started; at browser startup a
+    // restored tangled://millix tab can get here first.
+    VLOG(1) << "millix app: node config not ready, retrying";
+    content::GetUIThreadTaskRunner({})->PostDelayedTask(
+        FROM_HERE,
+        base::BindOnce(&MillixAppMessageHandler::SendNodeApiConfigWhenReady,
+                       weak_factory_.GetWeakPtr()),
+        base::Seconds(1));
+    return;
+  }
   base::DictValue apiConfig;
   apiConfig.Set("node_id", millix_bar->GetNodeId());
   apiConfig.Set("node_signature", millix_bar->GetNodeSignature());
-  AllowJavascript();
+  VLOG(1) << "millix app: sending node config to page";
   CallJavascriptFunction("onLoadNodeApiConfig", apiConfig);
+}
+
+void MillixAppUI::MillixAppMessageHandler::OnJavascriptDisallowed() {
+  weak_factory_.InvalidateWeakPtrs();
 }
 
 void MillixAppUI::MillixAppMessageHandler::UpdateMillixWallet(
     const base::ListValue& args) {
-  auto* profile = Profile::FromWebUI(web_ui());
-  Browser* browser = chrome::FindTabbedBrowser(profile, false);
-  auto* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
-  auto* web_contents = browser_view->GetMillixBarView()->GetWebContents();
-  web_contents->GetWebUI()->ProcessWebUIMessage(
+  content::WebContents* bar_contents = GetMillixBarContents();
+  if (!bar_contents) {
+    return;
+  }
+  bar_contents->GetWebUI()->ProcessWebUIMessage(
       GURL(chrome::kChromeUIMillixBarURL), "updateMillixWallet", args.Clone());
 }
 

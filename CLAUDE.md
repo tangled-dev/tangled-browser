@@ -30,7 +30,7 @@ sh upgrade_tangled.sh <chromium-tag> <win|linux|darwin> <x64|arm64> <build-dir> 
 4. `setup_millix_wallet_ui.sh` copies the overlay and runs `react-app-rewired build` into `build/`.
 5. `setup_tangled.sh <os> <arch> <build-dir> <full>` does the following inside `src/`:
    - Only when `full=true`: a global regex rebrand using the `replace-in-file` npm package and `replace_in_file.template`. It changes `chrome://` to `tangled://`, the `"chrome"` URL scheme to `"tangled"`, and "Chromium" to "Tangled" in `.grd`/`.grdp`/`.xtb` strings, plus a few `sed` edits.
-   - Applies every `patches/**/*.patch`. Each applied patch is recorded in `applied_patches.log` and skipped on re-runs, so delete the log (or its entry) to re-apply one. The script stops at the first patch that fails.
+   - Applies every `patches/**/*.patch`. Each applied patch is recorded in `applied_patches.log` and skipped on re-runs, so delete the log (or its entry) to re-apply one. A patch missing from the log but already present in `src/` (`git apply --check -R` succeeds) is recorded and skipped instead of failing. The script stops at the first patch that fails.
    - Copies `chromium_resources/*`, the millix bar UI and the wallet UI build into `src/`.
    - Runs `gn gen` (release, ccache, proprietary codecs, widevine), then copies the millix node bundle, the bot and advertisement bundles, and the Node runtime into `src/millix_node/`.
    - Runs `autoninja -C <build-dir> chrome`, plus `installer` (linux) or `mini_installer` (win). On macOS it copies `millix_node` into `Tangled.app/Contents/Resources/`.

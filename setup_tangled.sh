@@ -13,6 +13,14 @@ git_apply() {
         fi
     fi
 
+    # Applied but not logged (e.g. applied by hand or by an interrupted run):
+    # record it instead of failing on a second apply.
+    if git apply --check -R $1 2>/dev/null; then
+        echo "patch already applied (not logged)"
+        echo "$1" >> ../applied_patches.log
+        return
+    fi
+
     git apply -v $1
     if [ $? -ne 0 ]; then
         echo "git apply failed"
