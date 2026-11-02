@@ -159,6 +159,11 @@ const checkPIDFile = () => {
     });
 };
 
+// The APIs are only used locally, so bind them to loopback. The advertisement
+// P2P server keeps its default address so other nodes can still connect.
+const spawnTangledAdvertisementProcess = () => childProcess.spawn(process.execPath, [`${__dirname}/tangled-advertisement.js`, '--pid-file', './tangled-advertisement.pid', '--bind-api', '127.0.0.1'], { stdio: 'ignore' });
+const spawnTangledBotProcess           = () => childProcess.spawn(process.execPath, [`${__dirname}/tangled-bot.js`, '--pid-file', './tangled-bot.pid', '--bind', '127.0.0.1'], { stdio: 'ignore' });
+
 const checkTangledAdvertisementProcess = () => {
     console.log(`[advertisement] check process status`);
     request.get('https://localhost:15555/', {
@@ -167,7 +172,7 @@ const checkTangledAdvertisementProcess = () => {
     }, (err, response, body) => {
         console.log(`[advertisement] status: ${err || response.statusCode}`);
         if (err || response.statusCode !== 200) {
-            tangledAdvertisementProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-advertisement.js`, '--pid-file', './tangled-advertisement.pid'], { stdio: 'ignore' });
+            tangledAdvertisementProcess = spawnTangledAdvertisementProcess();
         }
         setTimeout(() => checkTangledAdvertisementProcess(), 60000);
     });
@@ -181,7 +186,7 @@ const checkTangledBotProcess = () => {
     }, (err, response, body) => {
         console.log(`[bot] status: ${err || response.statusCode}`);
         if (err || response.statusCode !== 200) {
-            tangledBotProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-bot.js`, '--pid-file', './tangled-bot.pid'], { stdio: 'ignore' });
+            tangledBotProcess = spawnTangledBotProcess();
         }
         setTimeout(() => checkTangledBotProcess(), 60000);
     });
@@ -190,11 +195,11 @@ const checkTangledBotProcess = () => {
 eventBus.on('wallet_unlock', () => {
     console.log(`[advertisement] wallet unlocked`);
     if (!tangledAdvertisementProcess) {
-        tangledAdvertisementProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-advertisement.js`, '--pid-file', './tangled-advertisement.pid'], { stdio: 'ignore' });
+        tangledAdvertisementProcess = spawnTangledAdvertisementProcess();
         setTimeout(() => checkTangledAdvertisementProcess(), 60000);
     }
     if (!tangledBotProcess) {
-        tangledBotProcess = childProcess.spawn(process.execPath, [`${__dirname}/tangled-bot.js`, '--pid-file', './tangled-bot.pid'], { stdio: 'ignore' });
+        tangledBotProcess = spawnTangledBotProcess();
         setTimeout(() => checkTangledBotProcess(), 60000);
     }
 });
