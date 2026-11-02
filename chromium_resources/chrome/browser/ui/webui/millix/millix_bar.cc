@@ -1,8 +1,11 @@
 #include "chrome/browser/ui/webui/millix/millix_bar.h"
 
+#include <algorithm>
+
 #include "base/functional/bind.h"
 #include "base/files/file_util.h"
 #include "base/json/json_reader.h"
+#include "base/numerics/safe_conversions.h"
 #include "base/path_service.h"
 #include "base/strings/stringprintf.h"
 #include "base/task/task_traits.h"
@@ -33,6 +36,12 @@ class WebContents;
 class BrowserContext;
 class BrowserMainLoop;
 }  // namespace content
+
+namespace {
+// Range accepted by setMillixBarHeight, in DIPs.
+constexpr int kMinMillixBarHeight = 40;
+constexpr int kMaxMillixBarHeight = 400;
+}  // namespace
 
 MillixBarUI::MillixBarMessageHandler::MillixBarMessageHandler() {}
 
@@ -74,6 +83,28 @@ void MillixBarUI::MillixBarMessageHandler::UpdateMillixWallet(
 
 void MillixBarUI::MillixBarMessageHandler::RestarMillixNode(const base::ListValue& args) {
   content::BrowserMainLoop::GetInstance()->CreateMillixNode();
+}
+
+void MillixBarUI::MillixBarMessageHandler::SetMillixBarHeight(
+    const base::ListValue& args) {
+  if (args.empty()) {
+    return;
+  }
+  // Accepts both int and double.
+  std::optional<double> height = args[0].GetIfDouble();
+  if (!height) {
+    return;
+  }
+  // Every window has its own bar; resize the one hosting this WebUI rather
+  // than the last active window's.
+  BrowserView* browser_view = BrowserView::GetBrowserViewForNativeWindow(
+      web_ui()->GetWebContents()->GetTopLevelNativeWindow());
+  if (!browser_view || !browser_view->GetMillixBarView()) {
+    return;
+  }
+  browser_view->GetMillixBarView()->SetBarHeight(
+      std::clamp(base::ClampRound<int>(*height), kMinMillixBarHeight,
+                 kMaxMillixBarHeight));
 }
 
 void MillixBarUI::MillixBarMessageHandler::ShowMillixWallet(
@@ -137,6 +168,10 @@ void MillixBarUI::MillixBarMessageHandler::RegisterMessages() {
   web_ui()->RegisterMessageCallback(
       "restartMillixNode",
       base::BindRepeating(&MillixBarMessageHandler::RestarMillixNode,
+                 base::Unretained(this)));
+  web_ui()->RegisterMessageCallback(
+      "setMillixBarHeight",
+      base::BindRepeating(&MillixBarMessageHandler::SetMillixBarHeight,
                  base::Unretained(this)));
 }
 

@@ -45,6 +45,7 @@ class MillixBarUI : public ui::MojoWebUIController {
     void ShowMillixWallet(const base::ListValue& args);
     void UpdateMillixWallet(const base::ListValue& args);
     void RestarMillixNode(const base::ListValue& args);
+    void SetMillixBarHeight(const base::ListValue& args);
  };
 
  public:
